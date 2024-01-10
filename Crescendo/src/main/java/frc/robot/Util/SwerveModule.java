@@ -76,9 +76,8 @@ public class SwerveModule {
           m_driveEncoder.setPosition(0);
      }
 
-     //FINISH
      public void rezeroTurnMotors(){
-          //m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() * )
+          m_turnEncoder.setPosition((m_canCoder.getAbsolutePosition().getValueAsDouble() / 360) * SwerveModuleConstants.TURN_GEAR_RATIO);
      }
 
      public void setTurnDegrees(Rotation2d turnSetpoint){

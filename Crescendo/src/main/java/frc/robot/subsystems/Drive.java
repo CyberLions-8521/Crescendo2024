@@ -6,24 +6,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.kauailabs.navx.frc.AHRS;;
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Drive() {}
+    //odometry
+    //gyroscope
+    //swerve modules
+    //setpositions
+    //set states
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
