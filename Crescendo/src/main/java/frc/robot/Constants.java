@@ -27,30 +27,30 @@ public final class Constants {
     public static final double WHEELBASE_WIDTH = 0;
     public static final double WHEELBASE_LENGTH = 0;
 
-    public static final Translation2d REAR_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    public static final Translation2d REAR_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
-    public static final Translation2d FRONT_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    public static final Translation2d FRONT_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
+    public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
+    public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
+    public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
+    public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
 
-    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(REAR_RIGHT_MODULE_POSITION, REAR_LEFT_MODULE_POSITION, FRONT_RIGHT_MODULE_POSITION, FRONT_LEFT_MODULE_POSITION);
+    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(BOTTOM_RIGHT_MODULE_POSITION, BOTTOM_LEFT_MODULE_POSITION, TOP_RIGHT_MODULE_POSITION, TOP_LEFT_MODULE_POSITION);
 
     public static final double DRIVE_GEAR_RATIO = 0;
     public static final double TURN_GEAR_RATIO = 0;
 
-    public static final int REAR_RIGHT_DRIVE_PORT = 0;
-    public static final int REAR_LEFT_DRIVE_PORT = 0;
-    public static final int FRONT_RIGHT_DRIVE_PORT = 0;
-    public static final int FRONT_LEFT_DRIVE_PORT = 0;
+    public static final int BOTTOM_RIGHT_DRIVE_PORT = 0;
+    public static final int BOTTOM_LEFT_DRIVE_PORT = 0;
+    public static final int TOP_RIGHT_DRIVE_PORT = 0;
+    public static final int TOP_LEFT_DRIVE_PORT = 0;
 
-    public static final int REAR_RIGHT_TURN_PORT = 0;
-    public static final int REAR_LEFT_TURN_PORT = 0;
-    public static final int FRONT_RIGHT_TURN_PORT = 0;
-    public static final int FRONT_LEFT_TURN_PORT = 0;
+    public static final int BOTTOM_RIGHT_TURN_PORT = 0;
+    public static final int BOTTOM_LEFT_TURN_PORT = 0;
+    public static final int TOP_RIGHT_TURN_PORT = 0;
+    public static final int TOP_LEFT_TURN_PORT = 0;
 
-    public static final int REAR_RIGHT_ENCODER_PORT = 0;
-    public static final int REAR_LEFT_ENCODER_PORT = 0;
-    public static final int FRONT_RIGHT_ENCODER_PORT = 0;
-    public static final int FRONT_LEFT_ENCODER_PORT = 0;
+    public static final int BOTTOM_RIGHT_ENCODER_PORT = 0;
+    public static final int BOTTOM_LEFT_ENCODER_PORT = 0;
+    public static final int TOP_RIGHT_ENCODER_PORT = 0;
+    public static final int TOP_LEFT_ENCODER_PORT = 0;
 
     public static final double MAX_TANGENTIAL_VELOCITY = 4.0;
     public static final double MAX_ANGULAR_VELOCITY = WHEEL_DIAMETER_METERS * Math.PI;

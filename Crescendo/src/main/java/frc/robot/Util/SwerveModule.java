@@ -10,6 +10,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveModuleConstants;
@@ -130,5 +131,7 @@ public class SwerveModule {
           return ((m_driveEncoder.getPosition() / SwerveModuleConstants.DRIVE_GEAR_RATIO) * SwerveModuleConstants.CIRCUMFERENCE);
      }
 
-
+     public SwerveModulePosition getModulePosition(){
+          return new SwerveModulePosition(getDrivePosition(), getTurnAngle());
+     }
 }
