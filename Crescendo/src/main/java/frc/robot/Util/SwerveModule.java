@@ -1,19 +1,17 @@
 package frc.robot.Util;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveModuleConstants;
 
 public class SwerveModule {
@@ -67,9 +65,20 @@ public class SwerveModule {
           m_config.MagnetSensor.MagnetOffset = angleOffset;
      }
 
+     public void configGains(){
+          m_turnController.setP(SmartDashboard.getNumber("Turn P", 0));
+          m_driveController.setP(SmartDashboard.getNumber("Drive P", 0));
+          m_driveController.setFF(SmartDashboard.getNumber("Drive FF", 0));
+     }
+
      public void zeroEncoders(){
           m_turnEncoder.setPosition(0);
           m_driveEncoder.setPosition(0);
+     }
+
+     //FINISH
+     public void rezeroTurnMotors(){
+          //m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() * )
      }
 
      public void setTurnDegrees(Rotation2d turnSetpoint){
@@ -101,6 +110,25 @@ public class SwerveModule {
           //getabsposition returns status signal of type double / rotations
           //get value takes the type value and returns it.
           return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
+     }
+
+     public double getDriveVelocity(){
+          //RPM --> m/s
+          //RPM / 60 = Rotations per second
+          //rotations per sec * gear ratio
+          //rotations per second * (motor turns / 1 rotation)
+          //motor turns per second
+          //motor turns per second * circumference
+          double RPS = m_driveEncoder.getVelocity() * 60;
+          double rotations = RPS * SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          return (rotations * SwerveModuleConstants.DRIVE_GEAR_RATIO);
+     }
+
+     public double getDrivePosition(){
+          //motor turns / gear ratio
+          //motor turns / (motor turns / 1 revolution)
+          //1 revolution * circumference
+          return ((m_driveEncoder.getPosition() / SwerveModuleConstants.DRIVE_GEAR_RATIO) * SwerveModuleConstants.CIRCUMFERENCE);
      }
 
 
