@@ -44,11 +44,6 @@ public class DriveTele extends Command {
       }
   }
 
-  public void driveFromChassis(ChassisSpeeds speeds){
-    SwerveModuleState[] states = DRIVE_KINEMATICS.toSwerveModuleStates(speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DriveConstants.MAX_TANGENTIAL_VELOCITY);
-    m_drive.setModuleStates(states);
-  }
 
    public DriveTele(DoubleSupplier fwd, DoubleSupplier str, DoubleSupplier rot, Drive drive) {
     this.m_drive = drive;
@@ -72,14 +67,14 @@ public class DriveTele extends Command {
 
     //makes everything like a 3rd person robot
     //might have to add - in front 
-    driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_drive.getDriveHeading()));
+    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_drive.getDriveHeading()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     //?
-     driveFromChassis(new ChassisSpeeds());
+     m_drive.driveFromChassis(new ChassisSpeeds());
   }
 
   // Returns true when the command should end.
