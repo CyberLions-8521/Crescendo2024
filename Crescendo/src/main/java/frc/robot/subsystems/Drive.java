@@ -6,20 +6,23 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.SwerveModuleConstants;
+import static frc.robot.Constants.SwerveModuleConstants.*;
 import frc.robot.Util.SwerveModule;
+
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private Drive() {
     m_gyro.reset();
-    m_gyro.calibrate();
+    //m_gyro.calibrate();
 
     SmartDashboard.putNumber("Turn P", 0);
     SmartDashboard.putNumber("Drive P", 0);
@@ -31,16 +34,16 @@ public class Drive extends SubsystemBase {
     //setpositions
     //set states
 
-    private SwerveModule m_bottomRight = new SwerveModule(SwerveModuleConstants.BOTTOM_RIGHT_DRIVE_PORT, SwerveModuleConstants.BOTTOM_RIGHT_TURN_PORT, SwerveModuleConstants.BOTTOM_RIGHT_ENCODER_PORT, SwerveModuleConstants.BOTTOM_RIGHT_ENCODER_PORT, false);
-    private SwerveModule m_bottomLeft = new SwerveModule(SwerveModuleConstants.BOTTOM_LEFT_DRIVE_PORT, SwerveModuleConstants.BOTTOM_LEFT_TURN_PORT, SwerveModuleConstants.BOTTOM_LEFT_ENCODER_PORT, SwerveModuleConstants.BOTTOM_LEFT_ENCODER_PORT, false);
-    private SwerveModule m_topRight = new SwerveModule(SwerveModuleConstants.TOP_RIGHT_DRIVE_PORT, SwerveModuleConstants.TOP_RIGHT_TURN_PORT, SwerveModuleConstants.TOP_RIGHT_ENCODER_PORT, SwerveModuleConstants.TOP_RIGHT_ENCODER_PORT, false);
-    private SwerveModule m_topLeft = new SwerveModule(SwerveModuleConstants.TOP_LEFT_DRIVE_PORT, SwerveModuleConstants.TOP_LEFT_TURN_PORT, SwerveModuleConstants.TOP_LEFT_ENCODER_PORT, SwerveModuleConstants.TOP_LEFT_ENCODER_PORT, false);
+    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_PORT, false);
+    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_PORT, false);
+    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_PORT, false);
+    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_PORT, false);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-    private Drive m_instance = new Drive();
+    private static Drive m_instance = new Drive();
 
-    public Drive getInstance(){
+    public static Drive getInstance(){
       return m_instance;
     }    
 
@@ -55,7 +58,7 @@ public class Drive extends SubsystemBase {
   }
 
    public SwerveModulePosition[] getModulePositions(){
-    SwerveModulePosition[] modulePositions = {m_topLeft.getModulePosition(), m_topRight.getModulePosition(), m_bottomLeft.getModulePosition(), rearRight.getModulePosition()};
+    SwerveModulePosition[] modulePositions = {m_bottomRight.getModulePosition(), m_bottomLeft.getModulePosition(), m_topRight.getModulePosition(), m_topLeft.getModulePosition()};
     return modulePositions;
   }
 
@@ -67,10 +70,13 @@ public class Drive extends SubsystemBase {
     m_gyro.reset();
   }
 
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DRIVE_KINEMATICS, this.getDriveHeading(), this.getModulePositions());
 
-    // SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(SwerveModuleConstants.DRIVE_KINEMATICS, m_gyro.getAngle(), getSwerveModulePositions());
+  public Pose2d getPose2D(){
+    return m_odometry.getPoseMeters();
+  }
 
-    public void logData(){
+  public void logData(){
     SmartDashboard.putNumber("Drive Velocity", m_topRight.getDriveVelocity());
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
 
@@ -89,6 +95,7 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("rear right", m_bottomRight.getTurnAngle().getDegrees());
   }
 
+  //AUTONOMOUS ROUTINE ############//#endregion
   
 
   @Override

@@ -19,6 +19,11 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class DriveConstants {
+    public static final double MAX_ANGULAR_VELOCITY = 0;
+    public static final double MAX_TANGENTIAL_VELOCITY = 0;
+  }
   
   public static class SwerveModuleConstants{
     public static final double WHEEL_DIAMETER_METERS = 0;
@@ -51,9 +56,6 @@ public final class Constants {
     public static final int BOTTOM_LEFT_ENCODER_PORT = 0;
     public static final int TOP_RIGHT_ENCODER_PORT = 0;
     public static final int TOP_LEFT_ENCODER_PORT = 0;
-
-    public static final double MAX_TANGENTIAL_VELOCITY = 4.0;
-    public static final double MAX_ANGULAR_VELOCITY = WHEEL_DIAMETER_METERS * Math.PI;
 
     public static final double DRIVE_KP = 0;
     public static final double DRIVE_KFF = 0;

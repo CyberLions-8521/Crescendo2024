@@ -39,25 +39,6 @@ public class SwerveModule {
           zeroEncoders();
      }
 
-     public void configMotors(boolean isInverted){
-          m_driveMotor.restoreFactoryDefaults();
-          m_turnMotor.restoreFactoryDefaults();
-
-          m_driveMotor.setIdleMode(IdleMode.kBrake);
-          m_turnMotor.setIdleMode(m_driveMotor.getIdleMode());
-
-          m_driveMotor.setInverted(isInverted);
-          m_driveMotor.setInverted(false);
-
-          m_driveMotor.setSmartCurrentLimit(15,15);
-          m_turnMotor.setSmartCurrentLimit(15,15);
-
-          m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
-          m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);
-
-          m_turnController.setP(SwerveModuleConstants.TURN_KP);
-     }
-
      public void configCANcoder(double angleOffset){
           CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = m_config.MagnetSensor.AbsoluteSensorRange.Signed_PlusMinusHalf;
@@ -133,5 +114,24 @@ public class SwerveModule {
 
      public SwerveModulePosition getModulePosition(){
           return new SwerveModulePosition(getDrivePosition(), getTurnAngle());
+     }
+
+     public void configMotors(boolean isInverted){
+          m_driveMotor.restoreFactoryDefaults();
+          m_turnMotor.restoreFactoryDefaults();
+
+          m_driveMotor.setIdleMode(IdleMode.kBrake);
+          m_turnMotor.setIdleMode(m_driveMotor.getIdleMode());
+
+          m_driveMotor.setInverted(isInverted);
+          m_driveMotor.setInverted(false);
+
+          m_driveMotor.setSmartCurrentLimit(15,15);
+          m_turnMotor.setSmartCurrentLimit(15,15);
+
+          m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
+          m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);
+
+          m_turnController.setP(SwerveModuleConstants.TURN_KP);
      }
 }
