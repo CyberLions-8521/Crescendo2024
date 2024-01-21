@@ -136,6 +136,7 @@ public class SwerveModule {
           m_turnMotor.setSmartCurrentLimit(15,15);
 
           m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
+          m_driveController.setD(SwerveModuleConstants.DRIVE_KD);
           m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);
 
           m_turnController.setP(SwerveModuleConstants.TURN_KP);

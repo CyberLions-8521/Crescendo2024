@@ -42,24 +42,25 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO = 0;
     public static final double TURN_GEAR_RATIO = 0;
 
-    public static final int BOTTOM_RIGHT_DRIVE_PORT = 0;
-    public static final int BOTTOM_LEFT_DRIVE_PORT = 0;
-    public static final int TOP_RIGHT_DRIVE_PORT = 0;
-    public static final int TOP_LEFT_DRIVE_PORT = 0;
+    public static final int BOTTOM_RIGHT_DRIVE_PORT = 1;
+    public static final int BOTTOM_LEFT_DRIVE_PORT = 3;
+    public static final int TOP_RIGHT_DRIVE_PORT = 7;
+    public static final int TOP_LEFT_DRIVE_PORT = 5;
 
-    public static final int BOTTOM_RIGHT_TURN_PORT = 0;
-    public static final int BOTTOM_LEFT_TURN_PORT = 0;
-    public static final int TOP_RIGHT_TURN_PORT = 0;
-    public static final int TOP_LEFT_TURN_PORT = 0;
+    public static final int BOTTOM_RIGHT_TURN_PORT = 2;
+    public static final int BOTTOM_LEFT_TURN_PORT = 4;
+    public static final int TOP_RIGHT_TURN_PORT = 8;
+    public static final int TOP_LEFT_TURN_PORT = 6;
 
-    public static final int BOTTOM_RIGHT_ENCODER_PORT = 0;
-    public static final int BOTTOM_LEFT_ENCODER_PORT = 0;
-    public static final int TOP_RIGHT_ENCODER_PORT = 0;
-    public static final int TOP_LEFT_ENCODER_PORT = 0;
+    public static final int BOTTOM_RIGHT_ENCODER_PORT = 12;
+    public static final int BOTTOM_LEFT_ENCODER_PORT = 10;
+    public static final int TOP_RIGHT_ENCODER_PORT = 9;
+    public static final int TOP_LEFT_ENCODER_PORT = 11;
 
-    public static final double DRIVE_KP = 0;
-    public static final double DRIVE_KFF = 0;
-    public static final double TURN_KP = 0;
+    public static final double DRIVE_KP = 0.000165;
+    public static final double DRIVE_KFF = 0.00004;
+    public static final double DRIVE_KD = 0.00015;
+    public static final double TURN_KP = 0.5;
 
   }
 }
