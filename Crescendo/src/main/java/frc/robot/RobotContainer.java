@@ -28,6 +28,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+   m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
+    m_driverController.button(5).onTrue(new InstantCommand(m_drive::resetHeading));
   }
 
   /**

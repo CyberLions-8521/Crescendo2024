@@ -110,6 +110,14 @@ public class Drive extends SubsystemBase {
   public Pose2d getPose2D(){
     return m_odometry.getPoseMeters();
   }
+  
+  public void readConfigGains(){
+    m_topLeft.configGains();
+    m_topRight.configGains();
+    m_bottomLeft.configGains();
+    m_bottomRight.configGains();
+
+  }
 
   public void resetOdometry(Pose2d pose){
     m_odometry.resetPosition(getDriveHeading(), getModulePositions(), pose);

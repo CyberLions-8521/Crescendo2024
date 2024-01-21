@@ -48,9 +48,10 @@ public class SwerveModule {
      }
 
      public void configGains(){
-          m_turnController.setP(SmartDashboard.getNumber("Turn P", 0));
-          m_driveController.setP(SmartDashboard.getNumber("Drive P", 0));
-          m_driveController.setFF(SmartDashboard.getNumber("Drive FF", 0));
+          m_turnController.setP(SmartDashboard.getNumber("Turn P", SwerveModuleConstants.TURN_KP));
+          m_driveController.setP(SmartDashboard.getNumber("Drive P", SwerveModuleConstants.DRIVE_KP));
+          m_driveController.setD(SmartDashboard.getNumber("Drive D", SwerveModuleConstants.DRIVE_KD));
+          m_driveController.setFF(SmartDashboard.getNumber("Drive FF", SwerveModuleConstants.DRIVE_KFF));
      }
 
      public void zeroEncoders(){
@@ -135,10 +136,10 @@ public class SwerveModule {
           m_driveMotor.setSmartCurrentLimit(15,15);
           m_turnMotor.setSmartCurrentLimit(15,15);
 
-          m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
+          /*m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
           m_driveController.setD(SwerveModuleConstants.DRIVE_KD);
-          m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);
+          m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);*/
 
-          m_turnController.setP(SwerveModuleConstants.TURN_KP);
+          //m_turnController.setP(SwerveModuleConstants.TURN_KP);
      }
 }

@@ -21,16 +21,16 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    public static final double MAX_ANGULAR_VELOCITY = 0;
-    public static final double MAX_TANGENTIAL_VELOCITY = 0;
+    public static final double MAX_ANGULAR_VELOCITY = 2 * Math.PI;
+    public static final double MAX_TANGENTIAL_VELOCITY = 4;
   }
   
   public static class SwerveModuleConstants{
-    public static final double WHEEL_DIAMETER_METERS = 0;
+    public static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    public static final double WHEELBASE_WIDTH = 0;
-    public static final double WHEELBASE_LENGTH = 0;
+    public static final double WHEELBASE_WIDTH = 0.6604;
+    public static final double WHEELBASE_LENGTH = 0.6604;
 
     public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
@@ -61,6 +61,5 @@ public final class Constants {
     public static final double DRIVE_KFF = 0.00004;
     public static final double DRIVE_KD = 0.00015;
     public static final double TURN_KP = 0.5;
-
   }
 }
