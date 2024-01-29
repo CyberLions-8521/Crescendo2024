@@ -5,12 +5,10 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,28 +19,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.SwerveModuleConstants.*;
-import static frc.robot.Constants.DriveConstants.*;
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
 
 //import frc.robot.Util.PPSwerveControllerCommand;
 
-import java.util.HashMap;
-import java.util.function.Supplier;
-
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Util.SwerveModule;
-import frc.robot.commands.DriveTele;
-
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -50,9 +35,10 @@ public class Drive extends SubsystemBase {
     m_gyro.reset();
     //m_gyro.calibrate();
 
-    SmartDashboard.putNumber("Turn P", 0);
-    SmartDashboard.putNumber("Drive P", 0);
-    SmartDashboard.putNumber("Drive FF", 0);
+    SmartDashboard.putNumber("Turn P", TURN_KP);
+    SmartDashboard.putNumber("Drive P", DRIVE_KP);
+    SmartDashboard.putNumber("Drive D", DRIVE_KD);
+    SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
   }
     //odometry
     //gyroscope
@@ -60,10 +46,10 @@ public class Drive extends SubsystemBase {
     //setpositions
     //set states
 
-    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_PORT, false);
-    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_PORT, false);
-    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_PORT, false);
-    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_PORT, false);
+    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
+    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
+    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
+    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -74,8 +60,9 @@ public class Drive extends SubsystemBase {
     }    
 
     public void setModuleStates(SwerveModuleState[] states){
-      SmartDashboard.putNumber("front left desired velocity", states[1].speedMetersPerSecond);
-      SmartDashboard.putNumber("front left desired angle", states[1].angle.getDegrees());
+      SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
+      SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
+      SmartDashboard.putNumber("front left error", Math.abs(Math.abs(states[0].speedMetersPerSecond) - Math.abs(m_topLeft.getDriveVelocity())));
 
       m_topLeft.setState(states[0]);
       m_topRight.setState(states[1]);
@@ -99,10 +86,6 @@ public class Drive extends SubsystemBase {
 
   public ChassisSpeeds getRelativeSpeeds(){
     return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
-  }
-
-  public void resetHeading(){
-    m_gyro.reset();
   }
 
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DRIVE_KINEMATICS, this.getDriveHeading(), this.getModulePositions());
@@ -130,7 +113,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putNumber("Drive Velocity", m_topRight.getDriveVelocity());
+    SmartDashboard.putNumber("Drive Velocity", Math.abs(m_topRight.getDriveVelocity()));
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
 
     SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
@@ -179,6 +162,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    logData();
   }
 
   @Override

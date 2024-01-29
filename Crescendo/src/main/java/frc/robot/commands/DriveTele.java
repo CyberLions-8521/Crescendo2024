@@ -16,12 +16,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Tracker;
 
 /** An example command that uses an example subsystem. */
 public class DriveTele extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
   private Drive m_drive = Drive.getInstance();
+  private Tracker m_tracker = Tracker.getInstance();
 
   private DoubleSupplier fwd, str, rot;
   private Drive drive;
@@ -61,13 +63,13 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = modifyInputs(fwd.getAsDouble(), false);
-    double vy = modifyInputs(str.getAsDouble(), false);
+    double vx = -modifyInputs(fwd.getAsDouble(), false);
+    double vy = -modifyInputs(str.getAsDouble(), false);
     double omega = modifyInputs(rot.getAsDouble(), true);
 
     //makes everything like a 3rd person robot
     //might have to add - in front 
-    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_drive.getDriveHeading()));
+    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_tracker.getPose().getRotation()));
   }
 
   // Called once the command ends or is interrupted.
@@ -77,9 +79,5 @@ public class DriveTele extends Command {
      m_drive.driveFromChassis(new ChassisSpeeds());
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+
 }

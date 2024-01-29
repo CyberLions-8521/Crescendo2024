@@ -12,24 +12,31 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveTele;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
-
-
+import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
   private final Drive m_drive = Drive.getInstance();
+  private final Tracker m_tracker = Tracker.getInstance();
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   public RobotContainer() {
     configureBindings();
+
+    m_drive.setDefaultCommand(new DriveTele(
+      () -> m_driverController.getLeftY(),
+      () -> m_driverController.getLeftX(),
+      () -> m_driverController.getRightX()
+    , m_drive));
   }
 
   private void configureBindings() {
    m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
-    m_driverController.button(5).onTrue(new InstantCommand(m_drive::resetHeading));
+    m_driverController.button(5).onTrue(new InstantCommand(m_tracker::resetHeading));
   }
 
   /**

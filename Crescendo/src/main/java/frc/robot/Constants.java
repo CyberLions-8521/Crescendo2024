@@ -37,10 +37,10 @@ public final class Constants {
     public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
 
-    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(BOTTOM_RIGHT_MODULE_POSITION, BOTTOM_LEFT_MODULE_POSITION, TOP_RIGHT_MODULE_POSITION, TOP_LEFT_MODULE_POSITION);
+    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(TOP_LEFT_MODULE_POSITION, TOP_RIGHT_MODULE_POSITION, BOTTOM_LEFT_MODULE_POSITION, BOTTOM_RIGHT_MODULE_POSITION);
 
-    public static final double DRIVE_GEAR_RATIO = 0;
-    public static final double TURN_GEAR_RATIO = 0;
+    public static final double TURN_GEAR_RATIO = 12.8;
+    public static final double DRIVE_GEAR_RATIO = 6.75;
 
     public static final int BOTTOM_RIGHT_DRIVE_PORT = 1;
     public static final int BOTTOM_LEFT_DRIVE_PORT = 3;
@@ -57,9 +57,14 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 9;
     public static final int TOP_LEFT_ENCODER_PORT = 11;
 
-    public static final double DRIVE_KP = 0.000165;
-    public static final double DRIVE_KFF = 0.00004;
-    public static final double DRIVE_KD = 0.00015;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 31.3;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -63;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = -128.4;
+    public static final double TOP_LEFT_ENCODER_OFFSET = 167.95;
+
+    public static final double DRIVE_KP = 0.00003;//0.00013;//0.000165;
+    public static final double DRIVE_KFF = 0.00017;//0.00017;//0.00004;
+    public static final double DRIVE_KD = 0.00001;//.00029;//0.00015;
     public static final double TURN_KP = 0.5;
   }
 }
