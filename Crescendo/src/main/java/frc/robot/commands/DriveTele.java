@@ -26,7 +26,7 @@ public class DriveTele extends Command {
   private Tracker m_tracker = Tracker.getInstance();
 
   private DoubleSupplier fwd, str, rot;
-  private Drive drive;
+  // private Drive drive;
 
   private double modifyInputs(double value, boolean isRot){
     if(isRot){
@@ -63,8 +63,8 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -modifyInputs(fwd.getAsDouble(), false);
-    double vy = -modifyInputs(str.getAsDouble(), false);
+    double vx = modifyInputs(fwd.getAsDouble(), false);
+    double vy = modifyInputs(str.getAsDouble(), false);
     double omega = modifyInputs(rot.getAsDouble(), true);
 
     //makes everything like a 3rd person robot

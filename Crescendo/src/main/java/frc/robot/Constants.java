@@ -66,5 +66,8 @@ public final class Constants {
     public static final double DRIVE_KFF = 0.00017;//0.00017;//0.00004;
     public static final double DRIVE_KD = 0.00001;//.00029;//0.00015;
     public static final double TURN_KP = 0.5;
+
+    public static final double LOWER_BOUND = 0.0;
+    public static final double UPPER_BOUND = 360.0;
   }
 }

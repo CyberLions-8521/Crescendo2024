@@ -17,7 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveModuleConstants;
-
+import edu.wpi.first.math.MathUtil;
 public class SwerveModule {
      CANSparkMax m_driveMotor;
      CANSparkMax m_turnMotor;
@@ -95,7 +95,7 @@ public class SwerveModule {
      }
 
      public void setState(SwerveModuleState state){
-          SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());// state.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = state.optimize(state, Rotation2d.fromDegrees(MathUtil.inputModulus(getTurnAngle().getDegrees(), SwerveModuleConstants.LOWER_BOUND, SwerveModuleConstants.UPPER_BOUND))); //CTREUtils.optimize(state, getTurnAngle());
           setDriveVelocity(optimizedState.speedMetersPerSecond);
           setTurnDegrees(optimizedState.angle);
      }
