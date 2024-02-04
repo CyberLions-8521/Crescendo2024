@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,12 +22,13 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
-
 public class RobotContainer {
   private final Drive m_drive = Drive.getInstance();
   private final Tracker m_tracker = Tracker.getInstance();
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+  // private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     configureBindings();
@@ -32,11 +38,16 @@ public class RobotContainer {
       () -> m_driverController.getLeftX(),
       () -> m_driverController.getRightX()
     , m_drive));
+    m_drive.autonomousRoutine();
   }
 
   private void configureBindings() {
-   m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
+    m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
     m_driverController.button(5).onTrue(new InstantCommand(m_tracker::resetHeading));
+
+    // Autos
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -46,7 +57,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    //return Autos.exampleAuto(m_exampleSubsystem);
-    return null;
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    // return autoChooser.getSelected();
+    // return m_drive.followPathCommand("Test Path");
+    return new PathPlannerAuto("New Auto");
   }
 }
