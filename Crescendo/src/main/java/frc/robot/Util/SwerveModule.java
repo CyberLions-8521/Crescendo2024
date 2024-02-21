@@ -95,7 +95,9 @@ public class SwerveModule {
      }
 
      public void setState(SwerveModuleState state){
-          SwerveModuleState optimizedState = state.optimize(state, Rotation2d.fromDegrees(MathUtil.inputModulus(getTurnAngle().getDegrees(), SwerveModuleConstants.LOWER_BOUND, SwerveModuleConstants.UPPER_BOUND))); //CTREUtils.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());
+          //state.optimize(state, Rotation2d.fromDegrees(MathUtil.inputModulus(getTurnAngle().getDegrees(), SwerveModuleConstants.LOWER_BOUND, SwerveModuleConstants.UPPER_BOUND))); 
+          
           setDriveVelocity(optimizedState.speedMetersPerSecond);
           setTurnDegrees(optimizedState.angle);
      }

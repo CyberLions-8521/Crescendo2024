@@ -60,11 +60,11 @@ public final class Constants {
     public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 31.3;
     public static final double BOTTOM_LEFT_ENCODER_OFFSET = -63;
     public static final double TOP_RIGHT_ENCODER_OFFSET = -128.4;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 167.95;
+    public static final double TOP_LEFT_ENCODER_OFFSET = -60.90;//167.95;
 
-    public static final double DRIVE_KP = 0.00003;//0.00013;//0.000165;
-    public static final double DRIVE_KFF = 0.00017;//0.00017;//0.00004;
-    public static final double DRIVE_KD = 0.00001;//.00029;//0.00015;
+    public static final double DRIVE_KP = 0.00015;//0.00003;//0.00013;//0.000165;
+    public static final double DRIVE_KFF = 0.000195;//0.00017;//0.00017;//0.00004;
+    public static final double DRIVE_KD = 0.001;//0.00001;//.00029;//0.00015;
     public static final double TURN_KP = 0.5;
 
     public static final double LOWER_BOUND = 0.0;

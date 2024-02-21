@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.SwerveModuleConstants.*;
+import static frc.robot.Constants.DriveConstants.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -143,8 +144,8 @@ public class Drive extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(DRIVE_KP, 0.0, DRIVE_KD), // Translation PID constants
                         new PIDConstants(TURN_KP, 0.0, 0.0), // Rotation PID constants
-                        4.0, // Max module speed, in m/s
-                        0.6604, // Drive base radius in meters. Distance from robot center to furthest module.
+                        MAX_TANGENTIAL_VELOCITY, // Max module speed, in m/s
+                        WHEELBASE_LENGTH, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -173,8 +174,8 @@ public class Drive extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(DRIVE_KD, 0.0, DRIVE_KD), // Translation PID constants
                         new PIDConstants(TURN_KP, 0.0, 0.0), // Rotation PID constants
-                        4.0, // Max module speed, in m/s
-                        0.6604, // Drive base radius in meters. Distance from robot center to furthest module.
+                        MAX_TANGENTIAL_VELOCITY, // Max module speed, in m/s
+                        WHEELBASE_LENGTH, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {

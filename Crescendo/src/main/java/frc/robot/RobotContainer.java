@@ -28,7 +28,7 @@ public class RobotContainer {
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  // private SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;// = new SendableChooser<>();
 
   public RobotContainer() {
     configureBindings();
@@ -39,15 +39,16 @@ public class RobotContainer {
       () -> m_driverController.getRightX()
     , m_drive));
     m_drive.autonomousRoutine();
+
+    // Autos
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData(autoChooser);
+    autoChooser.addOption("HELLO JAKCSON", new PathPlannerAuto("Sideways Auto"));
   }
 
   private void configureBindings() {
     m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
     m_driverController.button(5).onTrue(new InstantCommand(m_tracker::resetHeading));
-
-    // Autos
-    // autoChooser = AutoBuilder.buildAutoChooser();
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -58,8 +59,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    // return autoChooser.getSelected();
+    return autoChooser.getSelected();
     // return m_drive.followPathCommand("Test Path");
-    return new PathPlannerAuto("New Auto");
+    // return new PathPlannerAuto("Sideways Auto");
   }
 }
