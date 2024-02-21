@@ -20,11 +20,17 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class MotorConstants {
+    public static final int WRIST_MOTOR = 0;
+    public static final int INDEXER_MOTOR = 0;
+    public static final int ELEVATOR_MOTOR = 0;
+  }
+
   public static class DriveConstants {
     public static final double MAX_ANGULAR_VELOCITY = 2 * Math.PI;
     public static final double MAX_TANGENTIAL_VELOCITY = 4;
   }
-  
+
   public static class SwerveModuleConstants{
     public static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
@@ -57,14 +63,30 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 9;
     public static final int TOP_LEFT_ENCODER_PORT = 11;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 31.3;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -63;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = -128.4;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 167.95;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0;//31.3;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0;//-63;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = 0;//-128.4;
+    public static final double TOP_LEFT_ENCODER_OFFSET = 0;//-60.90;//167.95;
 
-    public static final double DRIVE_KP = 0.00003;//0.00013;//0.000165;
-    public static final double DRIVE_KFF = 0.00017;//0.00017;//0.00004;
-    public static final double DRIVE_KD = 0.00001;//.00029;//0.00015;
-    public static final double TURN_KP = 0.5;
+    public static final double DRIVE_KP = 0;//0.00015;//0.00003;//0.00013;//0.000165;
+    public static final double DRIVE_KFF = 0;//0.000195;//0.00017;//0.00017;//0.00004;
+    public static final double DRIVE_KD = 0;//0.001;//0.00001;//.00029;//0.00015;
+    public static final double TURN_KP = 0;//0.5;
+
+    public static final double LOWER_BOUND = 0.0;
+    public static final double UPPER_BOUND = 360.0;
+  }
+
+  public static class WristConstants{
+    public static final double WRIST_KP = 0;
+    public static final double WRIST_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+  }
+  public static class ElevatorConstants{
+    public static final double ELEVATOR_KP = 0;
+    public static final double ELEVATOR_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
   }
 }

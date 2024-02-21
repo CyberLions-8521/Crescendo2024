@@ -4,44 +4,131 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.AccelStrategy;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.MotorConstants;
+public class Elevator extends SubsystemBase {
 
-public class ExampleSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  public Elevator() {
+    configMotors();
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  private static Elevator m_instance = new Elevator();
+
+  public static Elevator getInstance(){
+    if (m_instance == null){
+      m_instance = new Elevator();
+    }
+    return m_instance;
+  }
+ 
+  public enum ElevatorState{
+    OFF,
+    JOG,
+    POSITION,
+    ZERO
+  }
+
+  private ElevatorState m_state = ElevatorState.OFF;
+
+  private CANSparkMax m_elevatorMaster = new CANSparkMax(MotorConstants.ELEVATOR_MOTOR, MotorType.kBrushless);
+  private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
+  private DigitalInput m_limitSwitch = new DigitalInput(0);
+  private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
+  
+  private double jogValue = 0;
+  private Rotation2d setpoint = new Rotation2d();
+
+  public void setState(ElevatorState m_state){
+    this.m_state = m_state;
+  }
+  
+  public ElevatorState getState(){
+    return m_state;
+  }
+
+  public void set(double value){
+    m_elevatorMaster.set(value);
+  }
+
+  public void setJogValue(double jogValue){
+    this.jogValue = jogValue;
+    setState(ElevatorState.JOG);
+  }
+
+  public void goToSetpoint(){
+    m_elevatorController.setReference(setpoint.getRotations(), ControlType.kSmartMotion);
+  }
+
+  public void setSetpoint(Rotation2d setpoint){
+    this.setpoint = setpoint;
+    setState(ElevatorState.POSITION);
+  }
+
+  public Rotation2d getSetpoint(){
+    return setpoint;
+  }
+
+  public void resetEncoder(){
+    m_elevatorEncoder.setPosition(0);
+  }
+
+  public void zero(){
+    if(!m_limitSwitch.get()){
+      setJogValue(-1);
+    }else{
+      setState(ElevatorState.OFF);
+      resetEncoder();
+    }
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    switch(m_state){
+      case OFF:
+        set(0);
+        break;
+      case JOG:
+        set(jogValue);
+        break;
+      case POSITION:
+        goToSetpoint();
+        break;
+      case ZERO:
+        zero();
+        break;
+    }   
   }
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+  public void logData(){
+    SmartDashboard.putString("Wrist State", getState().toString());
+    SmartDashboard.putNumber("Wrist Setpoint", getSetpoint().getDegrees());
+  }
+
+  public void configMotors(){
+    m_elevatorMaster.restoreFactoryDefaults();
+    m_elevatorMaster.setInverted(false);
+    m_elevatorMaster.setIdleMode(IdleMode.kBrake);
+    m_elevatorMaster.setSmartCurrentLimit(40, 40);
+    
+     
+    m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
+    m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
+
+    m_elevatorController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    m_elevatorController.setSmartMotionMaxAccel(ElevatorConstants.MAX_ACCELERATION, 0);
+    m_elevatorController.setSmartMotionMaxVelocity(ElevatorConstants.MAX_VELOCITY, 0);    
   }
 }
