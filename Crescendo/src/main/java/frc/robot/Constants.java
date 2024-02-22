@@ -21,9 +21,19 @@ public final class Constants {
   }
 
   public static class MotorConstants {
+    //Wrist
     public static final int WRIST_MOTOR = 0;
+
+    //Indexer
     public static final int INDEXER_MOTOR = 0;
+
+    //Elevator
     public static final int ELEVATOR_MOTOR = 0;
+
+    //Toaster / Shooter / Intake
+    public static final int TOASTER_RIGHT_MOTOR = 0;
+    public static final int TOASTER_LEFT_MOTOR = 0;
+    public static final int HOLDER_MOTOR = 0;
   }
 
   public static class DriveConstants {
@@ -32,11 +42,11 @@ public final class Constants {
   }
 
   public static class SwerveModuleConstants{
-    public static final double WHEEL_DIAMETER_METERS = 0.1016;
+    public static final double WHEEL_DIAMETER_METERS = 0;//0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    public static final double WHEELBASE_WIDTH = 0.6604;
-    public static final double WHEELBASE_LENGTH = 0.6604;
+    public static final double WHEELBASE_WIDTH = 0;//0.6604;
+    public static final double WHEELBASE_LENGTH = 0;//0.6604;
 
     public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
@@ -86,6 +96,12 @@ public final class Constants {
   public static class ElevatorConstants{
     public static final double ELEVATOR_KP = 0;
     public static final double ELEVATOR_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+  }
+  public static class ToasterConstants{
+    public static final double TOASTER_KP = 0;
+    public static final double TOASTER_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
   }

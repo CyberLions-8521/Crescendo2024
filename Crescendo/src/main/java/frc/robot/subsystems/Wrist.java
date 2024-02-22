@@ -18,33 +18,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.Wrist.ArmState;
+import frc.robot.subsystems.Wrist.WristState;
 
 public class Wrist extends SubsystemBase {
   
   //Constructor & Instance
-  private Wrist() {
+  Wrist() {
     configMotors();
   }
 
-  private static Wrist m_instance = new Wrist();
-
-  public static Wrist getInstance(){
-    if (m_instance == null){
-      m_instance = new Wrist();
-    }
-    return m_instance;
-  }
-
   //Enum
-  public enum ArmState{
+  public enum WristState{
         OFF,
         JOG,
         POSITION,
         ZERO
     }
   
-  private ArmState m_state = ArmState.OFF;
+  private WristState m_state = WristState.OFF;
   
   //Objects
   private CANSparkMax m_wristMaster = new CANSparkMax(MotorConstants.WRIST_MOTOR, MotorType.kBrushless);
@@ -56,11 +47,11 @@ public class Wrist extends SubsystemBase {
   private Rotation2d setpoint = new Rotation2d();
 
 
-  public void setState(ArmState m_state){
+  public void setState(WristState m_state){
     this.m_state = m_state;
   }
 
-  public ArmState getState(){
+  public WristState getState(){
     return m_state;
   }
 
@@ -70,7 +61,7 @@ public class Wrist extends SubsystemBase {
 
   public void setJogValue(double jogValue){
     this.jogValue = jogValue;
-    setState(ArmState.JOG);
+    setState(WristState.JOG);
   }
 
   public void goToSetpoint(){
@@ -79,7 +70,7 @@ public class Wrist extends SubsystemBase {
 
   public void setSetpoint(Rotation2d setpoint){
     this.setpoint = setpoint;
-    setState(ArmState.POSITION);
+    setState(WristState.POSITION);
   }
 
   public Rotation2d getSetpoint(){
@@ -94,7 +85,7 @@ public class Wrist extends SubsystemBase {
     if(!m_limitSwitch.get()){
       setJogValue(-1);
     }else{
-      setState(ArmState.OFF);
+      setState(WristState.OFF);
       resetEncoder();
       
     }

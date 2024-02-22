@@ -2,21 +2,25 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Wrist.WristState;
 
 public class SuperStructure extends SubsystemBase {
-  private static SuperStructure m_instance = new SuperStructure();
+
+  public static final Wrist m_wrist = new Wrist();
+  public static final Elevator m_elevator = new Elevator();
+  public static final Indexer m_indexer = new Indexer();
+  public static final Toaster m_toaster = new Toaster();
 
   public SuperStructure() {}
 
-  public static SuperStructure getInstance(){
-    if (m_instance == null){
-      m_instance = new SuperStructure();
-    }
-    return m_instance;
+  public void zeroAll(){
+    m_wrist.setState(WristState.ZERO);
+    m_elevator.setState(ElevatorState.ZERO);
   }
 
   private enum SuperStructureState{
-    OFF,
+    // OFF,
     ZERO,
     GROUND,
     AMP,
@@ -25,13 +29,17 @@ public class SuperStructure extends SubsystemBase {
     TRAP
   }
 
-  private SuperStructureState m_state = SuperStructureState.OFF;
+  public void zeroALL(){
+
+  }
+
+  private SuperStructureState m_state = SuperStructureState.ZERO;
 
   public void setState(SuperStructureState newState) {
     m_state = newState;
     switch (m_state) {
-      case OFF:
-        break;
+      // case OFF:
+      //   break;
       case ZERO:
         break;
       case GROUND:
