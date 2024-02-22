@@ -24,15 +24,6 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     configMotors();
   }
-
-  private static Elevator m_instance = new Elevator();
-
-  public static Elevator getInstance(){
-    if (m_instance == null){
-      m_instance = new Elevator();
-    }
-    return m_instance;
-  }
  
   public enum ElevatorState{
     OFF,

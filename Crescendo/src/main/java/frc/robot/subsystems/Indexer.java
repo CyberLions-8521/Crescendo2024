@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
  
   public enum IndexerState{
     OFF,
-    STALL
+    ON
   }
 
   private IndexerState m_state = IndexerState.OFF;
@@ -66,7 +66,8 @@ public class Indexer extends SubsystemBase {
       case OFF:
         set(0);
         break;
-      case STALL:
+      case ON:
+        set(1);
         break;
     }   
   }
