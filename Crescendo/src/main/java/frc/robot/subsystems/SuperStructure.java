@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Indexer.IndexerState;
+import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
 import frc.robot.subsystems.Wrist.WristState;
 
@@ -14,6 +15,7 @@ public class SuperStructure extends SubsystemBase {
   public static final Elevator m_elevator = new Elevator();
   public static final Indexer m_indexer = new Indexer();
   public static final Toaster m_toaster = new Toaster();
+  public static final Joint m_joint = new Joint();
 
   public SuperStructure() {}
 
@@ -35,10 +37,11 @@ public class SuperStructure extends SubsystemBase {
   public void zeroAll(){
     m_wrist.setState(WristState.ZERO);
     m_elevator.setState(ElevatorState.ZERO);
+    m_joint.setState(JointState.ZERO);
   }
 
-  public void shoot(double RPM/* */){
-    //m_joint.goToSetpoint();
+  public void shoot(double RPM, Rotation2d setpoint){
+    m_joint.setSetpoint(setpoint);
     m_toaster.setRPM(RPM);
   }
 
@@ -64,12 +67,13 @@ public class SuperStructure extends SubsystemBase {
         m_indexer.setState(IndexerState.ON);
         break;
       case AMP:
+        
         break;
       case SOURCE:
         break;
       case SHOOT:
         //photonvisionnnn
-        shoot(100);
+        shoot(100, Rotation2d.fromRotations(0));
         break;
       case TRAP:
         break;
