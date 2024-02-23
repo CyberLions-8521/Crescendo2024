@@ -1,9 +1,14 @@
 package frc.robot.Util;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -11,18 +16,19 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.SwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 
 public class SwerveModule {
-     CANSparkMax m_driveMotor;
+     TalonFX m_driveMotor;
      CANSparkMax m_turnMotor;
-
-     SparkPIDController m_driveController;
+     
      SparkPIDController m_turnController;
 
      RelativeEncoder m_turnEncoder;
@@ -32,17 +38,14 @@ public class SwerveModule {
      private StatusSignal<Double> angleGetter;// = m_canCoder.getAbsolutePosition();
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
-          m_driveMotor = new CANSparkMax(drivePort, MotorType.kBrushless);
+          m_driveMotor = new TalonFX(drivePort);
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
           m_canCoder   = new CANcoder(encoderPort);
           angleGetter = m_canCoder.getAbsolutePosition();
 
-
-
-          m_driveController = m_driveMotor.getPIDController();
           m_turnController  = m_turnMotor.getPIDController();
 
-          m_driveEncoder = m_driveMotor.getEncoder();
+          // m_driveEncoder = m_driveMotor.getEncoder();
           m_turnEncoder = m_turnMotor.getEncoder();
 
           configMotors(isInverted);
@@ -63,9 +66,10 @@ public class SwerveModule {
 
      public void configGains(){
           m_turnController.setP(SmartDashboard.getNumber("Turn P", SwerveModuleConstants.TURN_KP));
-          m_driveController.setP(SmartDashboard.getNumber("Drive P", SwerveModuleConstants.DRIVE_KP));
+          m_driveMotor.(SmartDashboard.getNumber("Drive P", SwerveModuleConstants.DRIVE_KP));
           m_driveController.setD(SmartDashboard.getNumber("Drive D", SwerveModuleConstants.DRIVE_KD));
           m_driveController.setFF(SmartDashboard.getNumber("Drive FF", SwerveModuleConstants.DRIVE_KFF));
+          
      }
 
      public void zeroEncoders(){
@@ -140,23 +144,37 @@ public class SwerveModule {
      }
 
      public void configMotors(boolean isInverted){
-          m_driveMotor.restoreFactoryDefaults();
-          m_turnMotor.restoreFactoryDefaults();
-
-          m_driveMotor.setIdleMode(IdleMode.kBrake);
-          m_turnMotor.setIdleMode(m_driveMotor.getIdleMode());
-
-          m_driveMotor.setInverted(isInverted);
-
-          m_driveMotor.setSmartCurrentLimit(15,15);
-          m_turnMotor.setSmartCurrentLimit(15,15);
-
-          m_turnMotor.setInverted(false);
-
-          m_driveController.setP(SwerveModuleConstants.DRIVE_KP);
-          m_driveController.setD(SwerveModuleConstants.DRIVE_KD);
-          m_driveController.setFF(SwerveModuleConstants.DRIVE_KFF);
+          //CREATE CONFIGURATION OBJECT
+          TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
+          
+          //CONFIGURE PID VALUES
+          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
+          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
+          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
 
           m_turnController.setP(SwerveModuleConstants.TURN_KP);
+
+          //CONFIGURE CURRENT LIMITS
+          CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
+          m_driveCurrentLimits.StatorCurrentLimit = 15;
+          m_driveCurrentLimits.StatorCurrentLimitEnable = true;   
+
+          //CONFIGURE IDLE MODE
+          m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
+          m_turnMotor.setIdleMode(IdleMode.kBrake);
+
+          //CONFIGURE INVERSION
+          m_driveMotor.setInverted(isInverted);
+          m_turnMotor.setInverted(false);
+
+          //APPLY CURRENT LIMITS
+          m_driveControllerConfig.CurrentLimits = m_driveCurrentLimits;
+          m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
+          m_turnMotor.setSmartCurrentLimit(15,15);  
+
+          //RESTORE FACTORY DEFAULT
+          m_driveMotor.restoreFactoryDefaults();
+          m_turnMotor.restoreFactoryDefaults();
+          
      }
 }
