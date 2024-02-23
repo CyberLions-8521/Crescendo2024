@@ -37,7 +37,6 @@ public class SwerveModule {
 
      //ENCODER OBJECTS
      RelativeEncoder m_turnEncoder;
-     RelativeEncoder m_driveEncoder;
 
      //CREATE CONFIGURATION OBJECT
      TalonFXConfiguration m_driveControllerConfig;
@@ -46,27 +45,35 @@ public class SwerveModule {
      private CANcoder m_canCoder;
      private StatusSignal<Double> angleGetter;
      
+     //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
      private VelocityDutyCycle targetSpeed;
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
+          //CREATE MOTORS
           m_driveMotor = new TalonFX(drivePort);
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
+
+          //CREATE CANCODER
           m_canCoder   = new CANcoder(encoderPort);
           angleGetter = m_canCoder.getAbsolutePosition();
 
+          //CREATE PID CONTROLLER
           m_turnController  = m_turnMotor.getPIDController();
+          targetSpeed = new VelocityDutyCycle(0).withSlot(0);
 
+          //CREATE TURN ENCODER
           m_turnEncoder = m_turnMotor.getEncoder();
 
+          //CONFIGURATIONS
           configMotors(isInverted);
           configCANcoder(angleOffset);
           zeroEncoders();
           rezeroTurnMotors();
 
-          targetSpeed = new VelocityDutyCycle(0).withSlot(0);
      }
 
      public void configCANcoder(double angleOffset){
+          //CONFIGURE CANCODER
           CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
           m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
@@ -77,7 +84,10 @@ public class SwerveModule {
      }
 
      public void configGains(){
+          //CONFIGURE TURN CONTROLLER GAINS
           m_turnController.setP(SmartDashboard.getNumber("Turn P", SwerveModuleConstants.TURN_KP));
+
+          //CONFIGURE DRIVE CONTROLLER GAINS
           m_driveControllerConfig.Slot0.kP = (SmartDashboard.getNumber("Drive P", SwerveModuleConstants.DRIVE_KP));
           m_driveControllerConfig.Slot0.kD = (SmartDashboard.getNumber("Drive D", SwerveModuleConstants.DRIVE_KD));
           m_driveControllerConfig.Slot0.kV = (SmartDashboard.getNumber("Drive FF", SwerveModuleConstants.DRIVE_KFF));
@@ -85,11 +95,13 @@ public class SwerveModule {
      }
 
      public void zeroEncoders(){
+          //ZERO ENCODERS
           m_turnEncoder.setPosition(0);
-          m_driveEncoder.setPosition(0);
+          m_driveMotor.setPosition(0);
      }
 
      public void rezeroTurnMotors(){
+          //REZERO TURN MOTORS
           m_turnEncoder.setPosition(-getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
      }
 
@@ -142,7 +154,7 @@ public class SwerveModule {
           //rotations per second * (motor turns / 1 rotation)
           //motor turns per second
           //motor turns per second * circumference
-          double motorRPS = m_driveEncoder.getVelocity() / 60;
+          double motorRPS = m_driveMotor.getVelocity().getValue() / 60;
           double wheelRPS = motorRPS / SwerveModuleConstants.DRIVE_GEAR_RATIO;
           return (wheelRPS * SwerveModuleConstants.CIRCUMFERENCE);
      }
@@ -151,7 +163,7 @@ public class SwerveModule {
           //motor turns / gear ratio
           //motor turns / (motor turns / 1 revolution)
           //1 revolution * circumference
-          return ((m_driveEncoder.getPosition() / SwerveModuleConstants.DRIVE_GEAR_RATIO) * SwerveModuleConstants.CIRCUMFERENCE);
+          return ((m_driveMotor.getPosition().getValue() / SwerveModuleConstants.DRIVE_GEAR_RATIO) * SwerveModuleConstants.CIRCUMFERENCE);
      }
 
      public SwerveModulePosition getModulePosition(){
