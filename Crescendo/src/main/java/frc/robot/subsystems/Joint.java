@@ -18,16 +18,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.Joint.JointState;
 
 public class Joint extends SubsystemBase {
   
-  //Constructor & Instance
+  //CONSTRUCTOR
   Joint() {
     configMotors();
+    resetEncoder();
   }
 
-  //Enum
+  //STATES
   public enum JointState{
         OFF,
         JOG,
@@ -37,16 +37,25 @@ public class Joint extends SubsystemBase {
   
   private JointState m_state = JointState.OFF;
   
-  //Objects
-  private CANSparkMax m_JointMaster = new CANSparkMax(MotorConstants.JOINT_MOTOR, MotorType.kBrushless);
-  private RelativeEncoder m_JointEncoder = m_JointMaster.getEncoder();
+  //MOTOR OBJECTS
+  private CANSparkMax m_jointRight = new CANSparkMax(MotorConstants.JOINT_RIGHT_MOTOR, MotorType.kBrushless);
+  private CANSparkMax m_jointLeft = new CANSparkMax(MotorConstants.JOINT_LEFT_MOTOR, MotorType.kBrushless);
+
+  //ENCODER OBJECT
+  private RelativeEncoder m_jointRightEncoder = m_jointRight.getEncoder();
+  private RelativeEncoder m_jointLeftEncoder = m_jointLeft.getEncoder();
+
+  //LIMIT SWITCH OBJECT
   private DigitalInput m_limitSwitch = new DigitalInput(0);
-  private SparkPIDController m_JointController = m_JointMaster.getPIDController();
+
+  //MOTOR CONTROLLER OBJECT
+  private SparkPIDController m_JointController = m_jointRight.getPIDController();
   
+  //JOG VALUE & SETPOINT
   private double jogValue = 0;
   private Rotation2d setpoint = new Rotation2d();
 
-
+  //STATE OBJECTS
   public void setState(JointState m_state){
     this.m_state = m_state;
   }
@@ -55,8 +64,10 @@ public class Joint extends SubsystemBase {
     return m_state;
   }
 
+  //SET MOTOR OUTPUT METHODS
   public void set(double value){
-    m_JointMaster.set(value);
+    m_jointRight.set(value);
+    m_jointLeft.set(value);
   }
 
   public void setJogValue(double jogValue){
@@ -64,6 +75,7 @@ public class Joint extends SubsystemBase {
     setState(JointState.JOG);
   }
 
+  //SETPOINT METHODS
   public void goToSetpoint(){
     m_JointController.setReference(setpoint.getRotations(), ControlType.kPosition);
   }
@@ -77,13 +89,15 @@ public class Joint extends SubsystemBase {
     return setpoint;
   }
 
+  //ZERO/RESET METHODS
   public void resetEncoder(){
-    m_JointEncoder.setPosition(0);
+    m_jointRightEncoder.setPosition(0);
+    m_jointLeftEncoder.setPosition(0);
   }
 
   public void zero(){
     if(!m_limitSwitch.get()){
-      setJogValue(-1);
+      setJogValue(1);
     }else{
     setState(JointState.OFF);
     resetEncoder();
@@ -114,11 +128,15 @@ public class Joint extends SubsystemBase {
   }
 
   public void configMotors(){
-    m_JointMaster.restoreFactoryDefaults();
-    m_JointMaster.setInverted(false);
-    m_JointMaster.setIdleMode(IdleMode.kBrake);
-    m_JointMaster.setSmartCurrentLimit(40, 40);
-    
+    m_jointRight.restoreFactoryDefaults();
+    m_jointRight.setInverted(false);
+    m_jointRight.setIdleMode(IdleMode.kBrake);
+    m_jointRight.setSmartCurrentLimit(40, 40);
+
+    m_jointLeft.restoreFactoryDefaults();
+    m_jointLeft.setInverted(!m_jointRight.getInverted());
+    m_jointLeft.setIdleMode(IdleMode.kBrake);
+    m_jointLeft.setSmartCurrentLimit(40, 40);
      
     m_JointController.setP(JointConstants.JOINT_KP);
     m_JointController.setD(JointConstants.JOINT_KD);
