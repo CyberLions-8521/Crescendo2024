@@ -85,11 +85,10 @@ public class Joint extends SubsystemBase {
     if(!m_limitSwitch.get()){
       setJogValue(-1);
     }else{
-      setState(JointState.OFF);
-      resetEncoder();
-      
-    }
+    setState(JointState.OFF);
+    resetEncoder();
   }
+}
   
   @Override
   public void periodic() {

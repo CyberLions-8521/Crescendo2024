@@ -80,9 +80,9 @@ public class Elevator extends SubsystemBase {
     if(!m_limitSwitch.get()){
       setJogValue(-1);
     }else{
-      setState(ElevatorState.OFF);
-      resetEncoder();
-    }
+    setState(ElevatorState.OFF);
+    resetEncoder();
+  }
   }
 
   @Override

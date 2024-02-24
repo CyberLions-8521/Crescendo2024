@@ -22,31 +22,38 @@ import frc.robot.subsystems.Wrist.WristState;
 
 public class Wrist extends SubsystemBase {
   
-  //Constructor & Instance
+  //CONSTRUCTOR
   Wrist() {
     configMotors();
   }
 
-  //Enum
+  //STATES
   public enum WristState{
         OFF,
+        //JOG = MOTOR OUTPUT
         JOG,
         POSITION,
         ZERO
     }
   
+  //SET STATE, JOGVALUE, AND SETPOINT
   private WristState m_state = WristState.OFF;
-  
-  //Objects
-  private CANSparkMax m_wristMaster = new CANSparkMax(MotorConstants.WRIST_MOTOR, MotorType.kBrushless);
-  private RelativeEncoder m_wristEncoder = m_wristMaster.getEncoder();
-  private DigitalInput m_limitSwitch = new DigitalInput(0);
-  private SparkPIDController m_wristController = m_wristMaster.getPIDController();
-  
   private double jogValue = 0;
   private Rotation2d setpoint = new Rotation2d();
+  
+  //MOTOR OBJECT
+  private CANSparkMax m_wristMaster = new CANSparkMax(MotorConstants.WRIST_MOTOR, MotorType.kBrushless);
 
+  //ENCODER OBJECT
+  private RelativeEncoder m_wristEncoder = m_wristMaster.getEncoder();
+  
+  //LIMIT SWITCH
+  private DigitalInput m_limitSwitch = new DigitalInput(0);
 
+  //PID CONTROLLER
+  private SparkPIDController m_wristController = m_wristMaster.getPIDController();
+
+  //STATE METHODS
   public void setState(WristState m_state){
     this.m_state = m_state;
   }
@@ -55,6 +62,7 @@ public class Wrist extends SubsystemBase {
     return m_state;
   }
 
+  //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_wristMaster.set(value);
   }
@@ -64,6 +72,7 @@ public class Wrist extends SubsystemBase {
     setState(WristState.JOG);
   }
 
+  //SETPOINT METHODS
   public void goToSetpoint(){
     m_wristController.setReference(setpoint.getRotations(), ControlType.kPosition);
   }
@@ -77,19 +86,21 @@ public class Wrist extends SubsystemBase {
     return setpoint;
   }
 
+  //ZERO METHODS
   public void resetEncoder(){
     m_wristEncoder.setPosition(0);
   }
 
   public void zero(){
+    //IF LIMIT SWITCH IS NOT CLICKED --> GO BACKWARDS
     if(!m_limitSwitch.get()){
       setJogValue(-1);
-    }else{
+    }
+    else{
       setState(WristState.OFF);
       resetEncoder();
-      
     }
-  }
+}
   
   @Override
   public void periodic() {

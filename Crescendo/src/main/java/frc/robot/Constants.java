@@ -34,6 +34,9 @@ public final class Constants {
     public static final int TOASTER_RIGHT_MOTOR = 0;
     public static final int TOASTER_LEFT_MOTOR = 0;
     public static final int HOLDER_MOTOR = 0;
+
+    //Joint
+    public static final int JOINT_MOTOR = 0;
   }
 
   public static class DriveConstants {
@@ -45,8 +48,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER_METERS = 0;//0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    public static final double WHEELBASE_WIDTH = 0;//0.6604;
-    public static final double WHEELBASE_LENGTH = 0;//0.6604;
+    public static final double WHEELBASE_WIDTH = 0.7366;//0.6604;
+    public static final double WHEELBASE_LENGTH = 0.7366;//0.6604;
 
     public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
@@ -55,8 +58,8 @@ public final class Constants {
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(TOP_LEFT_MODULE_POSITION, TOP_RIGHT_MODULE_POSITION, BOTTOM_LEFT_MODULE_POSITION, BOTTOM_RIGHT_MODULE_POSITION);
 
-    public static final double TURN_GEAR_RATIO = 12.8;
-    public static final double DRIVE_GEAR_RATIO = 6.75;
+    public static final double TURN_GEAR_RATIO = 150.0/7;//12.8;
+    public static final double DRIVE_GEAR_RATIO = 5.9028;//8.14;//6.12;//6.75;
 
     public static final int BOTTOM_RIGHT_DRIVE_PORT = 1;
     public static final int BOTTOM_LEFT_DRIVE_PORT = 3;
@@ -102,6 +105,12 @@ public final class Constants {
   public static class ToasterConstants{
     public static final double TOASTER_KP = 0;
     public static final double TOASTER_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+  }
+  public static class JointConstants{
+    public static final double JOINT_KP = 0;
+    public static final double JOINT_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
   }

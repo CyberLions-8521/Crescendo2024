@@ -20,19 +20,12 @@ import frc.robot.Constants.MotorConstants;
 
 public class Indexer extends SubsystemBase {
 
+  //CONSTRUCTOR
   public Indexer() {
     configMotors();
   }
-
-  private static Indexer m_instance = new Indexer();
-
-  public static Indexer getInstance(){
-    if (m_instance == null){
-      m_instance = new Indexer();
-    }
-    return m_instance;
-  }
  
+  //STATES
   public enum IndexerState{
     OFF,
     ON
@@ -41,8 +34,6 @@ public class Indexer extends SubsystemBase {
   private IndexerState m_state = IndexerState.OFF;
 
   private CANSparkMax m_indexerMaster = new CANSparkMax(MotorConstants.INDEXER_MOTOR, MotorType.kBrushless);
-  private RelativeEncoder m_indexerEncoder = m_indexerMaster.getEncoder();
-  private SparkPIDController m_indexerController = m_indexerMaster.getPIDController();
 
   public void setState(IndexerState m_state){
     this.m_state = m_state;
@@ -56,10 +47,6 @@ public class Indexer extends SubsystemBase {
     m_indexerMaster.set(value);
   }
 
-  public void resetEncoder(){
-    m_indexerEncoder.setPosition(0);
-  }
-
   @Override
   public void periodic() {
     switch(m_state){
@@ -67,7 +54,7 @@ public class Indexer extends SubsystemBase {
         set(0);
         break;
       case ON:
-        set(1);
+        set(0.8);
         break;
     }   
   }
