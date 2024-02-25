@@ -11,11 +11,12 @@ import frc.robot.subsystems.Wrist.WristState;
 
 public class SuperStructure extends SubsystemBase {
 
-  public static final Wrist m_wrist = new Wrist();
-  public static final Elevator m_elevator = new Elevator();
-  public static final Indexer m_indexer = new Indexer();
-  public static final Toaster m_toaster = new Toaster();
-  public static final Joint m_joint = new Joint();
+  public final Wrist m_wrist = new Wrist();
+  public final Hood m_hood = new Hood();
+  public final Elevator m_elevator = new Elevator();
+  public final Indexer m_indexer = new Indexer();
+  public final Toaster m_toaster = new Toaster();
+  public final Joint m_joint = new Joint();
 
   public SuperStructure() {}
 
@@ -57,6 +58,9 @@ public class SuperStructure extends SubsystemBase {
   public void jointGoToSetpoint(Rotation2d setpoint){
     m_joint.setSetpoint(setpoint);
   }
+  public void hoodGoToSetpoint(Rotation2d setpoint){
+    m_hood.setSetpoint(setpoint);
+  }
 
   //   public void goToSetpoint(Rotation2d wristSetpoint, Rotation2d elevatorSetpoint, Rotation2d jointSetpoint){
   //   m_wrist.setSetpoint(wristSetpoint);
@@ -91,7 +95,7 @@ public class SuperStructure extends SubsystemBase {
         //joint up
         jointGoToSetpoint(null);
         elevatorGoToSetpoint(null);
-        //m_ampAssisst.setState(AmpAssistState.ON);
+        hoodGoToSetpoint(null);
         shoot(0);
 
         break;

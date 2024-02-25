@@ -24,6 +24,9 @@ public final class Constants {
     //Wrist
     public static final int WRIST_MOTOR = 0;
 
+    //Hood
+    public static final int HOOD_MOTOR = 0;
+
     //Indexer
     public static final int INDEXER_MOTOR = 0;
 
@@ -94,6 +97,12 @@ public final class Constants {
   public static class WristConstants{
     public static final double WRIST_KP = 0;
     public static final double WRIST_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+  }
+  public static class HoodConstants{
+    public static final double HOOD_KP = 0;
+    public static final double HOOD_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
   }
