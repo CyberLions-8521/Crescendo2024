@@ -36,7 +36,8 @@ public final class Constants {
     public static final int HOLDER_MOTOR = 0;
 
     //Joint
-    public static final int JOINT_MOTOR = 0;
+    public static final int JOINT_RIGHT_MOTOR = 0;
+    public static final int JOINT_LEFT_MOTOR = 0;
   }
 
   public static class DriveConstants {

@@ -42,19 +42,19 @@ public class SuperStructure extends SubsystemBase {
     m_indexer.setState(IndexerState.OFF);
   }
 
-  public void shoot(double RPM, Rotation2d setpoint){
-    m_joint.setSetpoint(setpoint);
+  public void shoot(double RPM){
     m_toaster.setRPM(RPM);
   }
 
-  
+  //Count combine setpoint methonds for simplification
   public void wristGoToSetpoint(Rotation2d setpoint){
     m_wrist.setSetpoint(setpoint);
   }
+
   public void elevatorGoToSetpoint(Rotation2d setpoint){
     m_elevator.setSetpoint(setpoint);
   }
-  public void jointrGoToSetpoint(Rotation2d setpoint){
+  public void jointGoToSetpoint(Rotation2d setpoint){
     m_joint.setSetpoint(setpoint);
   }
 
@@ -64,10 +64,10 @@ public class SuperStructure extends SubsystemBase {
   //   m_joint.setSetpoint(jointSetpoint);
   // }
 
-  public void intake(){
-    m_toaster.setState(ToasterState.INTAKE);
-    m_indexer.setState(IndexerState.ON);
-  }
+  // public void intake(){
+  //   m_toaster.setState(ToasterState.INTAKE);
+  //   m_indexer.setState(IndexerState.ON);
+  // }
 
   public void setState(SuperStructureState newState) {
     m_state = newState;
@@ -79,32 +79,38 @@ public class SuperStructure extends SubsystemBase {
         //wrist comes out
         //elevator comes out a bit
         //joint goes down all the way past the zero point
-        // goToSetpoint(null, null, null);
-        m_wrist.goToSetpoint();
+        wristGoToSetpoint(null);;
         elevatorGoToSetpoint(null);
-        jointrGoToSetpoint(null);
-        intake();
+        jointGoToSetpoint(null);
+        m_indexer.setState(IndexerState.ON);
+        m_toaster.setState(ToasterState.INTAKE);
         break;
       case AMP:
         //add amp assist subsystem
-        m_wrist.setState(WristState.ZERO);
         //elevator out
         //joint up
-        
-        // goToSetpoint(null, null, null);
-        shoot(0, null);
+        jointGoToSetpoint(null);
+        elevatorGoToSetpoint(null);
+        //m_ampAssisst.setState(AmpAssistState.ON);
+        shoot(0);
 
         break;
       case SOURCE:
-        m_wrist.setState(WristState.ZERO);
-        // goToSetpoint(null, null, null);
-        
+        //join up
+        //elevator out
+        jointGoToSetpoint(null);
+        elevatorGoToSetpoint(null);
+        m_toaster.setState(ToasterState.INTAKE);
         break;
       case SHOOT:
-        //photonvisionnnn
-        shoot(100, Rotation2d.fromRotations(0));
+        //photonvisionnnn for aim assist
+        jointGoToSetpoint(null);
+        shoot(100);
         break;
       case TRAP:
+        //wrist goes all the way up
+        //trap mechanism activates
+        wristGoToSetpoint(null);
         break;
     }
   }
