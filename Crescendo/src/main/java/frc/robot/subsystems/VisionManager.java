@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -37,56 +38,66 @@ public class VisionManager extends SubsystemBase {
 
   private PhotonCamera m_camera1 = new PhotonCamera("joemama");
   private PhotonCamera m_camera2 = new PhotonCamera("Jackson");
-  private PhotonPipelineResult results1;
-  private PhotonPipelineResult results2;
+  private PhotonPipelineResult results;
   private Pose3d robotPose;
-  private PhotonTrackedTarget target1;
-  private PhotonTrackedTarget target2;
-  Transform3d robotToCam1;
-  Transform3d robotToCam2;
+  private PhotonTrackedTarget target;
+  private Transform3d robotToCam1;
+  private Transform3d robotToCam2;
+  private double imageCaptureTime;
+
+  AprilTagPoseEstimate estimator;
+
+  private final Supplier<Rotation2d> rotationSupplier;
+  private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
   PhotonPoseEstimator m_estimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_camera1, robotToCam1);
   PhotonPoseEstimator m_estimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_camera2, robotToCam2);
   SwerveDrivePoseEstimator m_swerveEstimator;
   
-  public VisionManager(Rotation2d gyroAngle, SwerveModulePosition[] swervePositions) {
+  public VisionManager(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
+    this.rotationSupplier = rotationSupplier;
+    this.modulePositionSupplier = modulePositionSupplier;
 
-    m_swerveEstimator = new SwerveDrivePoseEstimator(SwerveModuleConstants.DRIVE_KINEMATICS, gyroAngle, swervePositions, null);
+    m_swerveEstimator = new SwerveDrivePoseEstimator(SwerveModuleConstants.DRIVE_KINEMATICS, rotationSupplier.get(), modulePositionSupplier.get(), null);
+
+    m_estimator1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    m_estimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
   }
 
   @Override
   public void periodic() {
-    update(null, null);
+    update();
   }
 
-  public void update(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions){
-    m_swerveEstimator.update(gyro.getRotation2d(), modulePositions);
+  public void update(){
+    m_swerveEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
+    updateVisionPoseEstimate(m_estimator1);
+    updateVisionPoseEstimate(m_estimator2);
+  }
+  
+  private Pose3d updateVisionPoseEstimate(PhotonPoseEstimator m_estimator){
     
-    results1 = m_camera1.getLatestResult();
-    results2 = m_camera2.getLatestResult();
-    
-    //add smth for that speific aiming tag on the speaker
-    if(results1.hasTargets()){
-      target1 = results1.getBestTarget();
-      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target1.getBestCameraToTarget(), 
-      aprilTagFieldLayout.getTagPose(target1.getFiducialId()).get(), new Transform3d());
+    if(m_estimator.update() != null){
+      results = m_camera1.getLatestResult();  
+      target = results.getBestTarget();
+      target.getPoseAmbiguity();
+      imageCaptureTime = results.getTimestampSeconds();
+      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), 
+      aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), new Transform3d());
+      m_swerveEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
     }
+    return robotPose;
+  } 
 
-    if(results2.hasTargets()){
-      target2 = results2.getBestTarget();
-      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target1.getBestCameraToTarget(), 
-      aprilTagFieldLayout.getTagPose(target1.getFiducialId()).get(), new Transform3d());
-    }
-    m_swerveEstimator.addVisionMeasurement(null, 0);
+  public void aimAtTarget(){
+    //get yaw and pitch?
+    //return yaw and pitch for robot container
   }
 
-
-
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    AprilTagPoseEstimate estimate = new AprilTagPoseEstimate(null, null, 0, 0)   
-    m_estimator1.setReferencePose(prevEstimatedRobotPose);
-        return m_estimator1.update();
-    }
+  public Pose2d getCurrentPose(){
+    return m_swerveEstimator.getEstimatedPosition();
+  }
 
 
 }
