@@ -55,6 +55,7 @@ public class VisionManager extends SubsystemBase {
   SwerveDrivePoseEstimator m_swerveEstimator;
   
   public VisionManager(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
+    
     this.rotationSupplier = rotationSupplier;
     this.modulePositionSupplier = modulePositionSupplier;
 
@@ -76,28 +77,47 @@ public class VisionManager extends SubsystemBase {
     updateVisionPoseEstimate(m_estimator2);
   }
   
-  private Pose3d updateVisionPoseEstimate(PhotonPoseEstimator m_estimator){
+  private void updateVisionPoseEstimate(PhotonPoseEstimator m_estimator){
     
-    if(m_estimator.update() != null){
-      results = m_camera1.getLatestResult();  
-      target = results.getBestTarget();
-      target.getPoseAmbiguity();
-      imageCaptureTime = results.getTimestampSeconds();
-      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), 
-      aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), new Transform3d());
-      m_swerveEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
+    // if(m_estimator.update() != null){
+    //   results = m_camera1.getLatestResult();  
+    //   target = results.getBestTarget();
+    //   target.getPoseAmbiguity();
+    //   imageCaptureTime = results.getTimestampSeconds();
+    //   robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), 
+    //   aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), new Transform3d());
+    //   m_swerveEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
+    // }
+    //or
+    Optional<EstimatedRobotPose> estimatedPose = m_estimator.update();
+    if(estimatedPose.isPresent()){
+      m_swerveEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), estimatedPose.get().timestampSeconds);
     }
-    return robotPose;
+    
   } 
 
-  public void aimAtTarget(){
-    //get yaw and pitch?
-    //return yaw and pitch for robot container
-  }
+
+  //aim assist
+  // public double getYawSpeakerTag(){
+  //   //Yaw = right of the april tag
+  //   results = m_camera1.getLatestResult();  
+  //   target = results.getBestTarget();
+  //   if(target.getFiducialId() == 1){
+  //     return target.getYaw();
+  //   }
+  //   return 0;
+  // }
+  // public double getPitchSpeakerTag(){
+  //   //pitch = up of the april tag
+  //   results = m_camera1.getLatestResult();  
+  //   target = results.getBestTarget();
+  //   if(target.getFiducialId() == 1){
+  //     return target.getPitch();
+  //   }    
+  //   return 0;
+  // }
 
   public Pose2d getCurrentPose(){
     return m_swerveEstimator.getEstimatedPosition();
   }
-
-
 }
