@@ -39,13 +39,13 @@ public class VisionManager extends SubsystemBase {
   private PhotonCamera m_camera1 = new PhotonCamera("joemama");
   private PhotonCamera m_camera2 = new PhotonCamera("Jackson");
   private PhotonPipelineResult results;
-  private Pose3d robotPose;
   private PhotonTrackedTarget target;
+  private Pose3d robotPose;
   private Transform3d robotToCam1;
   private Transform3d robotToCam2;
   private double imageCaptureTime;
 
-  AprilTagPoseEstimate estimator;
+  private AprilTagPoseEstimate estimator;
 
   private final Supplier<Rotation2d> rotationSupplier;
   private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
@@ -78,7 +78,10 @@ public class VisionManager extends SubsystemBase {
   }
   
   private void updateVisionPoseEstimate(PhotonPoseEstimator m_estimator){
-    
+    Optional<EstimatedRobotPose> estimatedPose = m_estimator.update();
+    if(estimatedPose.isPresent()){
+      m_swerveEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), estimatedPose.get().timestampSeconds);
+    }
     // if(m_estimator.update() != null){
     //   results = m_camera1.getLatestResult();  
     //   target = results.getBestTarget();
@@ -89,11 +92,6 @@ public class VisionManager extends SubsystemBase {
     //   m_swerveEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
     // }
     //or
-    Optional<EstimatedRobotPose> estimatedPose = m_estimator.update();
-    if(estimatedPose.isPresent()){
-      m_swerveEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), estimatedPose.get().timestampSeconds);
-    }
-    
   } 
 
 
