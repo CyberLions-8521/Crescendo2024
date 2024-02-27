@@ -16,6 +16,7 @@ public class Toaster extends SubsystemBase {
   //CONSTRUCTOR
   public Toaster() {
     configMotors();
+    configToasterPID();
   }
 
   //STATES
@@ -38,6 +39,7 @@ public class Toaster extends SubsystemBase {
   
   private double RPM = 0;
 
+  //STATE METHODS
   public void setState(ToasterState m_state){
     this.m_state = m_state;
   }
@@ -46,11 +48,13 @@ public class Toaster extends SubsystemBase {
     return m_state;
   }
 
+  //SET MOTOR OUTPUT METHODS
   public void set(double intakeValue, double holderValue){
     m_toasterRight.set(intakeValue);
     m_toasterLeft.set(intakeValue);
     m_holder.set(holderValue);
   }
+  
   
   public void shoot(){
     m_toasterController.setReference(RPM, ControlType.kVelocity);
@@ -62,13 +66,7 @@ public class Toaster extends SubsystemBase {
   }
 
   public void intake(){
-
     set(-0.8, -0.8);
-    /*if(m_toasterLeft.getOutputCurrent() >= 0.01){
-      
-    }else{
-      
-    }*/
   }
   
   @Override
@@ -91,25 +89,33 @@ public class Toaster extends SubsystemBase {
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
   }
 
-  public void configMotors(){
-    m_toasterRight.restoreFactoryDefaults();
-    m_toasterRight.setInverted(false);
-    m_toasterRight.setIdleMode(IdleMode.kBrake);
-    m_toasterRight.setSmartCurrentLimit(40, 40);
-
-    m_toasterLeft.restoreFactoryDefaults();
-    m_toasterLeft.setInverted(!m_toasterRight.getInverted());
-    m_toasterLeft.setIdleMode(IdleMode.kBrake);
-    m_toasterLeft.setSmartCurrentLimit(40, 40);
-
-    m_holder.restoreFactoryDefaults();
-    m_holder.setInverted(false);
-    m_holder.setIdleMode(IdleMode.kBrake);
-    m_holder.setSmartCurrentLimit(40, 40);
-
+  public void configToasterPID(){
     m_toasterController.setP(ToasterConstants.TOASTER_KP);
     m_toasterController.setD(ToasterConstants.TOASTER_KD);
+  }
 
+  public void configMotors(){
+    //RESTORE FACTORY DEFAULT
+    m_toasterRight.restoreFactoryDefaults();
+    m_toasterLeft.restoreFactoryDefaults();
+    m_holder.restoreFactoryDefaults();
+
+    //SET INVERSION
+    m_toasterRight.setInverted(false);
+    m_toasterLeft.setInverted(!m_toasterRight.getInverted());
+    m_holder.setInverted(false);
+
+    //SET IDLE MODE
+    m_toasterRight.setIdleMode(IdleMode.kBrake);
+    m_toasterLeft.setIdleMode(m_toasterRight.getIdleMode());
+    m_holder.setIdleMode(IdleMode.kBrake);
+
+    //SET SMART CURRENT LIMIT
+    m_toasterRight.setSmartCurrentLimit(40, 40);
+    m_toasterLeft.setSmartCurrentLimit(40, 40);
+    m_holder.setSmartCurrentLimit(40, 40);
+
+    //SET SMART MOTION
     m_toasterController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     m_toasterController.setSmartMotionMaxAccel(ToasterConstants.MAX_ACCELERATION, 0);
     m_toasterController.setSmartMotionMaxVelocity(ToasterConstants.MAX_VELOCITY, 0);    
