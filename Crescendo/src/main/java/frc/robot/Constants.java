@@ -99,29 +99,34 @@ public final class Constants {
     public static final double WRIST_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+    public static final double GEAR_RATIO = 0;
   }
   public static class HoodConstants{
     public static final double HOOD_KP = 0;
     public static final double HOOD_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+    public static final double GEAR_RATIO = 1;
   }
   public static class ElevatorConstants{
     public static final double ELEVATOR_KP = 0;
     public static final double ELEVATOR_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+    public static final double GEAR_RATIO = 12;
   }
   public static class ToasterConstants{
     public static final double TOASTER_KP = 0;
     public static final double TOASTER_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+    public static final double GEAR_RATIO = 1;
   }
   public static class JointConstants{
     public static final double JOINT_KP = 0;
     public static final double JOINT_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+    public static final double GEAR_RATIO = 188.4615;
   }
 }

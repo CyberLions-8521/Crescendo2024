@@ -20,7 +20,7 @@ public class SuperStructure extends SubsystemBase {
 
   public SuperStructure() {}
 
-  private enum SuperStructureState{
+  public enum SuperStructureState{
     // OFF,
     ZERO,
     GROUND,
@@ -52,7 +52,7 @@ public class SuperStructure extends SubsystemBase {
     m_wrist.setSetpoint(setpoint);
   }
 
-  public void elevatorGoToSetpoint(double setpoint){
+  public void elevatorGoToSetpoint(Rotation2d setpoint){
     m_elevator.setSetpoint(setpoint);
   }
   public void jointGoToSetpoint(Rotation2d setpoint){
@@ -84,7 +84,7 @@ public class SuperStructure extends SubsystemBase {
         //elevator comes out a bit
         //joint goes down all the way past the zero point
         wristGoToSetpoint(null);;
-        elevatorGoToSetpoint(0);
+        elevatorGoToSetpoint(null);
         jointGoToSetpoint(null);
         m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
@@ -94,7 +94,7 @@ public class SuperStructure extends SubsystemBase {
         //elevator out
         //joint up
         jointGoToSetpoint(null);
-        elevatorGoToSetpoint(0);
+        elevatorGoToSetpoint(null);
         hoodGoToSetpoint(null);
         shoot(0);
 
@@ -103,7 +103,7 @@ public class SuperStructure extends SubsystemBase {
         //join up
         //elevator out
         jointGoToSetpoint(null);
-        elevatorGoToSetpoint(0);
+        elevatorGoToSetpoint(null);
         m_toaster.setState(ToasterState.INTAKE);
         break;
       case SHOOT:

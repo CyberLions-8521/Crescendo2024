@@ -51,4 +51,8 @@ public class Tracker extends SubsystemBase{
     public void resetHeading(){
         setPose(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(0)));
     }
+
+    public SwerveDrivePoseEstimator getSwervePoseEstimator(){
+        return m_poseEstimator;
+    }
 }

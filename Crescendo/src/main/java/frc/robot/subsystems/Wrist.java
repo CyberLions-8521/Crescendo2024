@@ -137,6 +137,6 @@ public class Wrist extends SubsystemBase {
 
     m_wristController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     m_wristController.setSmartMotionMaxAccel(WristConstants.MAX_ACCELERATION, 0);
-    m_wristController.setSmartMotionMaxVelocity(WristConstants.MAX_VELOCITY, 0);    
+    m_wristController.setSmartMotionMaxVelocity(WristConstants.MAX_VELOCITY, 0);
   }
 }

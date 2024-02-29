@@ -54,12 +54,13 @@ public class VisionManager extends SubsystemBase {
   PhotonPoseEstimator m_estimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_camera2, robotToCam2);
   SwerveDrivePoseEstimator m_swerveEstimator;
   
-  public VisionManager(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
+  public VisionManager(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier, SwerveDrivePoseEstimator m_swerveEstimator) {
     
     this.rotationSupplier = rotationSupplier;
     this.modulePositionSupplier = modulePositionSupplier;
 
-    m_swerveEstimator = new SwerveDrivePoseEstimator(SwerveModuleConstants.DRIVE_KINEMATICS, rotationSupplier.get(), modulePositionSupplier.get(), null);
+    this.m_swerveEstimator = m_swerveEstimator;
+    // m_swerveEstimator = new SwerveDrivePoseEstimator(SwerveModuleConstants.DRIVE_KINEMATICS, rotationSupplier.get(), modulePositionSupplier.get(), null);
 
     m_estimator1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     m_estimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
