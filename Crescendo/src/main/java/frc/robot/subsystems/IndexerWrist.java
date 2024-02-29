@@ -19,16 +19,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
-public class Wrist extends SubsystemBase {
+public class IndexerWrist extends SubsystemBase {
   
   //CONSTRUCTOR
-  Wrist() {
+  IndexerWrist() {
     configMotors();
     resetEncoder();
   }
 
   //STATES
-  public enum WristState{
+  public enum IndexerWristState{
         OFF,
         //JOG = MOTOR OUTPUT
         JOG,
@@ -37,49 +37,49 @@ public class Wrist extends SubsystemBase {
     }
   
   //SET STATE, JOGVALUE, AND SETPOINT
-  private WristState m_state = WristState.OFF;
+  private IndexerWristState m_state = IndexerWristState.OFF;
   private double jogValue = 0;
   private Rotation2d setpoint = new Rotation2d();
   
   //MOTOR OBJECT
-  private CANSparkMax m_wristMaster = new CANSparkMax(MotorConstants.WRIST_MOTOR, MotorType.kBrushless);
+  private CANSparkMax m_indexerWristMaster = new CANSparkMax(MotorConstants.INDEXER_WRIST_MOTOR, MotorType.kBrushless);
 
   //ENCODER OBJECT
-  private RelativeEncoder m_wristEncoder = m_wristMaster.getEncoder();
+  private RelativeEncoder m_indexerWristEncoder = m_indexerWristMaster.getEncoder();
   
   //LIMIT SWITCH
   private DigitalInput m_limitSwitch = new DigitalInput(0);
 
   //PID CONTROLLER
-  private SparkPIDController m_wristController = m_wristMaster.getPIDController();
+  private SparkPIDController m_indexerWristController = m_indexerWristMaster.getPIDController();
 
   //STATE METHODS
-  public void setState(WristState m_state){
+  public void setState(IndexerWristState m_state){
     this.m_state = m_state;
   }
 
-  public WristState getState(){
+  public IndexerWristState getState(){
     return m_state;
   }
 
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
-    m_wristMaster.set(value);
+    m_indexerWristMaster.set(value);
   }
 
   public void setJogValue(double jogValue){
     this.jogValue = jogValue;
-    setState(WristState.JOG);
+    setState(IndexerWristState.JOG);
   }
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_wristController.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_indexerWristController.setReference(setpoint.getRotations(), ControlType.kPosition);
   }
 
   public void setSetpoint(Rotation2d setpoint){
     this.setpoint = setpoint;
-    setState(WristState.POSITION);
+    setState(IndexerWristState.POSITION);
   }
 
   public Rotation2d getSetpoint(){
@@ -88,7 +88,7 @@ public class Wrist extends SubsystemBase {
 
   //ZERO METHODS
   public void resetEncoder(){
-    m_wristEncoder.setPosition(0);
+    m_indexerWristEncoder.setPosition(0);
   }
 
   public void zero(){
@@ -97,7 +97,7 @@ public class Wrist extends SubsystemBase {
       setJogValue(-1);
     }
     else{
-      setState(WristState.OFF);
+      setState(IndexerWristState.OFF);
       resetEncoder();
     }
 }
@@ -121,22 +121,22 @@ public class Wrist extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putString("Wrist State", getState().toString());
-    SmartDashboard.putNumber("Wrist Setpoint", getSetpoint().getDegrees());
+    SmartDashboard.putString("indexer Wrist State", getState().toString());
+    SmartDashboard.putNumber("Indexer Wrist Setpoint", getSetpoint().getDegrees());
   }
 
   public void configMotors(){
-    m_wristMaster.restoreFactoryDefaults();
-    m_wristMaster.setInverted(false);
-    m_wristMaster.setIdleMode(IdleMode.kBrake);
-    m_wristMaster.setSmartCurrentLimit(40, 40);
+    m_indexerWristMaster.restoreFactoryDefaults();
+    m_indexerWristMaster.setInverted(false);
+    m_indexerWristMaster.setIdleMode(IdleMode.kBrake);
+    m_indexerWristMaster.setSmartCurrentLimit(40, 40);
     
      
-    m_wristController.setP(WristConstants.WRIST_KP);
-    m_wristController.setD(WristConstants.WRIST_KD);
+    m_indexerWristController.setP(IndexerWristConstants.INDEXER_WRIST_KP);
+    m_indexerWristController.setD(IndexerWristConstants.INDEXER_WRIST_KD);
 
-    m_wristController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    m_wristController.setSmartMotionMaxAccel(WristConstants.MAX_ACCELERATION, 0);
-    m_wristController.setSmartMotionMaxVelocity(WristConstants.MAX_VELOCITY, 0);
+    m_indexerWristController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    m_indexerWristController.setSmartMotionMaxAccel(IndexerWristConstants.MAX_ACCELERATION, 0);
+    m_indexerWristController.setSmartMotionMaxVelocity(IndexerWristConstants.MAX_VELOCITY, 0);
   }
 }

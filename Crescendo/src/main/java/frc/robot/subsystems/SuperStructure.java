@@ -7,11 +7,11 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
-import frc.robot.subsystems.Wrist.WristState;
+import frc.robot.subsystems.IndexerWrist.WristState;
 
 public class SuperStructure extends SubsystemBase {
 
-  public final Wrist m_wrist = new Wrist();
+  public final IndexerWrist m_wrist = new IndexerWrist();
   public final HoodWrist m_hood = new HoodWrist();
   public final Elevator m_elevator = new Elevator();
   public final Indexer m_indexer = new Indexer();

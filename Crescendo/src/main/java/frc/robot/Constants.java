@@ -21,8 +21,10 @@ public final class Constants {
   }
 
   public static class MotorConstants {
+    
     //Wrist
-    public static final int WRIST_MOTOR = 0;
+    public static final int INDEXER_WRIST_MOTOR = 0;
+    public static final int HOOD_WRIST_MOTOR = 0;
 
     //Hood
     public static final int HOOD_MOTOR = 0;
@@ -94,9 +96,9 @@ public final class Constants {
     public static final double UPPER_BOUND = 360.0;
   }
 
-  public static class WristConstants{
-    public static final double WRIST_KP = 0;
-    public static final double WRIST_KD = 0;
+  public static class IndexerWristConstants{
+    public static final double INDEXER_WRIST_KP = 0;
+    public static final double INDEXER_WRIST_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
     public static final double GEAR_RATIO = 0;
@@ -128,5 +130,9 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
     public static final double GEAR_RATIO = 188.4615;
+  }
+  public static class ColorConstants{
+    public static final int LED_PORT = 0;
+    public static final int BUFFER_LENGTH = 0;
   }
 }

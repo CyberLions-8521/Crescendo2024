@@ -42,7 +42,7 @@ public class HoodWrist extends SubsystemBase {
   private Rotation2d setpoint = new Rotation2d();
   
   //MOTOR OBJECT
-  private CANSparkMax m_hoodWristMaster = new CANSparkMax(MotorConstants.HOOD_MOTOR, MotorType.kBrushless);
+  private CANSparkMax m_hoodWristMaster = new CANSparkMax(MotorConstants.HOOD_WRIST_MOTOR, MotorType.kBrushless);
 
   //ENCODER OBJECT
   private RelativeEncoder m_hoodEncoder = m_hoodWristMaster.getEncoder();
