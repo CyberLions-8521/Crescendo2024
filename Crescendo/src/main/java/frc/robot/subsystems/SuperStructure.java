@@ -7,7 +7,7 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
-import frc.robot.subsystems.IndexerWrist.WristState;
+import frc.robot.subsystems.IndexerWrist.IndexerWristState;
 
 public class SuperStructure extends SubsystemBase {
 
@@ -40,7 +40,7 @@ public class SuperStructure extends SubsystemBase {
 
   
   public void zeroAll(){
-    m_wrist.setState(WristState.ZERO);
+    m_wrist.setState(IndexerWristState.ZERO);
     m_elevator.setState(ElevatorState.ZERO);
     m_joint.setState(JointState.ZERO);
     m_toaster.setState(ToasterState.OFF);
