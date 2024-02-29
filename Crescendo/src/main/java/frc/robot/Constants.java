@@ -101,9 +101,9 @@ public final class Constants {
     public static final double MAX_VELOCITY = 0;
     public static final double GEAR_RATIO = 0;
   }
-  public static class HoodConstants{
-    public static final double HOOD_KP = 0;
-    public static final double HOOD_KD = 0;
+  public static class HoodWristConstants{
+    public static final double HOOD_WRIST_KP = 0;
+    public static final double HOOD_WRIST_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
     public static final double GEAR_RATIO = 1;

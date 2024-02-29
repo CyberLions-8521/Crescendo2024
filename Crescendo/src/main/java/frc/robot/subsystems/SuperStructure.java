@@ -12,13 +12,13 @@ import frc.robot.subsystems.Wrist.WristState;
 public class SuperStructure extends SubsystemBase {
 
   public final Wrist m_wrist = new Wrist();
-  public final Hood m_hood = new Hood();
+  public final HoodWrist m_hood = new HoodWrist();
   public final Elevator m_elevator = new Elevator();
   public final Indexer m_indexer = new Indexer();
   public final Toaster m_toaster = new Toaster();
   public final Joint m_joint = new Joint();
 
-  public SuperStructure() {}
+  private SuperStructure() {}
 
   public enum SuperStructureState{
     // OFF,
@@ -30,7 +30,11 @@ public class SuperStructure extends SubsystemBase {
     TRAP
   }
 
-  
+  private static SuperStructure m_instance = new SuperStructure();
+
+  public static SuperStructure getInstance(){
+    return m_instance;
+  }
   
   private SuperStructureState m_state = SuperStructureState.ZERO;
 
