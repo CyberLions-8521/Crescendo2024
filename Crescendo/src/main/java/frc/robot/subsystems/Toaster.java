@@ -54,19 +54,18 @@ public class Toaster extends SubsystemBase {
     m_toasterLeft.set(intakeValue);
     m_holder.set(holderValue);
   }
-  
-  
-  public void shoot(){
-    m_toasterController.setReference(RPM, ControlType.kVelocity);
-  }
 
   public void setRPM(double RPM){
     this.RPM = RPM;
     setState(ToasterState.SHOOT);
   }
 
+  public void shoot(){
+    m_toasterController.setReference(RPM, ControlType.kVelocity);
+  }
+
   public void intake(){
-    set(-0.8, -0.8);
+    set(-0.3, -0.3);
   }
   
   @Override

@@ -12,36 +12,48 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.MotorConstants;
 public class Elevator extends SubsystemBase {
 
+  //CONSTRUCTOR
   public Elevator() {
     configMotors();
   }
  
+  //STATES ENUM
   public enum ElevatorState{
     OFF,
     JOG,
+    SETPOINT,
     POSITION,
     ZERO
   }
 
+  //SETTING STATE TO DEFAULT
   private ElevatorState m_state = ElevatorState.OFF;
 
-  private CANSparkMax m_elevatorMaster = new CANSparkMax(MotorConstants.ELEVATOR_MOTOR, MotorType.kBrushless);
+  //MOTOR OBJECTS
+  private CANSparkMax m_elevatorMaster = new CANSparkMax(MotorConstants.ELEVATOR_MASTER_MOTOR, MotorType.kBrushless);
+  private CANSparkMax m_elevatorSlave = new CANSparkMax(MotorConstants.ELEVATOR_SLAVE_MOTOR, MotorType.kBrushless);
+
+  //ENCODER OBJECT
   private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
+
+  //LIMIT SWITCH OBJECT
   private DigitalInput m_limitSwitch = new DigitalInput(0);
+
+  //PID CONTROLLER OBJECT
   private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
   
+  //JOG VALUE AND SETPOINT
   private double jogValue = 0;
-  private Rotation2d setpoint = new Rotation2d();
+  private double setpoint;
 
+  //STATE METHODS
   public void setState(ElevatorState m_state){
     this.m_state = m_state;
   }
@@ -50,6 +62,7 @@ public class Elevator extends SubsystemBase {
     return m_state;
   }
 
+  //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_elevatorMaster.set(value);
   }
@@ -59,30 +72,59 @@ public class Elevator extends SubsystemBase {
     setState(ElevatorState.JOG);
   }
 
+  //SETPOINT METHODS
   public void goToSetpoint(){
-    m_elevatorController.setReference(setpoint.getRotations(), ControlType.kSmartMotion);
+    m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
   }
 
-  public void setSetpoint(Rotation2d setpoint){
+  public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
     setState(ElevatorState.POSITION);
   }
 
-  public Rotation2d getSetpoint(){
+  public double getSetpoint(){
     return setpoint;
   }
 
+  public boolean atSetpoint(){
+    return Math.abs(setpoint - getElevatorHeight()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
+  }
+
+  public boolean setElevatorHeight(double setpoint){
+        this.setpoint = setpoint;
+        setState(ElevatorState.SETPOINT);
+        configMotors();
+        m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
+
+        return atSetpoint();
+  }
+
+  /*public boolean atZero(){
+        return absoluteEncoder.getAbsolutePosition() == ElevatorConstants.ELEVATOR_ZERO_HEIGHT;
+  }*/
+
+  //GETTER METHODS
+  public double getElevatorHeight(){
+    return m_elevatorEncoder.getPosition();
+  }
+
+  private double getError(){
+    return Math.abs(setpoint - getElevatorHeight());
+  }
+
+  //RESET/ZERO METHODS
   public void resetEncoder(){
     m_elevatorEncoder.setPosition(0);
   }
 
   public void zero(){
-    if(!m_limitSwitch.get()){
+    if(!m_limitSwitch.get()) {
       setJogValue(-1);
-    }else{
+    }
+    else {
     setState(ElevatorState.OFF);
     resetEncoder();
-  }
+    }
   }
 
   @Override
@@ -104,20 +146,40 @@ public class Elevator extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putString("Wrist State", getState().toString());
-    SmartDashboard.putNumber("Wrist Setpoint", getSetpoint().getDegrees());
+    SmartDashboard.putNumber("Elevator Setpoint", setpoint);
+    SmartDashboard.putString("Elevator State", m_state.toString());
+    SmartDashboard.putNumber("Elevator Position", m_elevatorEncoder.getPosition());
+    SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
+  }
+
+  public void configElevatorPID(){
+    //SET PID VALUES
+    m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
+    m_elevatorController.setFF(ElevatorConstants.ELEVATOR_KFF);
+    m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
   }
 
   public void configMotors(){
-    m_elevatorMaster.restoreFactoryDefaults();
-    m_elevatorMaster.setInverted(false);
-    m_elevatorMaster.setIdleMode(IdleMode.kBrake);
-    m_elevatorMaster.setSmartCurrentLimit(40, 40);
+    //FOLLOW METHOD
+    m_elevatorSlave.follow(m_elevatorMaster);
     
-     
-    m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
-    m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
+    //RESTORE FACTORY DEFAULT
+    m_elevatorMaster.restoreFactoryDefaults();
+    m_elevatorSlave.restoreFactoryDefaults();
 
+    //SET INVERSION
+    m_elevatorMaster.setInverted(false);
+    m_elevatorSlave.setIdleMode(m_elevatorMaster.getIdleMode());
+    
+    //SET IDLE MODE
+    m_elevatorMaster.setIdleMode(IdleMode.kBrake);
+    m_elevatorSlave.setIdleMode(m_elevatorMaster.getIdleMode());
+
+    //SET SMART CURRENT LIMIT
+    m_elevatorMaster.setSmartCurrentLimit(40, 40);
+    m_elevatorSlave.setSmartCurrentLimit(40,40);
+
+    //SET SMART MOTION STRATEGIES
     m_elevatorController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     m_elevatorController.setSmartMotionMaxAccel(ElevatorConstants.MAX_ACCELERATION, 0);
     m_elevatorController.setSmartMotionMaxVelocity(ElevatorConstants.MAX_VELOCITY, 0);    

@@ -24,6 +24,7 @@ public class Joint extends SubsystemBase {
   //CONSTRUCTOR
   Joint() {
     configMotors();
+    configJointPID();
     resetEncoder();
   }
 
@@ -35,6 +36,7 @@ public class Joint extends SubsystemBase {
         ZERO
     }
   
+  //SET STATE
   private JointState m_state = JointState.OFF;
   
   //MOTOR OBJECTS
@@ -127,20 +129,29 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getDegrees());
   }
 
-  public void configMotors(){
-    m_jointRight.restoreFactoryDefaults();
-    m_jointRight.setInverted(false);
-    m_jointRight.setIdleMode(IdleMode.kBrake);
-    m_jointRight.setSmartCurrentLimit(40, 40);
-
-    m_jointLeft.restoreFactoryDefaults();
-    m_jointLeft.setInverted(!m_jointRight.getInverted());
-    m_jointLeft.setIdleMode(IdleMode.kBrake);
-    m_jointLeft.setSmartCurrentLimit(40, 40);
-     
+  public void configJointPID(){
     m_JointController.setP(JointConstants.JOINT_KP);
     m_JointController.setD(JointConstants.JOINT_KD);
+  }
 
+  public void configMotors(){
+    //RESTORE FACTORY DEFAULT
+    m_jointRight.restoreFactoryDefaults();
+    m_jointLeft.restoreFactoryDefaults();
+
+    //INVERSION
+    m_jointRight.setInverted(false);
+    m_jointLeft.setInverted(!m_jointRight.getInverted());
+
+    //IDLE MODE
+    m_jointRight.setIdleMode(IdleMode.kBrake);
+    m_jointLeft.setIdleMode(m_jointRight.getIdleMode());
+
+    //SET SMART CURRENT LIMIT
+    m_jointRight.setSmartCurrentLimit(40, 40);
+    m_jointLeft.setSmartCurrentLimit(40, 40);
+
+    //SET SMART MOTION 
     m_JointController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     m_JointController.setSmartMotionMaxAccel(JointConstants.MAX_ACCELERATION, 0);
     m_JointController.setSmartMotionMaxVelocity(JointConstants.MAX_VELOCITY, 0);    

@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,8 +28,10 @@ public class Indexer extends SubsystemBase {
   }
 
   private IndexerState m_state = IndexerState.OFF;
+  private double RPM = 0;
 
   private CANSparkMax m_indexerMaster = new CANSparkMax(MotorConstants.INDEXER_MOTOR, MotorType.kBrushless);
+  private SparkPIDController m_indexerPIDController = m_indexerMaster.getPIDController();
 
   public void setState(IndexerState m_state){
     this.m_state = m_state;
@@ -39,6 +43,10 @@ public class Indexer extends SubsystemBase {
 
   public void set(double value){
     m_indexerMaster.set(value);
+  }
+
+  public void intake(){
+    m_indexerPIDController.setReference(RPM, ControlType.kVelocity);
   }
 
   @Override

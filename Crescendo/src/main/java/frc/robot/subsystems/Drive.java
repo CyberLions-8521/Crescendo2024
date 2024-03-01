@@ -31,7 +31,7 @@ import frc.robot.Util.SwerveModule;
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private Drive() {
+  public Drive() {
     m_gyro.reset();
     //m_gyro.calibrate();
 
@@ -52,12 +52,6 @@ public class Drive extends SubsystemBase {
     private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-
-    private static Drive m_instance = new Drive();
-
-    public static Drive getInstance(){
-      return m_instance;
-    }    
 
     public void setModuleStates(SwerveModuleState[] states){
       SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
