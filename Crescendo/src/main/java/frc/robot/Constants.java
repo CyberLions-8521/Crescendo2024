@@ -72,15 +72,15 @@ public final class Constants {
     public static final int TOP_RIGHT_DRIVE_PORT = 2;
     public static final int TOP_LEFT_DRIVE_PORT = 4;
 
-    public static final int BOTTOM_RIGHT_TURN_PORT = 2;
+    public static final int BOTTOM_RIGHT_TURN_PORT = 8;
     public static final int BOTTOM_LEFT_TURN_PORT = 4;
-    public static final int TOP_RIGHT_TURN_PORT = 8;
-    public static final int TOP_LEFT_TURN_PORT = 6;
+    public static final int TOP_RIGHT_TURN_PORT = 6;
+    public static final int TOP_LEFT_TURN_PORT = 11;
 
     public static final int BOTTOM_RIGHT_ENCODER_PORT = 12;
-    public static final int BOTTOM_LEFT_ENCODER_PORT = 10;
-    public static final int TOP_RIGHT_ENCODER_PORT = 9;
-    public static final int TOP_LEFT_ENCODER_PORT = 11;
+    public static final int BOTTOM_LEFT_ENCODER_PORT = 9;
+    public static final int TOP_RIGHT_ENCODER_PORT = 11;
+    public static final int TOP_LEFT_ENCODER_PORT = 10;
 
     public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0;//31.3;
     public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0;//-63;
