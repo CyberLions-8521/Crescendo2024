@@ -9,7 +9,7 @@ import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
 import frc.robot.subsystems.IndexerWrist.IndexerWristState;
 
-public class SuperStructure extends SubsystemBase {
+public class SuperStructure1 extends SubsystemBase {
 
   public final IndexerWrist m_wrist = new IndexerWrist();
   public final HoodWrist m_hood = new HoodWrist();
@@ -18,7 +18,7 @@ public class SuperStructure extends SubsystemBase {
   public final Toaster m_toaster = new Toaster();
   public final Joint m_joint = new Joint();
 
-  private SuperStructure() {}
+  private SuperStructure1() {}
 
   public enum SuperStructureState{
     // OFF,
@@ -30,9 +30,9 @@ public class SuperStructure extends SubsystemBase {
     TRAP
   }
 
-  private static SuperStructure m_instance = new SuperStructure();
+  private static SuperStructure1 m_instance = new SuperStructure1();
 
-  public static SuperStructure getInstance(){
+  public static SuperStructure1 getInstance(){
     return m_instance;
   }
   

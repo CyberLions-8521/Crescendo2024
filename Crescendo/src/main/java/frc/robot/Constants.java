@@ -21,10 +21,9 @@ public final class Constants {
   }
 
   public static class MotorConstants {
-    
+    /* 
     //Wrist
-    public static final int INDEXER_WRIST_MOTOR = 0;
-    public static final int HOOD_WRIST_MOTOR = 0;
+    public static final int WRIST_MOTOR = 0;
 
     //Hood
     public static final int HOOD_MOTOR = 0;
@@ -33,7 +32,8 @@ public final class Constants {
     public static final int INDEXER_MOTOR = 0;
 
     //Elevator
-    public static final int ELEVATOR_MOTOR = 0;
+    public static final int ELEVATOR_MASTER_MOTOR = 0;
+    public static final int ELEVATOR_SLAVE_MOTOR = 0;
 
     //Toaster / Shooter / Intake
     public static final int TOASTER_RIGHT_MOTOR = 0;
@@ -43,6 +43,7 @@ public final class Constants {
     //Joint
     public static final int JOINT_RIGHT_MOTOR = 0;
     public static final int JOINT_LEFT_MOTOR = 0;
+    */
   }
 
   public static class DriveConstants {
@@ -51,7 +52,7 @@ public final class Constants {
   }
 
   public static class SwerveModuleConstants{
-    public static final double WHEEL_DIAMETER_METERS = 0;//0.1016;
+    public static final double WHEEL_DIAMETER_METERS = 4;//0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
     public static final double WHEELBASE_WIDTH = 0.7366;//0.6604;
@@ -67,18 +68,20 @@ public final class Constants {
     public static final double TURN_GEAR_RATIO = 150.0/7;//12.8;
     public static final double DRIVE_GEAR_RATIO = 5.9028;//8.14;//6.12;//6.75;
 
+    //KRAKENS
     public static final int BOTTOM_RIGHT_DRIVE_PORT = 3;
     public static final int BOTTOM_LEFT_DRIVE_PORT = 1;
     public static final int TOP_RIGHT_DRIVE_PORT = 2;
     public static final int TOP_LEFT_DRIVE_PORT = 4;
 
-    public static final int BOTTOM_RIGHT_TURN_PORT = 8;
-    public static final int BOTTOM_LEFT_TURN_PORT = 4;
+    //NEOS
+    public static final int BOTTOM_RIGHT_TURN_PORT = 20;
+    public static final int BOTTOM_LEFT_TURN_PORT = 9;
     public static final int TOP_RIGHT_TURN_PORT = 6;
     public static final int TOP_LEFT_TURN_PORT = 11;
 
     public static final int BOTTOM_RIGHT_ENCODER_PORT = 12;
-    public static final int BOTTOM_LEFT_ENCODER_PORT = 9;
+    public static final int BOTTOM_LEFT_ENCODER_PORT = 0;
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
@@ -96,43 +99,37 @@ public final class Constants {
     public static final double UPPER_BOUND = 360.0;
   }
 
-  public static class IndexerWristConstants{
-    public static final double INDEXER_WRIST_KP = 0;
-    public static final double INDEXER_WRIST_KD = 0;
+  public static class WristConstants{
+    public static final double WRIST_KP = 0;
+    public static final double WRIST_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
-    public static final double GEAR_RATIO = 0;
   }
-  public static class HoodWristConstants{
-    public static final double HOOD_WRIST_KP = 0;
-    public static final double HOOD_WRIST_KD = 0;
+  public static class HoodConstants{
+    public static final double HOOD_KP = 0;
+    public static final double HOOD_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
-    public static final double GEAR_RATIO = 1;
   }
   public static class ElevatorConstants{
     public static final double ELEVATOR_KP = 0;
+    public static final double ELEVATOR_KFF = 0;
     public static final double ELEVATOR_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
-    public static final double GEAR_RATIO = 12;
+    public static final double ELEVATOR_HEIGHT_TOLERANCE = 0;
+    public static final double ZEROING_SPEED = -0.05;
   }
   public static class ToasterConstants{
     public static final double TOASTER_KP = 0;
     public static final double TOASTER_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
-    public static final double GEAR_RATIO = 1;
   }
   public static class JointConstants{
     public static final double JOINT_KP = 0;
     public static final double JOINT_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
-    public static final double GEAR_RATIO = 188.4615;
-  }
-  public static class ColorConstants{
-    public static final int LED_PORT = 0;
-    public static final int BUFFER_LENGTH = 0;
   }
 }

@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-
-import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -19,17 +15,14 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DriveTele;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.PathHandler;
-import frc.robot.subsystems.SuperStructure;
+//import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Tracker;
-import frc.robot.subsystems.SuperStructure.SuperStructureState;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
-  private final Drive m_drive = Drive.getInstance();
+  private final Drive m_drive = new Drive();
   private final Tracker m_tracker = Tracker.getInstance();
-  private final PathHandler m_pathHandler = PathHandler.getInstance();
-  private final SuperStructure m_superStructure = SuperStructure.getInstance();
+  //private final SuperStructure m_superStructure = new SuperStructure();
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -46,7 +39,6 @@ public class RobotContainer {
   private void configureBindings() {
     m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
     m_driverController.button(5).onTrue(new InstantCommand(m_tracker::resetHeading));
-    
   }
 
   /**
@@ -57,6 +49,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(m_exampleSubsystem);
-    return m_pathHandler.followPath("First Path");
+    return null;
   }
 }
