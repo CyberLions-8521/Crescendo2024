@@ -10,7 +10,7 @@ import static frc.robot.Constants.SwerveModuleConstants.*;
 
 public class Tracker extends SubsystemBase{
 
-    private Drive m_drive = new Drive();
+    private Drive m_drive = Drive.getInstance();
     private static Tracker m_tracker = new Tracker();
 
     private Field2d field = new Field2d();
@@ -29,7 +29,6 @@ public class Tracker extends SubsystemBase{
       return m_tracker;
     }    
     
-
     @Override
     public void periodic() {
         update();

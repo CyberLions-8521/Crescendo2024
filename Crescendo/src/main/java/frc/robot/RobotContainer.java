@@ -20,7 +20,7 @@ import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
-  private final Drive m_drive = new Drive();
+  private final Drive m_drive = Drive.getInstance();
   private final Tracker m_tracker = Tracker.getInstance();
   //private final SuperStructure m_superStructure = new SuperStructure();
 

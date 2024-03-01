@@ -81,7 +81,7 @@ public final class Constants {
     public static final int TOP_LEFT_TURN_PORT = 11;
 
     public static final int BOTTOM_RIGHT_ENCODER_PORT = 12;
-    public static final int BOTTOM_LEFT_ENCODER_PORT = 0;
+    public static final int BOTTOM_LEFT_ENCODER_PORT = 9;
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 

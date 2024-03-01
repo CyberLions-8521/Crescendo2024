@@ -50,11 +50,11 @@ public class SwerveModule {
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
           //CREATE MOTORS
-          m_driveMotor = new TalonFX(drivePort);
+          m_driveMotor = new TalonFX(drivePort, "Ryan");
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
 
           //CREATE CANCODER
-          m_canCoder   = new CANcoder(encoderPort);
+          m_canCoder   = new CANcoder(encoderPort, "rio");
           angleGetter = m_canCoder.getAbsolutePosition();
 
           //CREATE PID CONTROLLER
