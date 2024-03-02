@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -34,6 +35,9 @@ public class Toaster extends SubsystemBase {
   private CANSparkMax m_toasterLeft = new CANSparkMax(MotorConstants.TOASTER_LEFT_MOTOR, MotorType.kBrushless);
   private CANSparkMax m_holder = new CANSparkMax(MotorConstants.HOLDER_MOTOR, MotorType.kBrushless);
 
+  //ENCODER OBJECT
+  private RelativeEncoder m_rightEncoder = m_toasterRight.getEncoder();
+
   //PID CONTROLLER
   private SparkPIDController m_toasterController = m_toasterRight.getPIDController();
   
@@ -58,6 +62,10 @@ public class Toaster extends SubsystemBase {
   public void setRPM(double RPM){
     this.RPM = RPM;
     setState(ToasterState.SHOOT);
+  }
+
+  public double getRPM(){
+    return m_rightEncoder.getVelocity();
   }
 
   public void shoot(){
@@ -86,6 +94,7 @@ public class Toaster extends SubsystemBase {
   public void logData(){
     SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
+    SmartDashboard.putNumber("RPM", getRPM());
   }
 
   public void configToasterPID(){
@@ -94,6 +103,9 @@ public class Toaster extends SubsystemBase {
   }
 
   public void configMotors(){
+    //FOLLOW EACH OTHER
+    // m_toasterLeft.follow(m_toasterRight);
+    
     //RESTORE FACTORY DEFAULT
     m_toasterRight.restoreFactoryDefaults();
     m_toasterLeft.restoreFactoryDefaults();
@@ -101,7 +113,7 @@ public class Toaster extends SubsystemBase {
 
     //SET INVERSION
     m_toasterRight.setInverted(false);
-    m_toasterLeft.setInverted(!m_toasterRight.getInverted());
+    m_toasterLeft.setInverted(true);
     m_holder.setInverted(false);
 
     //SET IDLE MODE

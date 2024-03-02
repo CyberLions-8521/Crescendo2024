@@ -38,7 +38,6 @@ public class Elevator extends SubsystemBase {
 
   //MOTOR OBJECTS
   private CANSparkMax m_elevatorMaster = new CANSparkMax(MotorConstants.ELEVATOR_MASTER_MOTOR, MotorType.kBrushless);
-  private CANSparkMax m_elevatorSlave = new CANSparkMax(MotorConstants.ELEVATOR_SLAVE_MOTOR, MotorType.kBrushless);
 
   //ENCODER OBJECT
   private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
@@ -160,24 +159,17 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configMotors(){
-    //FOLLOW METHOD
-    m_elevatorSlave.follow(m_elevatorMaster);
-    
     //RESTORE FACTORY DEFAULT
     m_elevatorMaster.restoreFactoryDefaults();
-    m_elevatorSlave.restoreFactoryDefaults();
 
     //SET INVERSION
     m_elevatorMaster.setInverted(false);
-    m_elevatorSlave.setIdleMode(m_elevatorMaster.getIdleMode());
     
     //SET IDLE MODE
     m_elevatorMaster.setIdleMode(IdleMode.kBrake);
-    m_elevatorSlave.setIdleMode(m_elevatorMaster.getIdleMode());
 
     //SET SMART CURRENT LIMIT
     m_elevatorMaster.setSmartCurrentLimit(40, 40);
-    m_elevatorSlave.setSmartCurrentLimit(40,40);
 
     //SET SMART MOTION STRATEGIES
     m_elevatorController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);

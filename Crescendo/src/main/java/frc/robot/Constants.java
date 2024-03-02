@@ -22,9 +22,10 @@ public final class Constants {
   }
 
   public static class MotorConstants {
-    /* 
+     
     //Wrist
-    public static final int WRIST_MOTOR = 0;
+    public static final int INDEXER_WRIST_MOTOR = 0;
+    public static final int HOOD_WRIST_MOTOR = 10;
 
     //Hood
     public static final int HOOD_MOTOR = 0;
@@ -37,14 +38,13 @@ public final class Constants {
     public static final int ELEVATOR_SLAVE_MOTOR = 0;
 
     //Toaster / Shooter / Intake
-    public static final int TOASTER_RIGHT_MOTOR = 0;
-    public static final int TOASTER_LEFT_MOTOR = 0;
-    public static final int HOLDER_MOTOR = 0;
+    public static final int TOASTER_RIGHT_MOTOR = 1;
+    public static final int TOASTER_LEFT_MOTOR = 2;
+    public static final int HOLDER_MOTOR = 3;
 
     //Joint
-    public static final int JOINT_RIGHT_MOTOR = 0;
+    public static final int JOINT_RIGHT_MOTOR = 4;
     public static final int JOINT_LEFT_MOTOR = 0;
-    */
   }
 
   public static class DriveConstants {
@@ -120,6 +120,7 @@ public final class Constants {
     public static final double MAX_VELOCITY = 0;
     public static final double ELEVATOR_HEIGHT_TOLERANCE = 0;
     public static final double ZEROING_SPEED = -0.05;
+    public static final double GEAR_RATIO = 13;
   }
   public static class ToasterConstants{
     public static final double TOASTER_KP = 0;
