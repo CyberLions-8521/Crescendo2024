@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -52,7 +53,7 @@ public final class Constants {
   }
 
   public static class SwerveModuleConstants{
-    public static final double WHEEL_DIAMETER_METERS = 4;//0.1016;
+    public static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
     public static final double WHEELBASE_WIDTH = 0.7366;//0.6604;
@@ -85,10 +86,10 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0;//31.3;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0;//-63;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = 0;//-128.4;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 0;//-60.90;//167.95;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.444824*360;//0.440918*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.341309*360;//-0.359131*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = -0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0;//0.000195;//0.00017;//0.00017;//0.00004;

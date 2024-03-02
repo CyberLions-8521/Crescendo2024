@@ -2,10 +2,13 @@ package frc.robot.Util;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -44,9 +47,12 @@ public class SwerveModule {
      //CANCODER OBJECT 
      private CANcoder m_canCoder;
      private StatusSignal<Double> angleGetter;
+
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
      private VelocityDutyCycle targetSpeed;
+     // private VelocityVoltage targetVoltage;
+     // private VoltageOut targetVoltageOut;
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
           //CREATE MOTORS
@@ -59,8 +65,11 @@ public class SwerveModule {
 
           //CREATE PID CONTROLLER
           m_turnController  = m_turnMotor.getPIDController();
-          targetSpeed = new VelocityDutyCycle(0).withSlot(0);
 
+          targetSpeed = new VelocityDutyCycle(0).withSlot(0);
+          // targetVoltage = new VelocityVoltage(0).withSlot(0);
+          // targetVoltageOut = new VoltageOut(0);
+          
           //CREATE TURN ENCODER
           m_turnEncoder = m_turnMotor.getEncoder();
 
@@ -74,24 +83,26 @@ public class SwerveModule {
 
      public void configCANcoder(double angleOffset){
           //CONFIGURE CANCODER
+          //missing restore factory defaualts
           CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
           m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-          //change initlization strategry
-          m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
+          // m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
+          m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
+          //change initlization strategry (automatically does it)
 
           m_canCoder.getConfigurator().apply(m_config);
      }
 
      public void configGains(){
           //CONFIGURE TURN CONTROLLER GAINS
-          m_turnController.setP(SmartDashboard.getNumber("Turn P", SwerveModuleConstants.TURN_KP));
+          m_turnController.setP(SmartDashboard.getNumber("Turn P", 0));
 
           //CONFIGURE DRIVE CONTROLLER GAINS
-          m_driveControllerConfig.Slot0.kP = (SmartDashboard.getNumber("Drive P", SwerveModuleConstants.DRIVE_KP));
-          m_driveControllerConfig.Slot0.kD = (SmartDashboard.getNumber("Drive D", SwerveModuleConstants.DRIVE_KD));
-          m_driveControllerConfig.Slot0.kV = (SmartDashboard.getNumber("Drive FF", SwerveModuleConstants.DRIVE_KFF));
-          
+          m_driveControllerConfig.Slot0.kP = (SmartDashboard.getNumber("Drive P", 0));
+          m_driveControllerConfig.Slot0.kD = (SmartDashboard.getNumber("Drive D", 0));
+          m_driveControllerConfig.Slot0.kV = (SmartDashboard.getNumber("Drive FF", 0));
+          m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
      }
 
      public void zeroEncoders(){
@@ -102,7 +113,9 @@ public class SwerveModule {
 
      public void rezeroTurnMotors(){
           //REZERO TURN MOTORS
+          //absolute rotaion of the cancoder * mt/r
           m_turnEncoder.setPosition(-getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
+          // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
 
      public void setTurnDegrees(Rotation2d turnSetpoint){
@@ -122,11 +135,15 @@ public class SwerveModule {
                //setControl uses RPS
                double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
                m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+               // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
+               // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
+
           }
      }
 
      public void setState(SwerveModuleState state){
-          SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());// state.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
+          // CTREUtils.optimize(state, getTurnAngle());
           setDriveVelocity(optimizedState.speedMetersPerSecond);
           setTurnDegrees(optimizedState.angle);
      }
@@ -141,20 +158,20 @@ public class SwerveModule {
      }
      
      public Rotation2d getAbsoluteTurnAngle(){
-          angleGetter.refresh();
+          // angleGetter.refresh();
           //getabsposition returns status signal of type double / rotations
           //get value takes the type value and returns it.
-          return Rotation2d.fromRotations(angleGetter.getValue());
+          // return Rotation2d.fromRotations(angleGetter.getValue());
+          return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
      }
      
      public double getDriveVelocity(){
-          //RPM --> m/s
-          //RPM / 60 = Rotations per second
+          //RPs --> m/s
           //rotations per sec * gear ratio
           //rotations per second * (motor turns / 1 rotation)
           //motor turns per second
           //motor turns per second * circumference
-          double motorRPS = m_driveMotor.getVelocity().getValue() / 60;
+          double motorRPS = m_driveMotor.getVelocity().getValue();
           double wheelRPS = motorRPS / SwerveModuleConstants.DRIVE_GEAR_RATIO;
           return (wheelRPS * SwerveModuleConstants.CIRCUMFERENCE);
      }

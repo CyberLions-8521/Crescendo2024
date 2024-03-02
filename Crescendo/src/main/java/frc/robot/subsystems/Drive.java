@@ -101,6 +101,10 @@ public class Drive extends SubsystemBase {
     setModuleStates(states);
   }
 
+  public void resetHeading(){
+    m_gyro.reset();
+  }
+
   public void logData(){
     SmartDashboard.putNumber("Drive Velocity", Math.abs(m_topRight.getDriveVelocity()));
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
