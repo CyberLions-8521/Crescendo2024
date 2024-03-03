@@ -45,28 +45,25 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
-    m_driverController.a().onTrue(new InstantCommand(m_drive::resetHeading));
-    // m_driverController.x().onTrue();
-    //m_driverController.button(3).whileTrue(new Shoot(m_toaster));
-    //y
-    //   m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.intake()));
-   // m_driverController.button(1).whileTrue(new RunCommand(()))
-    //x
-    //m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.shoot()));
+    //DRIVEBASE
+    //m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
+    //m_driverController.a().onTrue(new InstantCommand(m_drive::resetHeading));
+    
+    //TOASTER
+     //m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.intake()));
     /*m_driverController.button(3)
       .whileTrue( (new RunCommand(() -> m_toaster.setShooter(0.8)))
-      .alongWith( new WaitCommand(0.5)
+      .alongWith( new WaitCommand(0.75)
       .andThen(new RunCommand(() -> m_toaster.setHolder(0.9))) ));
     
     m_driverController.button(1).whileTrue(new RunCommand(() -> m_toaster.setHolder(0.9)));
-     */ 
-    
-    //new WaitCommand(5).andThen(new RunCommand(() -> m_toaster.shoot())));
+    */
+
+    //ELEAVATOR
     //y
-     //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.set(0.7)));
+    m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
     //x
-    // m_driverController.button(3).whileTrue(new RunCommand(() -> m_elevator.set(-0.7)));
+   m_driverController.button(3).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
      
   }
 

@@ -150,6 +150,7 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putString("Elevator State", m_state.toString());
     SmartDashboard.putNumber("Elevator Position", m_elevatorEncoder.getPosition());
     SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
+    SmartDashboard.putBoolean("Limit Switch", m_limitSwitch.get());
   }
 
   public void configElevatorPID(){

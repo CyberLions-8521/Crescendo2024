@@ -60,11 +60,11 @@ public class SwerveModule {
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
 
           //CREATE CANCODER
-          m_canCoder   = new CANcoder(encoderPort, "rio");
+          m_canCoder  = new CANcoder(encoderPort, "rio");
           angleGetter = m_canCoder.getAbsolutePosition();
 
           //CREATE PID CONTROLLER
-          m_turnController  = m_turnMotor.getPIDController();
+          m_turnController = m_turnMotor.getPIDController();
 
           targetSpeed = new VelocityDutyCycle(0).withSlot(0);
           // targetVoltage = new VelocityVoltage(0).withSlot(0);
@@ -75,21 +75,19 @@ public class SwerveModule {
 
           //CONFIGURATIONS
           configMotors(isInverted);
+          configGains();
           configCANcoder(angleOffset);
           zeroEncoders();
-          rezeroTurnMotors();
-
+          //rezeroTurnMotors();
      }
 
      public void configCANcoder(double angleOffset){
           //CONFIGURE CANCODER
-          //missing restore factory defaualts
           CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
           m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-          // m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
-          m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
-          //change initlization strategry (automatically does it)
+          m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
+          //m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
 
           m_canCoder.getConfigurator().apply(m_config);
      }
@@ -114,7 +112,8 @@ public class SwerveModule {
      public void rezeroTurnMotors(){
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(-getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
+          //m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() / (360) * (SwerveModuleConstants.TURN_GEAR_RATIO));
           // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
 
@@ -143,7 +142,6 @@ public class SwerveModule {
 
      public void setState(SwerveModuleState state){
           SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
-
 
           SwerveModuleState.optimize(state, getTurnAngle());
           setDriveVelocity(optimizedState.speedMetersPerSecond);
@@ -201,7 +199,7 @@ public class SwerveModule {
 
           //CONFIGURE CURRENT LIMITS
           CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
-          m_driveCurrentLimits.StatorCurrentLimit = 15;
+          m_driveCurrentLimits.StatorCurrentLimit = 40;
           m_driveCurrentLimits.StatorCurrentLimitEnable = true;   
 
           //CONFIGURE IDLE MODE
@@ -215,7 +213,7 @@ public class SwerveModule {
           //APPLY CURRENT LIMITS
           m_driveControllerConfig.CurrentLimits = m_driveCurrentLimits;
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
-          m_turnMotor.setSmartCurrentLimit(15,15);  
+          m_turnMotor.setSmartCurrentLimit(40,40);  
 
           //RESTORE FACTORY DEFAULT
           m_turnMotor.restoreFactoryDefaults();
