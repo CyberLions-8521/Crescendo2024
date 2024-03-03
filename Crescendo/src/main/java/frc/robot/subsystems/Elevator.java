@@ -142,6 +142,7 @@ public class Elevator extends SubsystemBase {
         zero();
         break;
     }   
+    logData();
   }
 
   public void logData(){

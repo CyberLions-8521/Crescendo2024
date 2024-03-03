@@ -7,8 +7,11 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -18,6 +21,7 @@ public class Toaster extends SubsystemBase {
   public Toaster() {
     configMotors();
     configToasterPID();
+    m_timer.start();
   }
 
   //STATES
@@ -43,6 +47,8 @@ public class Toaster extends SubsystemBase {
   
   private double RPM = 0;
 
+  public Timer m_timer = new Timer();
+
   //STATE METHODS
   public void setState(ToasterState m_state){
     this.m_state = m_state;
@@ -59,6 +65,15 @@ public class Toaster extends SubsystemBase {
     m_holder.set(holderValue);
   }
 
+  public void setShooter(double intakeValue){
+    m_toasterRight.set(intakeValue);
+    m_toasterLeft.set(intakeValue);
+  }
+
+  public void setHolder(double holderValue){
+    m_holder.set(holderValue);
+  }
+
   public void setRPM(double RPM){
     this.RPM = RPM;
     setState(ToasterState.SHOOT);
@@ -69,11 +84,17 @@ public class Toaster extends SubsystemBase {
   }
 
   public void shoot(){
-    m_toasterController.setReference(RPM, ControlType.kVelocity);
+    //m_timer.reset();
+   // m_toasterController.setReference(RPM, ControlType.kVelocity);
+    setShooter(0.8);
+    //if (m_timer.get() > 5){
+      //setHolder(0.6);
+    //}
+    setHolder(0.6);
   }
 
   public void intake(){
-    set(-0.3, -0.3);
+    set(-0.25, -0.25);
   }
   
   @Override
@@ -89,12 +110,14 @@ public class Toaster extends SubsystemBase {
         intake();  
         break;
     }     
+    logData();
   }
 
   public void logData(){
     SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
     SmartDashboard.putNumber("RPM", getRPM());
+    SmartDashboard.putNumber("Timer", m_timer.get());
   }
 
   public void configToasterPID(){

@@ -27,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.LimelightHelpers.LimelightTarget_Barcode;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -67,6 +68,8 @@ public class VisionManager extends SubsystemBase {
 
     m_estimator1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     m_estimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+  
   }
 
   @Override
@@ -119,5 +122,37 @@ public class VisionManager extends SubsystemBase {
   // }
   public Pose2d getCurrentPose(){
     return m_swerveEstimator.getEstimatedPosition();
+  }
+
+  //LIMELIGHT
+  public double limelight_aim_proportional()
+  {    
+    double kP = .035;
+    double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+    // convert to radians per second for our drive method
+    targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_VELOCITY;
+    //invert since tx is positive when the target is to the right of the crosshair
+    targetingAngularVelocity *= -1.0;
+
+    return targetingAngularVelocity;
+  }
+
+  public double getTX(){
+    return LimelightHelpers.getTX(getName());
+  }
+
+  public double getTY(){
+    return LimelightHelpers.getTY(getName());
+  }
+  // simple proportional ranging control with Limelight's "ty" value
+  // this works best if your Limelight's mount height and target mount height are different.
+  // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
+  public double limelight_range_proportional()
+  {    
+    double kP = .1;
+    double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+    targetingForwardSpeed *= DriveConstants.MAX_TANGENTIAL_VELOCITY;
+    targetingForwardSpeed *= -1.0;
+    return targetingForwardSpeed;
   }
 }

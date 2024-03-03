@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -18,7 +19,7 @@ import frc.robot.commands.DriveTele;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Toaster;
-import frc.robot.commands.Shoot;
+//import frc.robot.commands.Shoot;
 //import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
@@ -47,9 +48,25 @@ public class RobotContainer {
     m_driverController.b().onTrue(new InstantCommand(m_drive::readConfigGains));
     m_driverController.a().onTrue(new InstantCommand(m_drive::resetHeading));
     // m_driverController.x().onTrue();
-    // m_driverController.button(3).whileTrue(new Shoot(m_toaster));
-    m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.set(0.8,0.8)));
-    m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.set(-0.8,-0.8)));
+    //m_driverController.button(3).whileTrue(new Shoot(m_toaster));
+    //y
+    //   m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.intake()));
+   // m_driverController.button(1).whileTrue(new RunCommand(()))
+    //x
+    //m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.shoot()));
+    /*m_driverController.button(3)
+      .whileTrue( (new RunCommand(() -> m_toaster.setShooter(0.8)))
+      .alongWith( new WaitCommand(0.5)
+      .andThen(new RunCommand(() -> m_toaster.setHolder(0.9))) ));
+    
+    m_driverController.button(1).whileTrue(new RunCommand(() -> m_toaster.setHolder(0.9)));
+     */ 
+    
+    //new WaitCommand(5).andThen(new RunCommand(() -> m_toaster.shoot())));
+    //y
+     //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.set(0.7)));
+    //x
+    // m_driverController.button(3).whileTrue(new RunCommand(() -> m_elevator.set(-0.7)));
      
   }
 
