@@ -118,11 +118,11 @@ public class Elevator extends SubsystemBase {
 
   public void zero(){
     if(!m_limitSwitch.get()) {
-      setJogValue(-1);
+      setJogValue(-0.2);
     }
     else {
-    setState(ElevatorState.OFF);
-    resetEncoder();
+      setState(ElevatorState.OFF);
+      resetEncoder();
     }
   }
 
