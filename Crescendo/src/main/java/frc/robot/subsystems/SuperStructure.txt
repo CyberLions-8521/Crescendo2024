@@ -7,40 +7,36 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
-import frc.robot.subsystems.IndexerWrist.IndexerWristState;
+import frc.robot.subsystems.Wrist.WristState;
 
-public class SuperStructure1 extends SubsystemBase {
+public class SuperStructure extends SubsystemBase {
 
-  public final IndexerWrist m_wrist = new IndexerWrist();
-  public final HoodWrist m_hood = new HoodWrist();
+  public final Wrist m_wrist = new Wrist();
+  public final Hood m_hood = new Hood();
   public final Elevator m_elevator = new Elevator();
   public final Indexer m_indexer = new Indexer();
   public final Toaster m_toaster = new Toaster();
   public final Joint m_joint = new Joint();
 
-  private SuperStructure1() {}
+  public SuperStructure() {}
 
   public enum SuperStructureState{
     // OFF,
     ZERO,
-    GROUND,
+    GROUND_INTAKE,
     AMP,
-    SOURCE,
+    SOURCE_INTAKE,
     SHOOT,
     TRAP
   }
 
-  private static SuperStructure1 m_instance = new SuperStructure1();
-
-  public static SuperStructure1 getInstance(){
-    return m_instance;
-  }
+  
   
   private SuperStructureState m_state = SuperStructureState.ZERO;
 
   
   public void zeroAll(){
-    m_wrist.setState(IndexerWristState.ZERO);
+    m_wrist.setState(WristState.ZERO);
     m_elevator.setState(ElevatorState.ZERO);
     m_joint.setState(JointState.ZERO);
     m_toaster.setState(ToasterState.OFF);
@@ -56,7 +52,7 @@ public class SuperStructure1 extends SubsystemBase {
     m_wrist.setSetpoint(setpoint);
   }
 
-  public void elevatorGoToSetpoint(Rotation2d setpoint){
+  public void elevatorGoToSetpoint(double setpoint){
     m_elevator.setSetpoint(setpoint);
   }
   public void jointGoToSetpoint(Rotation2d setpoint){
@@ -83,12 +79,12 @@ public class SuperStructure1 extends SubsystemBase {
       case ZERO:
         zeroAll();
         break;
-      case GROUND:
+      case GROUND_INTAKE:
         //wrist comes out
         //elevator comes out a bit
         //joint goes down all the way past the zero point
         wristGoToSetpoint(null);;
-        elevatorGoToSetpoint(null);
+        elevatorGoToSetpoint(0);
         jointGoToSetpoint(null);
         m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
@@ -98,16 +94,16 @@ public class SuperStructure1 extends SubsystemBase {
         //elevator out
         //joint up
         jointGoToSetpoint(null);
-        elevatorGoToSetpoint(null);
+        elevatorGoToSetpoint(0);
         hoodGoToSetpoint(null);
         shoot(0);
 
         break;
-      case SOURCE:
+      case SOURCE_INTAKE:
         //join up
         //elevator out
         jointGoToSetpoint(null);
-        elevatorGoToSetpoint(null);
+        elevatorGoToSetpoint(0);
         m_toaster.setState(ToasterState.INTAKE);
         break;
       case SHOOT:

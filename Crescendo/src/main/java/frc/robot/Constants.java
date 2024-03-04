@@ -34,7 +34,7 @@ public final class Constants {
     public static final int INDEXER_MOTOR = 0;
 
     //Elevator
-    public static final int ELEVATOR_MASTER_MOTOR = 12;
+    public static final int ELEVATOR_MASTER_MOTOR = 9;
 
     //Toaster / Shooter / Intake
     public static final int TOASTER_RIGHT_MOTOR = 1;

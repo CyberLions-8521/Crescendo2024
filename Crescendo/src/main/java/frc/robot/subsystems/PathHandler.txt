@@ -38,8 +38,9 @@ public class PathHandler {
     }
 
     public void configEvents(){
-        NamedCommands.registerCommand("print", new PrintCommand("Hello World!"));
-        NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SHOOT), m_superStructure));
+        NamedCommands.registerCommand("Intake", new InstantCommand(() ->  m_superStructure.setState(SuperStructureState.GROUND_INTAKE), m_superStructure));
+        NamedCommands.registerCommand("Shoot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SHOOT), m_superStructure));
+
     }
 
     public void configAutoBuilder(){

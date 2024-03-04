@@ -50,7 +50,7 @@ public class RobotContainer {
     //m_driverController.a().onTrue(new InstantCommand(m_drive::resetHeading));
     
     //TOASTER
-     m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.intake()));
+     /*m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.intake()));
     m_driverController.button(3)
       .whileTrue( (new RunCommand(() -> m_toaster.setShooter(0.8)))
       .alongWith( new WaitCommand(0.75)
@@ -65,7 +65,7 @@ public class RobotContainer {
     //x
    m_driverController.button(6).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
    m_driverController.button(2).whileTrue(new RunCommand(() -> m_elevator.zero()));
-     
+     */
   }
 
   /**
