@@ -22,7 +22,7 @@ import frc.robot.Constants.*;
 public class HoodWrist extends SubsystemBase {
   
   //CONSTRUCTOR
-  HoodWrist() {
+  public HoodWrist() {
     configMotors();
     resetEncoder();
   }
@@ -35,7 +35,7 @@ public class HoodWrist extends SubsystemBase {
     }
   
   //INSTANCE
-  private static HoodWrist m_instance = new HoodWrist();
+  // private static HoodWrist m_instance = new HoodWrist();
 
   //STATE
   private HoodWristState m_state = HoodWristState.OFF;
@@ -56,9 +56,9 @@ public class HoodWrist extends SubsystemBase {
   private SparkPIDController m_hoodController = m_hoodWristMaster.getPIDController();
 
   //GET INSTANCE
-  public static HoodWrist getInstance(){
-    return m_instance;
-  }
+  // public static HoodWrist getInstance(){
+  //   return m_instance;
+  // }
 
   //STATE METHODS
   public void setState(HoodWristState m_state){

@@ -32,7 +32,7 @@ import frc.robot.Util.SwerveModule;
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Drive() {
-    m_gyro.reset();
+    // m_gyro.reset();
     //m_gyro.calibrate();
 
     SmartDashboard.putNumber("Turn P", TURN_KP);

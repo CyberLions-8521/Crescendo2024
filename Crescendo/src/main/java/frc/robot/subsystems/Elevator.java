@@ -120,7 +120,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void zero(){
-    if(!m_limitSwitch.get()) {
+    if(!atZero()) {
       set(-0.2);
     }
     else {

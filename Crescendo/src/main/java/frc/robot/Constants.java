@@ -24,17 +24,18 @@ public final class Constants {
   public static class MotorConstants {
      
     //Wrist
-    /*public static final int INDEXER_WRIST_MOTOR = 0;
-    public static final int HOOD_WRIST_MOTOR = 0;//10
+    //public static final int INDEXER_WRIST_MOTOR = 0;
+    public static final int HOOD_WRIST_MOTOR = 5;
 
     //Hood
-    public static final int HOOD_MOTOR = 0;
+    // public static final int HOOD_MOTOR = 0;
 
     //Indexer
-    public static final int INDEXER_MOTOR = 0;
+    // public static final int INDEXER_MOTOR = 0;
 
     //Elevator
-    */public static final int ELEVATOR_MASTER_MOTOR = 9;
+    
+    public static final int ELEVATOR_MASTER_MOTOR = 9;
 
     //Toaster / Shooter / Intake
     public static final int TOASTER_RIGHT_MOTOR = 1;
@@ -42,7 +43,8 @@ public final class Constants {
     public static final int HOLDER_MOTOR = 3;
 
     //Joint
-    //public static final int JOINT_RIGHT_MOTOR = 0;
+    public static final int JOINT_RIGHT_MOTOR = 4;
+    public static final int JOINT_LEFT_MOTOR = 7;
   }
 
   public static class DriveConstants {
@@ -84,10 +86,10 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.18*360;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.39*360;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = 0.14*360;//-61.17;//-0.341309*360;//-0.359131*360;
-    public static final double TOP_LEFT_ENCODER_OFFSET = -0.017*360;//10.45;//-0.023438*360;//-0.006836*360;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.175781 *360;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0.103760*360;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.138428*360;//-61.17;//-0.341309*360;//-0.359131*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = 0.479736*360;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0;//0.000195;//0.00017;//0.00017;//0.00004;
@@ -134,8 +136,8 @@ public final class Constants {
     public static final double SpeakerHolderSpeed = 0.6;
 
     //AMP
-    public static final double AmpShooterSpeed = 0;
-    public static final double AmpHolderSpeed = 0;
+    public static final double AmpShooterSpeed = 0.1;
+    public static final double AmpHolderSpeed = 0.1;
   }
   public static class JointConstants{
     public static final double JOINT_KP = 0;

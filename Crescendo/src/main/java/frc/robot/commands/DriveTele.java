@@ -23,7 +23,7 @@ public class DriveTele extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
   //private Drive m_drive = Drive.getInstance();
-  private Drive m_drive = new Drive();
+  private Drive m_drive = Drive.getInstance();
   private Tracker m_tracker = Tracker.getInstance();
 
   private DoubleSupplier fwd, str, rot;
@@ -36,14 +36,14 @@ public class DriveTele extends Command {
         value = 0;
       
       }
-      return value * MAX_ANGULAR_VELOCITY;
+      return value * MAX_ANGULAR_VELOCITY*0.1;
     }
 
       else{
         if(Math.abs(value) < 0.15){
           value = 0;
         }
-        return value * MAX_TANGENTIAL_VELOCITY;
+        return value * MAX_TANGENTIAL_VELOCITY*0.1;
       }
   }
 

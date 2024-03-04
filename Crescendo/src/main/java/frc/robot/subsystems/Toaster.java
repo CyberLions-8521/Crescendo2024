@@ -84,7 +84,8 @@ public class Toaster extends SubsystemBase {
         setSpeed(0, 0);
         break;
       case INTAKE:
-        setSpeed(ToasterConstants.intakeSpeed, ToasterConstants.intakeSpeed);
+        setShooterSpeed(ToasterConstants.intakeSpeed);
+        setHolderSpeed(ToasterConstants.intakeSpeed);
         break;
       case SPEAKER_SHOOT:
         setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);

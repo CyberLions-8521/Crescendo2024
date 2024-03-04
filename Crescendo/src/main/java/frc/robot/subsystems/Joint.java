@@ -22,7 +22,7 @@ import frc.robot.Constants.*;
 public class Joint extends SubsystemBase {
   
   //CONSTRUCTOR
-  Joint() {
+  public Joint() {
     configMotors();
     configJointPID();
     resetEncoder();
@@ -36,7 +36,7 @@ public class Joint extends SubsystemBase {
     }
 
   //INSTANCE
-  private static Joint m_instance = new Joint();
+  // private static Joint m_instance = new Joint();
   
   //SET STATE
   private JointState m_state = JointState.OFF;
@@ -50,7 +50,7 @@ public class Joint extends SubsystemBase {
   private RelativeEncoder m_jointLeftEncoder = m_jointLeft.getEncoder();
 
   //LIMIT SWITCH OBJECT
-  private DigitalInput m_limitSwitch = new DigitalInput(0);
+  private DigitalInput m_limitSwitch = new DigitalInput(4);
 
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
@@ -59,9 +59,9 @@ public class Joint extends SubsystemBase {
   private Rotation2d setpoint = new Rotation2d();
 
   //GET INSTANCE
-  public static Joint getInstance(){
-    return m_instance;
-  }
+  // public static Joint getInstance(){
+  //   return m_instance;
+  // }
 
   //STATE OBJECTS
   public void setState(JointState m_state){
@@ -138,7 +138,7 @@ public class Joint extends SubsystemBase {
     m_jointLeft.restoreFactoryDefaults();
 
     //INVERSION
-    m_jointRight.setInverted(false);
+    m_jointRight.setInverted(true);
     m_jointLeft.setInverted(!m_jointRight.getInverted());
 
     //IDLE MODE
