@@ -26,8 +26,8 @@ import frc.robot.subsystems.Toaster.ToasterState;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
-  private final Drive m_drive = new Drive();
-  //private final Drive m_drive = Drive.getInstance();
+  //private final Drive m_drive = new Drive();
+  private final Drive m_drive = Drive.getInstance();
   //private final Tracker m_tracker = Tracker.getInstance();
   private final Elevator m_elevator = new Elevator();
   private final Toaster m_toaster = new Toaster();

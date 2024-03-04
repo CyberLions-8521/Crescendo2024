@@ -10,8 +10,8 @@ import static frc.robot.Constants.SwerveModuleConstants.*;
 
 public class Tracker extends SubsystemBase{
 
-    //private Drive m_drive = Drive.getInstance();
-    public Drive m_drive = new Drive();
+    private Drive m_drive = Drive.getInstance();
+    //public Drive m_drive = new Drive();
     private static Tracker m_tracker = new Tracker();
 
     private Field2d field = new Field2d();
