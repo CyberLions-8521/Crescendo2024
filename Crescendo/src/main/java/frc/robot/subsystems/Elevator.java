@@ -32,7 +32,7 @@ public class Elevator extends SubsystemBase {
   }
 
   //INSTANCE
-  private static Elevator instance = new Elevator();
+  //private static Elevator instance = new Elevator();
 
   //SETTING STATE TO DEFAULT
   private ElevatorState m_state = ElevatorState.OFF;
@@ -54,9 +54,9 @@ public class Elevator extends SubsystemBase {
   private double setpoint;
 
   //INSTANCE
-  public static Elevator getInstance(){
-    return instance;
-  }  
+  //public static Elevator getInstance(){
+    //return instance;
+  //}  
 
 
   //STATE METHODS

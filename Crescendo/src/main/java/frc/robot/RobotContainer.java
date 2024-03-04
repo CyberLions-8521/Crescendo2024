@@ -21,13 +21,14 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Toaster;
 //import frc.robot.commands.Shoot;
 //import frc.robot.subsystems.SuperStructure;
-import frc.robot.subsystems.Tracker;
+//import frc.robot.subsystems.Tracker;
 import frc.robot.subsystems.Toaster.ToasterState;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
-  private final Drive m_drive = Drive.getInstance();
-  private final Tracker m_tracker = Tracker.getInstance();
+  private final Drive m_drive = new Drive();
+  //private final Drive m_drive = Drive.getInstance();
+  //private final Tracker m_tracker = Tracker.getInstance();
   private final Elevator m_elevator = new Elevator();
   private final Toaster m_toaster = new Toaster();
   //rivate final Shoot m_shoot = new Shoot(m_toaster);

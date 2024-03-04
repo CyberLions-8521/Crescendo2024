@@ -22,7 +22,8 @@ import frc.robot.subsystems.Tracker;
 public class DriveTele extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
-  private Drive m_drive = Drive.getInstance();
+  //private Drive m_drive = Drive.getInstance();
+  private Drive m_drive = new Drive();
   private Tracker m_tracker = Tracker.getInstance();
 
   private DoubleSupplier fwd, str, rot;

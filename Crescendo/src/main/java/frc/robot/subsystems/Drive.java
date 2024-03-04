@@ -31,7 +31,7 @@ import frc.robot.Util.SwerveModule;
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private Drive() {
+  public Drive() {
     m_gyro.reset();
     //m_gyro.calibrate();
 
@@ -46,11 +46,11 @@ public class Drive extends SubsystemBase {
     //setpositions
     //set states
 
-    private static Drive m_instance = new Drive();
+    //private static Drive m_instance = new Drive();
 
-    public static Drive getInstance(){
-      return m_instance;
-    }
+    //public static Drive getInstance(){
+      //return m_instance;
+    //}
     private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
     private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
     private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);

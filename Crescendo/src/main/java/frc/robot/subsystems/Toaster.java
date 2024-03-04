@@ -31,7 +31,7 @@ public class Toaster extends SubsystemBase {
     }
 
   //INSTANCE
-  public static Toaster m_instance = new Toaster();
+  //public static Toaster m_instance = new Toaster();
   
   //SET STATE TO OFF
   private ToasterState m_state = ToasterState.OFF;
@@ -48,9 +48,9 @@ public class Toaster extends SubsystemBase {
   private SparkPIDController m_toasterController = m_toasterRight.getPIDController();
 
   //GET INSTANCE
-  public static Toaster getInstance(){
-    return m_instance;
-  }
+  //public static Toaster getInstance(){
+    //return m_instance;
+  //}
 
   //STATE METHODS
   public void setState(ToasterState m_state){
