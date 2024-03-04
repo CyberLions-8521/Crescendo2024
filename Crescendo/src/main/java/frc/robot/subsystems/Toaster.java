@@ -20,16 +20,18 @@ public class Toaster extends SubsystemBase {
   //CONSTRUCTOR
   public Toaster() {
     configMotors();
-    configToasterPID();
-    m_timer.start();
   }
 
   //STATES
   public enum ToasterState{
         OFF,
-        SHOOT,
-        INTAKE
+        INTAKE,
+        SPEAKER_SHOOT,
+        AMP_SHOOT;
     }
+
+  //INSTANCE
+  public static Toaster m_instance = new Toaster();
   
   //SET STATE TO OFF
   private ToasterState m_state = ToasterState.OFF;
@@ -44,10 +46,11 @@ public class Toaster extends SubsystemBase {
 
   //PID CONTROLLER
   private SparkPIDController m_toasterController = m_toasterRight.getPIDController();
-  
-  private double RPM = 0;
 
-  public Timer m_timer = new Timer();
+  //GET INSTANCE
+  public static Toaster getInstance(){
+    return m_instance;
+  }
 
   //STATE METHODS
   public void setState(ToasterState m_state){
@@ -59,56 +62,37 @@ public class Toaster extends SubsystemBase {
   }
 
   //SET MOTOR OUTPUT METHODS
-  public void set(double intakeValue, double holderValue){
+  public void setSpeed(double intakeValue, double holderValue){
     m_toasterRight.set(intakeValue);
     m_toasterLeft.set(intakeValue);
     m_holder.set(holderValue);
   }
 
-  public void setShooter(double intakeValue){
+  public void setShooterSpeed(double intakeValue){
     m_toasterRight.set(intakeValue);
     m_toasterLeft.set(intakeValue);
   }
 
-  public void setHolder(double holderValue){
+  public void setHolderSpeed(double holderValue){
     m_holder.set(holderValue);
   }
 
-  public void setRPM(double RPM){
-    this.RPM = RPM;
-    setState(ToasterState.SHOOT);
-  }
-
-  public double getRPM(){
-    return m_rightEncoder.getVelocity();
-  }
-
-  public void shoot(){
-    //m_timer.reset();
-   // m_toasterController.setReference(RPM, ControlType.kVelocity);
-    setShooter(0.8);
-    //if (m_timer.get() > 5){
-      //setHolder(0.6);
-    //}
-    setHolder(0.6);
-  }
-
-  public void intake(){
-    set(-0.25, -0.25);
-  }
-  
   @Override
   public void periodic() {
     switch(m_state){
       case OFF:
-        set(0, 0);
+        setSpeed(0, 0);
         break;
-      case SHOOT:
-        shoot();
+      case INTAKE:
+        setSpeed(ToasterConstants.intakeSpeed, ToasterConstants.intakeSpeed);
         break;
-      case INTAKE: 
-        intake();  
+      case SPEAKER_SHOOT:
+        setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+        setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
         break;
+      case AMP_SHOOT:
+        setShooterSpeed(ToasterConstants.AmpShooterSpeed);
+        setHolderSpeed(ToasterConstants.AmpHolderSpeed);
     }     
     logData();
   }
@@ -116,18 +100,9 @@ public class Toaster extends SubsystemBase {
   public void logData(){
     SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
-    SmartDashboard.putNumber("RPM", getRPM());
-    SmartDashboard.putNumber("Timer", m_timer.get());
-  }
-
-  public void configToasterPID(){
-    m_toasterController.setP(ToasterConstants.TOASTER_KP);
-    m_toasterController.setD(ToasterConstants.TOASTER_KD);
   }
 
   public void configMotors(){
-    //FOLLOW EACH OTHER
-    // m_toasterLeft.follow(m_toasterRight);
     
     //RESTORE FACTORY DEFAULT
     m_toasterRight.restoreFactoryDefaults();

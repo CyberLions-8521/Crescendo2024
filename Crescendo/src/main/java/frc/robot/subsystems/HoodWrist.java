@@ -30,15 +30,17 @@ public class HoodWrist extends SubsystemBase {
   //STATES
   public enum HoodWristState{
         OFF,
-        //JOG = MOTOR OUTPUT
-        JOG,
         POSITION,
         ZERO
     }
   
-  //SET STATE, JOGVALUE, AND SETPOINT
+  //INSTANCE
+  private static HoodWrist m_instance = new HoodWrist();
+
+  //STATE
   private HoodWristState m_state = HoodWristState.OFF;
-  private double jogValue = 0;
+
+  //SETPOINT
   private Rotation2d setpoint = new Rotation2d();
   
   //MOTOR OBJECT
@@ -48,10 +50,15 @@ public class HoodWrist extends SubsystemBase {
   private RelativeEncoder m_hoodEncoder = m_hoodWristMaster.getEncoder();
   
   //LIMIT SWITCH
-  private DigitalInput m_limitSwitch = new DigitalInput(0);
+  private DigitalInput m_limitSwitch = new DigitalInput(1);
 
   //PID CONTROLLER
   private SparkPIDController m_hoodController = m_hoodWristMaster.getPIDController();
+
+  //GET INSTANCE
+  public static HoodWrist getInstance(){
+    return m_instance;
+  }
 
   //STATE METHODS
   public void setState(HoodWristState m_state){
@@ -63,13 +70,8 @@ public class HoodWrist extends SubsystemBase {
   }
 
   //SET MOTOR OUTPUT METHODS
-  public void set(double value){
+  public void setSpeed(double value){
     m_hoodWristMaster.set(value);
-  }
-
-  public void setJogValue(double jogValue){
-    this.jogValue = jogValue;
-    setState(HoodWristState.JOG);
   }
 
   //SETPOINT METHODS
@@ -94,7 +96,7 @@ public class HoodWrist extends SubsystemBase {
   public void zero(){
     //IF LIMIT SWITCH IS NOT CLICKED --> GO BACKWARDS
     if(!m_limitSwitch.get()){
-      setJogValue(-1);
+      setSpeed(-0.5);
     }
     else{
       setState(HoodWristState.OFF);
@@ -106,10 +108,7 @@ public class HoodWrist extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        set(0);
-        break;
-      case JOG:
-        set(jogValue);
+        setSpeed(0);
         break;
       case POSITION:
         goToSetpoint();
@@ -132,11 +131,11 @@ public class HoodWrist extends SubsystemBase {
     m_hoodWristMaster.setSmartCurrentLimit(40, 40);
     
      
-    m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
-    m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
+    //m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
+    //m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
 
     m_hoodController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);
-    m_hoodController.setSmartMotionMaxVelocity(HoodWristConstants.MAX_VELOCITY, 0);    
+    //m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);
+    //m_hoodController.setSmartMotionMaxVelocity(HoodWristConstants.MAX_VELOCITY, 0);    
   }
 }

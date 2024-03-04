@@ -30,15 +30,17 @@ public class IndexerWrist extends SubsystemBase {
   //STATES
   public enum IndexerWristState{
         OFF,
-        //JOG = MOTOR OUTPUT
-        JOG,
         POSITION,
         ZERO
     }
   
-  //SET STATE, JOGVALUE, AND SETPOINT
+  //INSTANCE
+  private static IndexerWrist m_instance = new IndexerWrist();
+
+  //STATE
   private IndexerWristState m_state = IndexerWristState.OFF;
-  private double jogValue = 0;
+
+  //SETPOINT
   private Rotation2d setpoint = new Rotation2d();
   
   //MOTOR OBJECT
@@ -48,10 +50,15 @@ public class IndexerWrist extends SubsystemBase {
   private RelativeEncoder m_indexerWristEncoder = m_indexerWristMaster.getEncoder();
   
   //LIMIT SWITCH
-  private DigitalInput m_limitSwitch = new DigitalInput(0);
+  private DigitalInput m_limitSwitch = new DigitalInput(1);
 
   //PID CONTROLLER
   private SparkPIDController m_indexerWristController = m_indexerWristMaster.getPIDController();
+
+  //GET INSTANCE
+  public static IndexerWrist getInstance(){
+    return m_instance;
+  }
 
   //STATE METHODS
   public void setState(IndexerWristState m_state){
@@ -65,11 +72,6 @@ public class IndexerWrist extends SubsystemBase {
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_indexerWristMaster.set(value);
-  }
-
-  public void setJogValue(double jogValue){
-    this.jogValue = jogValue;
-    setState(IndexerWristState.JOG);
   }
 
   //SETPOINT METHODS
@@ -94,7 +96,7 @@ public class IndexerWrist extends SubsystemBase {
   public void zero(){
     //IF LIMIT SWITCH IS NOT CLICKED --> GO BACKWARDS
     if(!m_limitSwitch.get()){
-      setJogValue(-1);
+      set(-1);
     }
     else{
       setState(IndexerWristState.OFF);
@@ -107,9 +109,6 @@ public class IndexerWrist extends SubsystemBase {
     switch(m_state){
       case OFF:
         set(0);
-        break;
-      case JOG:
-        set(jogValue);
         break;
       case POSITION:
         goToSetpoint();
@@ -132,11 +131,11 @@ public class IndexerWrist extends SubsystemBase {
     m_indexerWristMaster.setSmartCurrentLimit(40, 40);
     
      
-    m_indexerWristController.setP(IndexerWristConstants.INDEXER_WRIST_KP);
-    m_indexerWristController.setD(IndexerWristConstants.INDEXER_WRIST_KD);
+    //m_indexerWristController.setP(IndexerWristConstants.INDEXER_WRIST_KP);
+    //m_indexerWristController.setD(IndexerWristConstants.INDEXER_WRIST_KD);
 
     m_indexerWristController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    m_indexerWristController.setSmartMotionMaxAccel(IndexerWristConstants.MAX_ACCELERATION, 0);
-    m_indexerWristController.setSmartMotionMaxVelocity(IndexerWristConstants.MAX_VELOCITY, 0);
+   // m_indexerWristController.setSmartMotionMaxAccel(IndexerWristConstants.MAX_ACCELERATION, 0);
+    //m_indexerWristController.setSmartMotionMaxVelocity(IndexerWristConstants.MAX_VELOCITY, 0);
   }
 }

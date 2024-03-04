@@ -27,12 +27,24 @@ public class Indexer extends SubsystemBase {
     ON
   }
 
-  private IndexerState m_state = IndexerState.OFF;
-  private double RPM = 0;
+  //INSTANCE
+  private static Indexer m_instance = new Indexer();
 
+  //STATE OBJECT
+  private IndexerState m_state = IndexerState.OFF;
+
+  //MOTOR OBJECT
   private CANSparkMax m_indexerMaster = new CANSparkMax(MotorConstants.INDEXER_MOTOR, MotorType.kBrushless);
+
+  //PID CONTROLLER
   private SparkPIDController m_indexerPIDController = m_indexerMaster.getPIDController();
 
+  //INSTANCE
+  public static Indexer getInstance(){
+    return m_instance;
+  }
+
+  //STATE METHODS
   public void setState(IndexerState m_state){
     this.m_state = m_state;
   }
@@ -41,12 +53,9 @@ public class Indexer extends SubsystemBase {
     return m_state;
   }
 
+  //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_indexerMaster.set(value);
-  }
-
-  public void intake(){
-    m_indexerPIDController.setReference(RPM, ControlType.kVelocity);
   }
 
   @Override

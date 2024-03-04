@@ -31,10 +31,12 @@ public class Joint extends SubsystemBase {
   //STATES
   public enum JointState{
         OFF,
-        JOG,
         POSITION,
         ZERO
     }
+
+  //INSTANCE
+  private static Joint m_instance = new Joint();
   
   //SET STATE
   private JointState m_state = JointState.OFF;
@@ -54,8 +56,12 @@ public class Joint extends SubsystemBase {
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
   
   //JOG VALUE & SETPOINT
-  private double jogValue = 0;
   private Rotation2d setpoint = new Rotation2d();
+
+  //GET INSTANCE
+  public static Joint getInstance(){
+    return m_instance;
+  }
 
   //STATE OBJECTS
   public void setState(JointState m_state){
@@ -70,11 +76,6 @@ public class Joint extends SubsystemBase {
   public void set(double value){
     m_jointRight.set(value);
     m_jointLeft.set(value);
-  }
-
-  public void setJogValue(double jogValue){
-    this.jogValue = jogValue;
-    setState(JointState.JOG);
   }
 
   //SETPOINT METHODS
@@ -99,7 +100,7 @@ public class Joint extends SubsystemBase {
 
   public void zero(){
     if(!m_limitSwitch.get()){
-      setJogValue(1);
+      set(1);
     }else{
     setState(JointState.OFF);
     resetEncoder();
@@ -111,9 +112,6 @@ public class Joint extends SubsystemBase {
     switch(m_state){
       case OFF:
         set(0);
-        break;
-      case JOG:
-        set(jogValue);
         break;
       case POSITION:
         goToSetpoint();

@@ -27,11 +27,12 @@ public class Elevator extends SubsystemBase {
   //STATES ENUM
   public enum ElevatorState{
     OFF,
-    JOG,
     SETPOINT,
-    POSITION,
     ZERO
   }
+
+  //INSTANCE
+  private static Elevator instance = new Elevator();
 
   //SETTING STATE TO DEFAULT
   private ElevatorState m_state = ElevatorState.OFF;
@@ -52,6 +53,12 @@ public class Elevator extends SubsystemBase {
   private double jogValue = 0;
   private double setpoint;
 
+  //INSTANCE
+  public static Elevator getInstance(){
+    return instance;
+  }  
+
+
   //STATE METHODS
   public void setState(ElevatorState m_state){
     this.m_state = m_state;
@@ -66,19 +73,15 @@ public class Elevator extends SubsystemBase {
     m_elevatorMaster.set(value);
   }
 
-  public void setJogValue(double jogValue){
-    this.jogValue = jogValue;
-    setState(ElevatorState.JOG);
-  }
-
   //SETPOINT METHODS
   public void goToSetpoint(){
+    configMotors();
     m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
   }
 
   public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
-    setState(ElevatorState.POSITION);
+    setState(ElevatorState.SETPOINT);
   }
 
   public double getSetpoint(){
@@ -89,18 +92,18 @@ public class Elevator extends SubsystemBase {
     return Math.abs(setpoint - getElevatorHeight()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
   }
 
-  public boolean setElevatorHeight(double setpoint){
-        this.setpoint = setpoint;
-        setState(ElevatorState.SETPOINT);
-        configMotors();
-        m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
+  /*public boolean setElevatorHeight(double setpoint){
+    this.setpoint = setpoint;
+    setState(ElevatorState.SETPOINT);
+    configMotors();
+    m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
 
-        return atSetpoint();
-  }
-
-  /*public boolean atZero(){
-        return absoluteEncoder.getAbsolutePosition() == ElevatorConstants.ELEVATOR_ZERO_HEIGHT;
+    return atSetpoint();
   }*/
+
+  public boolean atZero(){
+        return m_limitSwitch.get();
+  }
 
   //GETTER METHODS
   public double getElevatorHeight(){
@@ -118,7 +121,7 @@ public class Elevator extends SubsystemBase {
 
   public void zero(){
     if(!m_limitSwitch.get()) {
-      setJogValue(-0.2);
+      set(-0.2);
     }
     else {
       setState(ElevatorState.OFF);
@@ -132,10 +135,7 @@ public class Elevator extends SubsystemBase {
       case OFF:
         set(0);
         break;
-      case JOG:
-        set(jogValue);
-        break;
-      case POSITION:
+      case SETPOINT:
         goToSetpoint();
         break;
       case ZERO:
@@ -148,8 +148,7 @@ public class Elevator extends SubsystemBase {
   public void logData(){
     SmartDashboard.putNumber("Elevator Setpoint", setpoint);
     SmartDashboard.putString("Elevator State", m_state.toString());
-    SmartDashboard.putNumber("Elevator Position", m_elevatorEncoder.getPosition());
-    SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
+    SmartDashboard.putNumber("Elevator Position", getElevatorHeight());
     SmartDashboard.putBoolean("Limit Switch", m_limitSwitch.get());
   }
 
