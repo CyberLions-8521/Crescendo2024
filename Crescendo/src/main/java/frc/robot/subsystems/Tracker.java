@@ -12,7 +12,7 @@ public class Tracker extends SubsystemBase{
 
     private Drive m_drive = Drive.getInstance();
     //public Drive m_drive = new Drive();
-    private static Tracker m_tracker = new Tracker();
+    private static Tracker m_instance = new Tracker();
 
     private Field2d field = new Field2d();
     
@@ -27,7 +27,7 @@ public class Tracker extends SubsystemBase{
     }
 
     public static Tracker getInstance(){
-      return m_tracker;
+      return m_instance;
     }    
     
     @Override

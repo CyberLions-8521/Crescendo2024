@@ -22,7 +22,7 @@ import frc.robot.Constants.*;
 public class HoodWrist extends SubsystemBase {
   
   //CONSTRUCTOR
-  public HoodWrist() {
+  private HoodWrist() {
     configMotors();
     resetEncoder();
   }
@@ -35,13 +35,13 @@ public class HoodWrist extends SubsystemBase {
     }
   
   //INSTANCE
-  // private static HoodWrist m_instance = new HoodWrist();
+  private static HoodWrist m_instance = new HoodWrist();
 
   //STATE
   private HoodWristState m_state = HoodWristState.OFF;
 
   //SETPOINT
-  private Rotation2d setpoint = new Rotation2d();
+  private double setpoint;
   
   //MOTOR OBJECT
   private CANSparkMax m_hoodWristMaster = new CANSparkMax(MotorConstants.HOOD_WRIST_MOTOR, MotorType.kBrushless);
@@ -56,9 +56,9 @@ public class HoodWrist extends SubsystemBase {
   private SparkPIDController m_hoodController = m_hoodWristMaster.getPIDController();
 
   //GET INSTANCE
-  // public static HoodWrist getInstance(){
-  //   return m_instance;
-  // }
+  public static HoodWrist getInstance(){
+    return m_instance;
+  }
 
   //STATE METHODS
   public void setState(HoodWristState m_state){
@@ -76,27 +76,42 @@ public class HoodWrist extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_hoodController.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_hoodController.setReference(setpoint, ControlType.kPosition);
+    if(atSetpoint()){
+      setState(HoodWristState.OFF);
+    }
   }
 
-  public void setSetpoint(Rotation2d setpoint){
+  public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
     setState(HoodWristState.POSITION);
   }
 
-  public Rotation2d getSetpoint(){
+  public double getSetpoint(){
     return setpoint;
   }
 
-  //ZERO METHODS
+  public boolean atSetpoint(){
+    return Math.abs(setpoint - getWristPostion()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
+  }
+
+  //ZERO METHODS / Encoders
   public void resetEncoder(){
     m_hoodEncoder.setPosition(0);
   }
 
+  public double getWristPostion(){
+    return m_hoodEncoder.getPosition();
+  }
+
+  public boolean atZero(){
+    return m_limitSwitch.get();
+  }
+
   public void zero(){
     //IF LIMIT SWITCH IS NOT CLICKED --> GO BACKWARDS
-    if(!m_limitSwitch.get()){
-      setSpeed(-0.5);
+    if(!atZero()){
+      setSpeed(-0.1);
     }
     else{
       setState(HoodWristState.OFF);
@@ -117,11 +132,13 @@ public class HoodWrist extends SubsystemBase {
         zero();
         break;
     }     
+    logData();
   }
 
   public void logData(){
     SmartDashboard.putString("hood wrist State", getState().toString());
-    SmartDashboard.putNumber("hood wrist Setpoint", getSetpoint().getDegrees());
+    SmartDashboard.putNumber("hood wrist Setpoint", getSetpoint());
+    SmartDashboard.putNumber("hood wrist Encoder Position", m_hoodEncoder.getPosition());
   }
 
   public void configMotors(){
@@ -130,9 +147,8 @@ public class HoodWrist extends SubsystemBase {
     m_hoodWristMaster.setIdleMode(IdleMode.kBrake);
     m_hoodWristMaster.setSmartCurrentLimit(40, 40);
     
-     
-    //m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
-    //m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
+    m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
+    m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
 
     m_hoodController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     //m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);

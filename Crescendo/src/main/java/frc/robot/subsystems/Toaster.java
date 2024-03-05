@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.*;
 
 public class Toaster extends SubsystemBase {
@@ -31,7 +33,7 @@ public class Toaster extends SubsystemBase {
     }
 
   //INSTANCE
-  //public static Toaster m_instance = new Toaster();
+  private static Toaster m_instance = new Toaster();
   
   //SET STATE TO OFF
   private ToasterState m_state = ToasterState.OFF;
@@ -48,9 +50,9 @@ public class Toaster extends SubsystemBase {
   private SparkPIDController m_toasterController = m_toasterRight.getPIDController();
 
   //GET INSTANCE
-  //public static Toaster getInstance(){
-    //return m_instance;
-  //}
+  public static Toaster getInstance(){
+    return m_instance;
+  }
 
   //STATE METHODS
   public void setState(ToasterState m_state){
@@ -88,12 +90,18 @@ public class Toaster extends SubsystemBase {
         setHolderSpeed(ToasterConstants.intakeSpeed);
         break;
       case SPEAKER_SHOOT:
-        setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
-        setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
+        // setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+        // setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
+        (new RunCommand(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed)))
+        .alongWith( new WaitCommand(ToasterConstants.SpeakerWaitTime)
+        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed))));
         break;
       case AMP_SHOOT:
-        setShooterSpeed(ToasterConstants.AmpShooterSpeed);
-        setHolderSpeed(ToasterConstants.AmpHolderSpeed);
+        // setShooterSpeed(ToasterConstants.AmpShooterSpeed);
+        // setHolderSpeed(ToasterConstants.AmpHolderSpeed);
+        (new RunCommand(() -> setShooterSpeed(ToasterConstants.AmpShooterSpeed)))
+        .alongWith( new WaitCommand(ToasterConstants.AmpWaitTime)
+        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.AmpHolderSpeed))));
     }     
     logData();
   }

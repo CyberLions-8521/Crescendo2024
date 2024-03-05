@@ -19,7 +19,7 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 public class Hood extends SubsystemBase {
 
   //CONSTRUCTOR
-  public Hood() {
+  private Hood() {
     configMotors();
   }
  

@@ -24,14 +24,14 @@ public final class Constants {
   public static class MotorConstants {
      
     //Wrist
-    //public static final int INDEXER_WRIST_MOTOR = 0;
+    public static final int INDEXER_WRIST_MOTOR = 0;
     public static final int HOOD_WRIST_MOTOR = 5;
 
     //Hood
-    // public static final int HOOD_MOTOR = 0;
+    public static final int HOOD_MOTOR = 0;
 
     //Indexer
-    // public static final int INDEXER_MOTOR = 0;
+    public static final int INDEXER_MOTOR = 0;
 
     //Elevator
     
@@ -133,16 +133,23 @@ public final class Constants {
 
     //SPEAKER
     public static final double SpeakerShooterSpeed = 0.8;
-    public static final double SpeakerHolderSpeed = 0.6;
+    public static final double SpeakerHolderSpeed = 0.9;
+    public static final double SpeakerWaitTime = 0.75;
 
     //AMP
     public static final double AmpShooterSpeed = 0.1;
     public static final double AmpHolderSpeed = 0.1;
+    public static final double AmpWaitTime = 0.3;
   }
   public static class JointConstants{
     public static final double JOINT_KP = 0;
     public static final double JOINT_KD = 0;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
+  }
+
+  public static class HoodWristConstants{
+    public static final double HOOD_WRIST_KP = 0;
+    public static final double HOOD_WRIST_KD = 0;
   }
 }

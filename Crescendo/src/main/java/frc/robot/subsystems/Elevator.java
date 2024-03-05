@@ -20,7 +20,7 @@ import frc.robot.Constants.MotorConstants;
 public class Elevator extends SubsystemBase {
 
   //CONSTRUCTOR
-  public Elevator() {
+  private Elevator() {
     configMotors();
   }
  
@@ -32,7 +32,7 @@ public class Elevator extends SubsystemBase {
   }
 
   //INSTANCE
-  //private static Elevator instance = new Elevator();
+  private static Elevator instance = new Elevator();
 
   //SETTING STATE TO DEFAULT
   private ElevatorState m_state = ElevatorState.OFF;
@@ -50,13 +50,12 @@ public class Elevator extends SubsystemBase {
   private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
   
   //JOG VALUE AND SETPOINT
-  private double jogValue = 0;
   private double setpoint;
 
   //INSTANCE
-  //public static Elevator getInstance(){
-    //return instance;
-  //}  
+  public static Elevator getInstance(){
+    return instance;
+  }  
 
 
   //STATE METHODS
@@ -75,8 +74,10 @@ public class Elevator extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    configMotors();
     m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
+    if(atSetpoint()){
+      setState(ElevatorState.OFF);
+    }
   }
 
   public void setSetpoint(double setpoint){
@@ -92,17 +93,8 @@ public class Elevator extends SubsystemBase {
     return Math.abs(setpoint - getElevatorHeight()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
   }
 
-  /*public boolean setElevatorHeight(double setpoint){
-    this.setpoint = setpoint;
-    setState(ElevatorState.SETPOINT);
-    configMotors();
-    m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
-
-    return atSetpoint();
-  }*/
-
   public boolean atZero(){
-        return m_limitSwitch.get();
+    return m_limitSwitch.get();
   }
 
   //GETTER METHODS

@@ -14,18 +14,20 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.subsystems.SuperStructure.SuperStructureState;
 
 public class PathHandler {
-    private static PathHandler instance = new PathHandler();
+    // private static PathHandler instance = new PathHandler();
     private Tracker tracker = Tracker.getInstance();
     private Drive drive = Drive.getInstance();
     private SuperStructure m_superStructure = SuperStructure.getInstance();
 
-    public PathHandler(){
+    private PathHandler(){
         configEvents();
         configAutoBuilder();
     }
 
+    private static PathHandler m_instance = new PathHandler();
+
     public static PathHandler getInstance(){
-        return instance;
+        return m_instance;
     }
 
     public Command getAuto(String fileName){
@@ -39,7 +41,7 @@ public class PathHandler {
 
     public void configEvents(){
         NamedCommands.registerCommand("print", new PrintCommand("Hello World!"));
-        NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SHOOT), m_superStructure));
+        NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SPEAKER_SHOOT), m_superStructure));
     }
 
     public void configAutoBuilder(){

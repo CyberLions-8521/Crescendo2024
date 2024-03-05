@@ -17,7 +17,7 @@ import frc.robot.Constants.MotorConstants;
 public class Indexer extends SubsystemBase {
 
   //CONSTRUCTOR
-  public Indexer() {
+  private Indexer() {
     configMotors();
   }
  

@@ -17,8 +17,14 @@ public class ColorManager extends SubsystemBase {
   //takes the number of LEDs as an input.
   private AddressableLEDBuffer m_buffer = new AddressableLEDBuffer(ColorConstants.BUFFER_LENGTH);
 
-  public ColorManager() {
+  private ColorManager() {
 
+  }
+
+  private static ColorManager m_instance = new ColorManager();
+
+  public static ColorManager getInstance(){
+    return m_instance;
   }
 
   public enum ColorManagerState{

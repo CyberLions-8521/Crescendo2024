@@ -20,26 +20,27 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
+import frc.robot.subsystems.PathHandler;
+import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Toaster;
-//import frc.robot.commands.Shoot;
-// import frc.robot.subsystems.SuperStructure;
-//import frc.robot.subsystems.Tracker;
-import frc.robot.subsystems.Toaster.ToasterState;
+import frc.robot.subsystems.SuperStructure;
+import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
-  //private final Drive m_drive = new Drive();
   private final Drive m_drive = Drive.getInstance();
-  //private final Tracker m_tracker = Tracker.getInstance();
-  private final Elevator m_elevator = new Elevator();
-  private final Toaster m_toaster = new Toaster();
-  private final Joint m_joint = new Joint();
-  private final HoodWrist m_hoodWrist = new HoodWrist();
+  private final Tracker m_tracker = Tracker.getInstance();
+  private final Elevator m_elevator = Elevator.getInstance();
+  private final Toaster m_toaster = Toaster.getInstance();
+  private final Joint m_joint = Joint.getInstance();
+  private final HoodWrist m_hoodWrist = HoodWrist.getInstance();
+  
   //rivate final Shoot m_shoot = new Shoot(m_toaster);
-  // private final SuperStructure m_superStructure = new SuperStructure(m_toaster, m_elevator);
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final SuperStructure m_superStructure = SuperStructure.getInstance();
+// private final PathHandler m_pathHandler = new PathHandler(m_superStructure);
   public RobotContainer() {
     configureBindings();
 
@@ -57,14 +58,14 @@ public class RobotContainer {
     
     //TOASTER
       
-      m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)));
-      m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
+      // m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)));
+      // m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
       // m_driverController.button(2).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)));
-      m_driverController.button(1).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT)));
-      m_driverController.button(2)
-        .whileTrue( (new RunCommand(() -> m_toaster.setShooterSpeed(0.8)))
-        .alongWith( new WaitCommand(0.75)
-        .andThen(new RunCommand(() -> m_toaster.setHolderSpeed(0.9)))));
+      // m_driverController.button(1).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT)));
+      // m_driverController.button(2)
+      //   .whileTrue( (new RunCommand(() -> m_toaster.setShooterSpeed(0.8)))
+      //   .alongWith( new WaitCommand(0.75)
+      //   .andThen(new RunCommand(() -> m_toaster.setHolderSpeed(0.9)))));
     
 
     //ELEAVATOR
@@ -75,12 +76,21 @@ public class RobotContainer {
     // m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setState(ElevatorState.ZERO)));
 
     //joint
-    // m_driverController.button(5).whileTrue(new RunCommand(() -> m_joint.set(0.8)));
-    // m_driverController.button(6).whileTrue(new RunCommand(() -> m_joint.set(-0.8)));
+    m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.set(0.8)));
+    m_driverController.button(2).whileTrue(new RunCommand(() -> m_joint.set(-0.8)));
 
     //hood wrist
+    // m_driverController.button(5)
+    //   .whileTrue((new RunCommand(() -> m_hoodWrist.setSpeed(0.3)))
+    //   .alongWith(new WaitCommand(0.2))
+    //   .andThen(new RunCommand(() -> m_hoodWrist.setSpeed(-0.1))));
+    // m_driverController.button(6)
+    //   .whileTrue((new RunCommand(() -> m_hoodWrist.setSpeed(-0.3))).alongWith(new WaitCommand(0.2)).andThen(new RunCommand(() -> m_hoodWrist.setSpeed(0.1))));
     m_driverController.button(5).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(0.3)));
     m_driverController.button(6).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(-0.3)));
+
+    //Superstructure 
+    // m_driverController.button(1).whileTrue();
   }
   
 
