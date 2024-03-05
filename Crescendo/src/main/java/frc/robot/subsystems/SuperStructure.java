@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Hood.HoodState;
+//import frc.robot.subsystems.Hood.HoodState;
 import frc.robot.subsystems.HoodWrist.HoodWristState;
-import frc.robot.subsystems.Indexer.IndexerState;
+//import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
-import frc.robot.subsystems.IndexerWrist.IndexerWristState;
+//import frc.robot.subsystems.IndexerWrist.IndexerWristState;
 
 public class SuperStructure extends SubsystemBase {
   public final Elevator m_elevator = Elevator.getInstance();
-  public final Hood m_hood = Hood.getInstance();
-  public final Indexer m_indexer = Indexer.getInstance();
+  //public final Hood m_hood = Hood.getInstance();
+  //public final Indexer m_indexer = Indexer.getInstance();
   public final Toaster m_toaster = Toaster.getInstance();
 
   //WRISTS
-  public final IndexerWrist m_indexerWrist = IndexerWrist.getInstance();
+  //public final IndexerWrist m_indexerWrist = IndexerWrist.getInstance();
   public final HoodWrist m_hoodWrist = HoodWrist.getInstance();
   public final Joint m_joint = Joint.getInstance();
 
@@ -58,7 +58,7 @@ public class SuperStructure extends SubsystemBase {
   public void zeroAll(){
     //WRISTS
     m_joint.setState(JointState.ZERO);
-    m_indexerWrist.setState(IndexerWristState.ZERO);
+    //m_indexerWrist.setState(IndexerWristState.ZERO);
     m_hoodWrist.setState(HoodWristState.ZERO);
 
     //REGULAR SUBSYSTEM
@@ -84,48 +84,48 @@ public class SuperStructure extends SubsystemBase {
 
       case GROUND_INTAKE:
         //WRISTS
-        m_indexerWrist.setSetpoint(0);
+        //m_indexerWrist.setSetpoint(0);
         m_hoodWrist.setSetpoint(0);
 
         goToElevatorPosition(null,0);
-        m_indexer.setState(IndexerState.ON);
+        //m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
-        m_hood.setState(HoodState.OFF);
+        //m_hood.setState(HoodState.OFF);
         break;
     
       case SOURCE:
         //WRISTS
-        m_indexerWrist.setSetpoint(0);
+        //m_indexerWrist.setSetpoint(0);
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
         goToElevatorPosition(null,0);
-        m_hood.setState(HoodState.OFF);
-        m_indexer.setState(IndexerState.OFF);
+        //m_hood.setState(HoodState.OFF);
+        //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.INTAKE);
         break;
       
       case SPEAKER_SHOOT:
         //WRISTS
-        m_indexerWrist.setSetpoint(0);
+        //m_indexerWrist.setSetpoint(0);
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
         goToElevatorPosition(null,0);
-        m_hood.setState(HoodState.OFF);
-        m_indexer.setState(IndexerState.OFF);
+        //m_hood.setState(HoodState.OFF);
+        //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.SPEAKER_SHOOT);
         break;
         
       case AMP_SHOOT:
         //WRISTS
-        m_indexerWrist.setSetpoint(0);
+        //m_indexerWrist.setSetpoint(0);
         m_hoodWrist.setSetpoint(5);
 
         //REGULAR SUBYSTEM
         goToElevatorPosition(null,0);
-        m_hood.setState(HoodState.ON);
-        m_indexer.setState(IndexerState.OFF);
+        //m_hood.setState(HoodState.ON);
+        //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.AMP_SHOOT);
       
       case TRAP:

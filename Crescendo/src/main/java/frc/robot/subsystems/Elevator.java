@@ -22,6 +22,7 @@ public class Elevator extends SubsystemBase {
   //CONSTRUCTOR
   private Elevator() {
     configMotors();
+    resetEncoder();
   }
  
   //STATES ENUM
@@ -74,6 +75,9 @@ public class Elevator extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
+    if(m_elevatorEncoder.getPosition() > 25){
+      set(0);
+    }
     m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
     if(atSetpoint()){
       setState(ElevatorState.OFF);
@@ -142,13 +146,19 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putString("Elevator State", m_state.toString());
     SmartDashboard.putNumber("Elevator Position", getElevatorHeight());
     SmartDashboard.putBoolean("Limit Switch", m_limitSwitch.get());
+
+    SmartDashboard.putNumber("Elevator kP", ElevatorConstants.ELEVATOR_KP);
+    SmartDashboard.putNumber("Elevator kD", ElevatorConstants.ELEVATOR_KD);
   }
 
   public void configElevatorPID(){
     //SET PID VALUES
-    m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
-    m_elevatorController.setFF(ElevatorConstants.ELEVATOR_KFF);
-    m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
+    //m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
+    //m_elevatorController.setFF(ElevatorConstants.ELEVATOR_KFF);
+    //m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
+
+    m_elevatorController.setP(SmartDashboard.getNumber("Elevator kP", 0));
+    m_elevatorController.setD(SmartDashboard.getNumber("Elevator kD", 0));
   }
 
   public void configMotors(){

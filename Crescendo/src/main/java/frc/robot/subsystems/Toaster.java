@@ -43,6 +43,8 @@ public class Toaster extends SubsystemBase {
   private CANSparkMax m_toasterLeft = new CANSparkMax(MotorConstants.TOASTER_LEFT_MOTOR, MotorType.kBrushless);
   private CANSparkMax m_holder = new CANSparkMax(MotorConstants.HOLDER_MOTOR, MotorType.kBrushless);
 
+  Timer m_timer = new Timer();
+
   //ENCODER OBJECT
   private RelativeEncoder m_rightEncoder = m_toasterRight.getEncoder();
 
@@ -84,23 +86,31 @@ public class Toaster extends SubsystemBase {
     switch(m_state){
       case OFF:
         setSpeed(0, 0);
+        m_timer.stop();
+        m_timer.reset();
         break;
       case INTAKE:
         setShooterSpeed(ToasterConstants.intakeSpeed);
         setHolderSpeed(ToasterConstants.intakeSpeed);
         break;
       case SPEAKER_SHOOT:
-        // setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+        m_timer.start();
+        //setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+        //setShooterSpeed(0.5);
+        setHolderSpeed(0.5);
+        //if (m_timer.get() > 5){
+          //setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
+        //}
         // setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
-        (new RunCommand(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed)))
-        .alongWith( new WaitCommand(ToasterConstants.SpeakerWaitTime)
-        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed)))
-        .alongWith( new WaitCommand(ToasterConstants.waitTime))
-        .andThen( new RunCommand(() -> setState(ToasterState.OFF)))
-        );
+        //(new RunCommand(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed)))
+        //.alongWith( new WaitCommand(ToasterConstants.SpeakerWaitTime)
+        //.andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed)))
+        // /.alongWith( new WaitCommand(ToasterConstants.waitTime))
+        //.andThen( new RunCommand(() -> setState(ToasterState.OFF)))
+        //);
         break;
       case AMP_SHOOT:
-        // setShooterSpeed(ToasterConstants.AmpShooterSpeed);
+        //setShooterSpeed(ToasterConstants.AmpShooterSpeed);
         // setHolderSpeed(ToasterConstants.AmpHolderSpeed);
         (new RunCommand(() -> setShooterSpeed(ToasterConstants.AmpShooterSpeed)))
         .alongWith( new WaitCommand(ToasterConstants.AmpWaitTime)
@@ -115,6 +125,7 @@ public class Toaster extends SubsystemBase {
   public void logData(){
     SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
+    SmartDashboard.putNumber("Timer", m_timer.get());
   }
 
   public void configMotors(){
