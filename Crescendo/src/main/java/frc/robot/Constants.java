@@ -128,6 +128,8 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
 
+    public static final double waitTime = 1;
+
     //INTAKE
     public static final double intakeSpeed = -0.25;
 

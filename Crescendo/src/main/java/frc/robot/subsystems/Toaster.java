@@ -94,14 +94,20 @@ public class Toaster extends SubsystemBase {
         // setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
         (new RunCommand(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed)))
         .alongWith( new WaitCommand(ToasterConstants.SpeakerWaitTime)
-        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed))));
+        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed)))
+        .alongWith( new WaitCommand(ToasterConstants.waitTime))
+        .andThen( new RunCommand(() -> setState(ToasterState.OFF)))
+        );
         break;
       case AMP_SHOOT:
         // setShooterSpeed(ToasterConstants.AmpShooterSpeed);
         // setHolderSpeed(ToasterConstants.AmpHolderSpeed);
         (new RunCommand(() -> setShooterSpeed(ToasterConstants.AmpShooterSpeed)))
         .alongWith( new WaitCommand(ToasterConstants.AmpWaitTime)
-        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.AmpHolderSpeed))));
+        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.AmpHolderSpeed)))
+        .alongWith( new WaitCommand(ToasterConstants.waitTime))
+        .andThen( new RunCommand(() -> setState(ToasterState.OFF)))
+        );
     }     
     logData();
   }
