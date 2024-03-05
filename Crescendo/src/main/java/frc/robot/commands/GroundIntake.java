@@ -9,7 +9,7 @@ import frc.robot.subsystems.SuperStructure.SuperStructureState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class Zero extends Command {
+public class GroundIntake extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SuperStructure m_superStructure;
 
@@ -18,7 +18,7 @@ public class Zero extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Zero(SuperStructure superStructure) {
+  public GroundIntake(SuperStructure superStructure) {
     m_superStructure = superStructure;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(superStructure);

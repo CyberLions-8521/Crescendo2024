@@ -9,7 +9,7 @@ import frc.robot.subsystems.SuperStructure.SuperStructureState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class SpeakerShoot extends Command {
+public class AmpShoot extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SuperStructure m_superStructure;
 
@@ -18,7 +18,7 @@ public class SpeakerShoot extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SpeakerShoot(SuperStructure superStructure) {
+  public AmpShoot(SuperStructure superStructure) {
     m_superStructure = superStructure;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(superStructure);
@@ -31,7 +31,7 @@ public class SpeakerShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_superStructure.setState(SuperStructureState.ZERO);
+    m_superStructure.setState(SuperStructureState.AMP_SHOOT);
   }
 
   // Called once the command ends or is interrupted.
