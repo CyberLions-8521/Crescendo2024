@@ -28,7 +28,7 @@ public final class Constants {
     public static final int HOOD_WRIST_MOTOR = 5;
 
     //Hood
-    //public static final int HOOD_MOTOR = 0;
+    public static final int HOOD_MOTOR = 13;
 
     //Indexer
     //public static final int INDEXER_MOTOR = 0;
@@ -123,7 +123,7 @@ public final class Constants {
     public static final double GEAR_RATIO = 13;
 
     public static final double MAX_POSITION = 26;
-    
+
   }
   public static class ToasterConstants{
     public static final double TOASTER_KP = 0;
