@@ -30,15 +30,7 @@ public class SuperStructure extends SubsystemBase {
   // public final CommandXboxController m_driverController;
 
 
-  private SuperStructure(/*Toaster m_toaster, Elevator m_elevator, Joint m_joint, HoodWrist m_hoodWrist/*, Hood m_hood, Indexer m_indexer, IndexerWrist m_indexerWrist , CommandXboxController m_driverController*/) {
-  //   this.m_toaster = m_toaster;
-  //   this.m_elevator = m_elevator;
-  //   this.m_joint = m_joint;
-  //   this.m_hoodWrist = m_hoodWrist;
-  //   this.m_hood = m_hood;
-  //   this.m_indexer = m_indexer;
-  //   this.m_indexerWrist = m_indexerwrist;
-  //   this.m_driverController = m_driverController;
+  private SuperStructure() {
   }
 
   private static SuperStructure m_instance = new SuperStructure();
@@ -48,7 +40,6 @@ public class SuperStructure extends SubsystemBase {
   }
 
   public enum SuperStructureState{
-    OFF,
     ZERO,
     GROUND_INTAKE,
     SOURCE,
@@ -56,12 +47,6 @@ public class SuperStructure extends SubsystemBase {
     AMP_SHOOT,
     TRAP
   }
-
-  // private static SuperStructure m_instance = new SuperStructure();
-
-  // public static SuperStructure getInstance(){
-  //   return m_instance;
-  // }
   
   private SuperStructureState m_state = SuperStructureState.ZERO;
 
@@ -72,16 +57,16 @@ public class SuperStructure extends SubsystemBase {
   
   public void zeroAll(){
     //WRISTS
-    //joint is zerod only for ground intake isn't it? bc limit swithc is at the bottom
-    // m_joint.setState(JointState.ZERO);
-    // m_indexerWrist.setState(IndexerWristState.ZERO);
-    // m_hoodWrist.setState(HoodWristState.ZERO);
+    m_joint.setState(JointState.ZERO);
+    m_indexerWrist.setState(IndexerWristState.ZERO);
+    m_hoodWrist.setState(HoodWristState.ZERO);
+
     //REGULAR SUBSYSTEM
     m_elevator.setState(ElevatorState.ZERO);
   }
 
-  public void goToElevatorPosition(Rotation2d jointSetpoint, Double elevatorSetpoint){
-    // m_joint.setSetpoint(jointSetpoint);
+  public void goToElevatorPosition(Rotation2d jointSetpoint, double elevatorSetpoint){
+    m_joint.setSetpoint(jointSetpoint);
     m_elevator.setSetpoint(elevatorSetpoint);
   }
 
@@ -93,42 +78,56 @@ public class SuperStructure extends SubsystemBase {
     m_state = newState;
 
     switch (m_state) {
-      case OFF:
-        offALL();
-        break;
-
       case ZERO:
         zeroAll();
         break;
 
       case GROUND_INTAKE:
-        // goToElevatorPosition(0,0);
-        // m_indexerWrist.setSetpoint(0);
-        // m_indexer.setState(IndexerState.ON);
+        //WRISTS
+        m_indexerWrist.setSetpoint(0);
+        m_hoodWrist.setSetpoint(0);
+
+        goToElevatorPosition(null,0);
+        m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
-        // m_hoodWrist.setState(ToasterState.ZERO);
+        m_hood.setState(HoodState.OFF);
         break;
     
       case SOURCE:
-        // goToElevatorPosition(0,0);
-        // m_hood.setState(HoodState.OFF);
+        //WRISTS
+        m_indexerWrist.setSetpoint(0);
+        m_hoodWrist.setSetpoint(0);
+
+        //REGULAR SUBSYSTEM
+        goToElevatorPosition(null,0);
+        m_hood.setState(HoodState.OFF);
+        m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.INTAKE);
         break;
       
       case SPEAKER_SHOOT:
-        // jointGoToSetpoint(null);
+        //WRISTS
+        m_indexerWrist.setSetpoint(0);
+        m_hoodWrist.setSetpoint(0);
+
+        //REGULAR SUBSYSTEM
+        goToElevatorPosition(null,0);
+        m_hood.setState(HoodState.OFF);
+        m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.SPEAKER_SHOOT);
-        // m_hood.setState(HoodState.OFF);
-        
         break;
         
       case AMP_SHOOT:
-        // jointGoToSetpoint(null);
-        // elevatorGoToSetpoint(null);
-        hoodGoToSetpoint(0);
-        // m_hood.setState(HoodState.ON);
-        m_toaster.setState(ToasterState.AMP_SHOOT);
+        //WRISTS
+        m_indexerWrist.setSetpoint(0);
+        m_hoodWrist.setSetpoint(5);
 
+        //REGULAR SUBYSTEM
+        goToElevatorPosition(null,0);
+        m_hood.setState(HoodState.ON);
+        m_indexer.setState(IndexerState.OFF);
+        m_toaster.setState(ToasterState.AMP_SHOOT);
+      
       case TRAP:
         // jointGoToSetpoint(null);
         // elevatorGoToSetpoint(null);

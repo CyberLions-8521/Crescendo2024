@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 15.19489206917345,
+      "y": 5.525086266457521
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Middle(1) - 4 notes - Pos(1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Middle(1) - 4 notes - Pos(2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Middle(1) - 4 notes - Pos(3)"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Red Middle",
+  "choreoAuto": false
+}

@@ -56,7 +56,7 @@ public class Joint extends SubsystemBase {
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
   
   //JOG VALUE & SETPOINT
-  private Rotation2d setpoint = new Rotation2d();
+  private Rotation2d setpoint;
 
   //GET INSTANCE
   public static Joint getInstance(){
@@ -92,6 +92,10 @@ public class Joint extends SubsystemBase {
     return setpoint;
   }
 
+  public double getPosition(){
+    return m_jointLeftEncoder.getPosition();
+  }
+
   //ZERO/RESET METHODS
   public void resetEncoder(){
     m_jointRightEncoder.setPosition(0);
@@ -124,7 +128,8 @@ public class Joint extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putString("Joint State", getState().toString());
-    SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getDegrees());
+    SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getRotations());
+    SmartDashboard.putNumber("Joint Position", getPosition());
   }
 
   public void configJointPID(){

@@ -41,7 +41,7 @@ public class IndexerWrist extends SubsystemBase {
   private IndexerWristState m_state = IndexerWristState.OFF;
 
   //SETPOINT
-  private Rotation2d setpoint = new Rotation2d();
+  private double setpoint;
   
   //MOTOR OBJECT
   private CANSparkMax m_indexerWristMaster = new CANSparkMax(MotorConstants.INDEXER_WRIST_MOTOR, MotorType.kBrushless);
@@ -76,15 +76,15 @@ public class IndexerWrist extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_indexerWristController.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_indexerWristController.setReference(setpoint, ControlType.kPosition);
   }
 
-  public void setSetpoint(Rotation2d setpoint){
+  public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
     setState(IndexerWristState.POSITION);
   }
 
-  public Rotation2d getSetpoint(){
+  public double getSetpoint(){
     return setpoint;
   }
 
@@ -121,7 +121,7 @@ public class IndexerWrist extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putString("indexer Wrist State", getState().toString());
-    SmartDashboard.putNumber("Indexer Wrist Setpoint", getSetpoint().getDegrees());
+    SmartDashboard.putNumber("Indexer Wrist Setpoint", getSetpoint());
   }
 
   public void configMotors(){
