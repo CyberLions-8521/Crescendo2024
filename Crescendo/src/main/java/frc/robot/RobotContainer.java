@@ -13,8 +13,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AmpShoot;
 // import frc.robot.commands.Autos;
 import frc.robot.commands.DriveTele;
+import frc.robot.commands.GroundIntake;
+import frc.robot.commands.Source;
+import frc.robot.commands.SpeakerShoot;
 //import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -28,14 +32,14 @@ import frc.robot.subsystems.Tracker;
 import frc.robot.Constants.SwerveModuleConstants.*;
 
 public class RobotContainer {
+  //SUBSYSTEMS
   private final Drive m_drive = Drive.getInstance();
   private final Tracker m_tracker = Tracker.getInstance();
   private final Elevator m_elevator = Elevator.getInstance();
   private final Toaster m_toaster = Toaster.getInstance();
   private final Joint m_joint = Joint.getInstance();
   private final HoodWrist m_hoodWrist = HoodWrist.getInstance();
-  
-  //rivate final Shoot m_shoot = new Shoot(m_toaster);
+ 
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -53,12 +57,20 @@ public class RobotContainer {
 
   private void configureBindings() {
     //DRIVEBASE
-    m_driverController.button(9).onTrue(new InstantCommand(m_drive::readConfigGains));
-    m_driverController.button(10).onTrue(new InstantCommand(m_drive::resetHeading));
+    //
+      m_driverController.button(9).onTrue(new InstantCommand(m_drive::readConfigGains));
+      m_driverController.button(10).onTrue(new InstantCommand(m_drive::resetHeading));
     
-    //TOASTER
-    m_driverController.
-      
+    //SUBSYSTEMS
+      //Y
+      m_driverController.button(4).whileTrue(new AmpShoot(m_superStructure));
+      //X
+      m_driverController.button(2).whileTrue(new GroundIntake(m_superStructure));
+      //B
+      m_driverController.button(3).whileTrue(new SpeakerShoot(m_superStructure));
+      //A
+      m_driverController.button(1).whileTrue(new Source(m_superStructure));
+        
       // m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)));
       // m_driverController.button(3).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
       // m_driverController.button(2).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)));
