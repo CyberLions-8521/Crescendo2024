@@ -64,10 +64,10 @@ public class Drive extends SubsystemBase {
       SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
       SmartDashboard.putNumber("front left error", Math.abs(Math.abs(states[0].speedMetersPerSecond) - Math.abs(m_topLeft.getDriveVelocity())));
 
-      m_topLeft.setState(states[0]);
-      m_topRight.setState(states[1]);
-      m_bottomLeft.setState(states[2]);
-      m_bottomRight.setState(states[3]);
+      m_topLeft.setState(states[3]);
+      m_topRight.setState(states[2]);
+      m_bottomLeft.setState(states[1]);
+      m_bottomRight.setState(states[0]);
   }
 
    public SwerveModulePosition[] getModulePositions(){
@@ -76,7 +76,7 @@ public class Drive extends SubsystemBase {
   }
 
   public SwerveModuleState[] getModuleStates(){
-    SwerveModuleState[] moduleStates = {m_bottomLeft.getState(), m_bottomLeft.getState(), m_bottomLeft.getState(), m_bottomLeft.getState()};
+    SwerveModuleState[] moduleStates = {m_bottomRight.getState(), m_bottomLeft.getState(), m_topRight.getState(), m_topLeft.getState()};
     return moduleStates;
   }
 

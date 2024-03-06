@@ -36,14 +36,14 @@ public class DriveTele extends Command {
         value = 0;
       
       }
-      return value * MAX_ANGULAR_VELOCITY*0.1;
+      return value * MAX_ANGULAR_VELOCITY;
     }
 
       else{
         if(Math.abs(value) < 0.15){
           value = 0;
         }
-        return value * MAX_TANGENTIAL_VELOCITY*0.1;
+        return value * MAX_TANGENTIAL_VELOCITY;
       }
   }
 

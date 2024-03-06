@@ -95,29 +95,15 @@ public class Toaster extends SubsystemBase {
         break;
       case SPEAKER_SHOOT:
         m_timer.start();
-        //setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+        setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
         //setShooterSpeed(0.5);
-        setHolderSpeed(0.5);
-        //if (m_timer.get() > 5){
-          //setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
-        //}
-        // setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
-        //(new RunCommand(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed)))
-        //.alongWith( new WaitCommand(ToasterConstants.SpeakerWaitTime)
-        //.andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.SpeakerHolderSpeed)))
-        // /.alongWith( new WaitCommand(ToasterConstants.waitTime))
-        //.andThen( new RunCommand(() -> setState(ToasterState.OFF)))
-        //);
+        //setHolderSpeed(0.5);
+        if (m_timer.get() > ToasterConstants.waitTime){
+          setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
+        }
         break;
       case AMP_SHOOT:
-        //setShooterSpeed(ToasterConstants.AmpShooterSpeed);
-        // setHolderSpeed(ToasterConstants.AmpHolderSpeed);
-        (new RunCommand(() -> setShooterSpeed(ToasterConstants.AmpShooterSpeed)))
-        .alongWith( new WaitCommand(ToasterConstants.AmpWaitTime)
-        .andThen(new RunCommand(() -> setHolderSpeed(ToasterConstants.AmpHolderSpeed)))
-        .alongWith( new WaitCommand(ToasterConstants.waitTime))
-        .andThen( new RunCommand(() -> setState(ToasterState.OFF)))
-        );
+        setSpeed(ToasterConstants.AmpShooterSpeed,ToasterConstants.AmpHolderSpeed);
     }     
     logData();
   }
@@ -149,10 +135,5 @@ public class Toaster extends SubsystemBase {
     m_toasterRight.setSmartCurrentLimit(40, 40);
     m_toasterLeft.setSmartCurrentLimit(40, 40);
     m_holder.setSmartCurrentLimit(40, 40);
-
-    //SET SMART MOTION
-    m_toasterController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    m_toasterController.setSmartMotionMaxAccel(ToasterConstants.MAX_ACCELERATION, 0);
-    m_toasterController.setSmartMotionMaxVelocity(ToasterConstants.MAX_VELOCITY, 0);    
   }
 }

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorState;
 //import frc.robot.subsystems.Hood.HoodState;
 import frc.robot.subsystems.HoodWrist.HoodWristState;
@@ -87,7 +88,7 @@ public class SuperStructure extends SubsystemBase {
         //m_indexerWrist.setSetpoint(0);
         m_hoodWrist.setSetpoint(0);
 
-        goToElevatorPosition(null,0);
+        goToElevatorPosition(null,ElevatorConstants.GROUND_INTAKE_POSITION);
         //m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
         //m_hood.setState(HoodState.OFF);
@@ -99,7 +100,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
-        goToElevatorPosition(null,0);
+        goToElevatorPosition(null,ElevatorConstants.SOURCE_POSITION);
         //m_hood.setState(HoodState.OFF);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.INTAKE);
@@ -111,7 +112,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
-        goToElevatorPosition(null,0);
+        goToElevatorPosition(null,ElevatorConstants.SPEAKER_POSITION);
         //m_hood.setState(HoodState.OFF);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.SPEAKER_SHOOT);
@@ -123,7 +124,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(5);
 
         //REGULAR SUBYSTEM
-        goToElevatorPosition(null,0);
+        goToElevatorPosition(null,ElevatorConstants.AMP_POSITION);
         //m_hood.setState(HoodState.ON);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.AMP_SHOOT);

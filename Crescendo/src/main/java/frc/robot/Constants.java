@@ -8,21 +8,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-
-  public static class MotorConstants {
-     
+  public static class MotorConstants {  
     //Wrist
     //public static final int INDEXER_WRIST_MOTOR = 0;
     public static final int HOOD_WRIST_MOTOR = 5;
@@ -34,7 +24,6 @@ public final class Constants {
     //public static final int INDEXER_MOTOR = 0;
 
     //Elevator
-    
     public static final int ELEVATOR_MASTER_MOTOR = 9;
 
     //Toaster / Shooter / Intake
@@ -45,6 +34,70 @@ public final class Constants {
     //Joint
     public static final int JOINT_RIGHT_MOTOR = 4;
     public static final int JOINT_LEFT_MOTOR = 7;
+  }
+
+  //WRIST CONSTANTS
+  public static class WristConstants{
+    public static final double WRIST_KP = 0;
+    public static final double WRIST_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+  }
+  public static class HoodConstants{
+    public static final double HOOD_SPEED = 0.8;
+  }
+
+  public static class ElevatorConstants{
+    public static final double ELEVATOR_KP = 0;
+    public static final double ELEVATOR_KD = 0;
+
+    public static final double MAX_ACCELERATION = 0.01;
+    public static final double MAX_VELOCITY = 0.1;
+
+    public static final double ELEVATOR_HEIGHT_TOLERANCE = 1;
+    public static final double ZEROING_SPEED = -0.05;
+    public static final double GEAR_RATIO = 13;
+
+    public static final double MAX_POSITION = 26;
+    public static final double AMP_POSITION = 0;
+    public static final double SPEAKER_POSITION = 0;
+    public static final double SOURCE_POSITION = 0;
+    public static final double TRAP_POSITION = 0;
+    public static final double GROUND_INTAKE_POSITION = 0;
+    
+  }
+  public static class ToasterConstants{
+    //WAIT TIME
+    public static final double waitTime = 0.75;
+
+    //INTAKE
+    public static final double intakeSpeed = -0.25;
+
+    //SPEAKER
+    public static final double SpeakerShooterSpeed = .9;
+    public static final double SpeakerHolderSpeed = 0.9;
+    public static final double SpeakerWaitTime = 0.75;
+
+    //AMP
+    public static final double AmpShooterSpeed = 0.3;
+    public static final double AmpHolderSpeed = 0.3;
+  }
+  
+  public static class JointConstants{
+    public static final double JOINT_KP = 0;
+    public static final double JOINT_KD = 0;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_VELOCITY = 0;
+    public static final Rotation2d AMP_POSITION = Rotation2d.fromRotations(0);
+    public static final Rotation2d SPEAKER_POSITION = Rotation2d.fromRotations(0);
+    public static final Rotation2d SOURCE_POSITION = Rotation2d.fromRotations(0);
+    public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
+    public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
+  }
+
+  public static class HoodWristConstants{
+    public static final double HOOD_WRIST_KP = 0;
+    public static final double HOOD_WRIST_KD = 0;
   }
 
   public static class DriveConstants {
@@ -100,61 +153,4 @@ public final class Constants {
     public static final double UPPER_BOUND = 360.0;
   }
 
-  public static class WristConstants{
-    public static final double WRIST_KP = 0;
-    public static final double WRIST_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-  }
-  public static class HoodConstants{
-    public static final double HOOD_KP = 0;
-    public static final double HOOD_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-  }
-  public static class ElevatorConstants{
-    public static final double ELEVATOR_KP = 0;
-    public static final double ELEVATOR_KFF = 0;
-    public static final double ELEVATOR_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-    public static final double ELEVATOR_HEIGHT_TOLERANCE = 0;
-    public static final double ZEROING_SPEED = -0.05;
-    public static final double GEAR_RATIO = 13;
-
-    public static final double MAX_POSITION = 26;
-
-  }
-  public static class ToasterConstants{
-    public static final double TOASTER_KP = 0;
-    public static final double TOASTER_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-
-    public static final double waitTime = 1;
-
-    //INTAKE
-    public static final double intakeSpeed = -0.25;
-
-    //SPEAKER
-    public static final double SpeakerShooterSpeed = 0.8;
-    public static final double SpeakerHolderSpeed = 0.9;
-    public static final double SpeakerWaitTime = 0.75;
-
-    //AMP
-    public static final double AmpShooterSpeed = 0.1;
-    public static final double AmpHolderSpeed = 0.1;
-    public static final double AmpWaitTime = 0.3;
-  }
-  public static class JointConstants{
-    public static final double JOINT_KP = 0;
-    public static final double JOINT_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-  }
-
-  public static class HoodWristConstants{
-    public static final double HOOD_WRIST_KP = 0;
-    public static final double HOOD_WRIST_KD = 0;
-  }
 }

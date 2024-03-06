@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.subsystems.Elevator.ElevatorState;
 
@@ -37,9 +38,6 @@ public class Hood extends SubsystemBase {
 
   //MOTOR OBJECT
   private CANSparkMax m_hoodMaster = new CANSparkMax(MotorConstants.HOOD_MOTOR, MotorType.kBrushless);
-  
-  //JOG VALUE
-  public double jogValue;
 
   //GET INSTANCE
   public static Hood getInstance(){
@@ -67,7 +65,7 @@ public class Hood extends SubsystemBase {
         setSpeed(0);
         break;
       case ON:
-        setSpeed(0.8);
+        setSpeed(HoodConstants.HOOD_SPEED);
         break;
     }   
   }
