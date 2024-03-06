@@ -66,7 +66,7 @@ public class DriveTele extends Command {
   public void execute() {
     double vx = -modifyInputs(fwd.getAsDouble(), false);
     double vy = -modifyInputs(str.getAsDouble(), false);
-    double omega = modifyInputs(rot.getAsDouble(), true);
+    double omega = -modifyInputs(rot.getAsDouble(), true);
 
     //makes everything like a 3rd person robot
     //might have to add - in front 

@@ -140,9 +140,9 @@ public final class Constants {
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
     public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.175781 *360;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0.103760*360;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.098145*360;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
     public static final double TOP_RIGHT_ENCODER_OFFSET = -0.138428*360;//-61.17;//-0.341309*360;//-0.359131*360;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 0.479736*360;//10.45;//-0.023438*360;//-0.006836*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = -0.030762*360;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0;//0.000195;//0.00017;//0.00017;//0.00004;

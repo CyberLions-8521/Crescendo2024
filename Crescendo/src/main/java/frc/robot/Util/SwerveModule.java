@@ -61,7 +61,7 @@ public class SwerveModule {
 
           //CREATE CANCODER
           m_canCoder  = new CANcoder(encoderPort, "rio");
-          angleGetter = m_canCoder.getAbsolutePosition();
+          // angleGetter = m_canCoder.getAbsolutePosition();
 
           //CREATE PID CONTROLLER
           m_turnController = m_turnMotor.getPIDController();
@@ -77,7 +77,6 @@ public class SwerveModule {
           configMotors(isInverted);
           configGains();
           configCANcoder(angleOffset);
-          zeroEncoders();
           //rezeroTurnMotors();
      }
 
@@ -128,16 +127,13 @@ public class SwerveModule {
           if(metersPerSec == 0){
                m_driveMotor.set(0);
           }
-          else{
-               // double RPM = ((metersPerSec * 60) / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-               // m_driveController.setReference(RPM, ControlType.kVelocity);
-               //setControl uses RPS
-               double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-               m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
-               // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
-               // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
-
-          }
+          // double RPM = ((metersPerSec * 60) / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          // m_driveController.setReference(RPM, ControlType.kVelocity);
+          //setControl uses RPS
+          double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+          // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
+          // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
      }
 
      public void setState(SwerveModuleState state){
@@ -154,7 +150,8 @@ public class SwerveModule {
 
      public Rotation2d getTurnAngle(){
           //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / SwerveModuleConstants.TURN_GEAR_RATIO); 
+          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / SwerveModuleConstants.TURN_GEAR_RATIO);
+          // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
      
      public Rotation2d getAbsoluteTurnAngle(){
@@ -208,7 +205,7 @@ public class SwerveModule {
 
           //CONFIGURE INVERSION
           m_driveMotor.setInverted(isInverted);
-          m_turnMotor.setInverted(false);
+          m_turnMotor.setInverted(isInverted);
 
           //APPLY CURRENT LIMITS
           m_driveControllerConfig.CurrentLimits = m_driveCurrentLimits;
@@ -217,5 +214,6 @@ public class SwerveModule {
 
           //RESTORE FACTORY DEFAULT
           m_turnMotor.restoreFactoryDefaults();
+          zeroEncoders();
      }
 }
