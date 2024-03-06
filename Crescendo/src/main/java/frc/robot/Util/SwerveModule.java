@@ -84,7 +84,8 @@ public class SwerveModule {
           //CONFIGURE CANCODER
           CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+          // m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
           m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
           //m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
 

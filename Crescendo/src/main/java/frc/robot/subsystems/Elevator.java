@@ -82,7 +82,7 @@ public class Elevator extends SubsystemBase {
     /*if(m_elevatorEncoder.getPosition() > 25){
       set(0);
     }*/
-    m_elevatorController.setReference(setpoint, ControlType.kSmartMotion);
+    m_elevatorController.setReference(setpoint, ControlType.kPosition);
     if(atSetpoint()){
       setState(ElevatorState.OFF);
     }
