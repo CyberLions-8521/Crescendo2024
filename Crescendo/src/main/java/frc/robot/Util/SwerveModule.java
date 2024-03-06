@@ -2,6 +2,7 @@ package frc.robot.Util;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,6 +16,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -22,10 +24,13 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 
@@ -44,13 +49,16 @@ public class SwerveModule {
      //CREATE CONFIGURATION OBJECT
      TalonFXConfiguration m_driveControllerConfig;
 
+     CANcoderConfiguration m_config;
+
      //CANCODER OBJECT 
      private CANcoder m_canCoder;
-     private StatusSignal<Double> angleGetter;
+
+     private PIDController m_turnPID = new PIDController(0.1, 0, 0);
 
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
-     private VelocityDutyCycle targetSpeed;
+     private VelocityDutyCycle targetSpeed = new VelocityDutyCycle(0);
      // private VelocityVoltage targetVoltage;
      // private VoltageOut targetVoltageOut;
 
@@ -66,7 +74,6 @@ public class SwerveModule {
           //CREATE PID CONTROLLER
           m_turnController = m_turnMotor.getPIDController();
 
-          targetSpeed = new VelocityDutyCycle(0).withSlot(0);
           // targetVoltage = new VelocityVoltage(0).withSlot(0);
           // targetVoltageOut = new VoltageOut(0);
           
@@ -74,19 +81,22 @@ public class SwerveModule {
           m_turnEncoder = m_turnMotor.getEncoder();
 
           //CONFIGURATIONS
-          configMotors(isInverted);
           configGains();
           configCANcoder(angleOffset);
           //rezeroTurnMotors();
+
+          var slot_amongus = new FeedbackConfigs();
+          slot_amongus.SensorToMechanismRatio = Constants.SwerveModuleConstants.CIRCUMFERENCE/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          
+          m_driveMotor.getConfigurator().apply(slot_amongus);
      }
 
      public void configCANcoder(double angleOffset){
           //CONFIGURE CANCODER
-          CANcoderConfiguration m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
           // m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
           m_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-          m_config.MagnetSensor.MagnetOffset = angleOffset / 360;
+          m_config.MagnetSensor.MagnetOffset = angleOffset;
           //m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
 
           m_canCoder.getConfigurator().apply(m_config);
@@ -117,13 +127,6 @@ public class SwerveModule {
           // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
 
-     public void setTurnDegrees(Rotation2d turnSetpoint){
-          //Rotations * Gear Ratio
-          //Rotations * (Motor Revolutions / 1 Rotation)
-          //Motor Revolutions
-          m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
-     }
-
      public void setDriveVelocity(double metersPerSec){
           if(metersPerSec == 0){
                m_driveMotor.set(0);
@@ -140,9 +143,12 @@ public class SwerveModule {
      public void setState(SwerveModuleState state){
           SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
 
+          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
+          
+          m_turnMotor.set(m_turnPID.calculate(getTurnAngle().getRotations(),optimizedState.angle.getRotations()));
           // SwerveModuleState.optimize(state, getTurnAngle());
-          setDriveVelocity(optimizedState.speedMetersPerSecond);
-          setTurnDegrees(optimizedState.angle);
+          // setDriveVelocity(optimizedState.speedMetersPerSecond);
+          // setTurnDegrees(optimizedState.angle);
      }
 
      public SwerveModuleState getState(){
@@ -151,7 +157,7 @@ public class SwerveModule {
 
      public Rotation2d getTurnAngle(){
           //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / SwerveModuleConstants.TURN_GEAR_RATIO);
+          return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
           // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
      
@@ -178,7 +184,7 @@ public class SwerveModule {
           //motor turns / gear ratio
           //motor turns / (motor turns / 1 revolution)
           //1 revolution * circumference
-          return ((m_driveMotor.getPosition().getValue() / SwerveModuleConstants.DRIVE_GEAR_RATIO) * SwerveModuleConstants.CIRCUMFERENCE);
+          return m_driveMotor.getPosition().getValueAsDouble();
      }
 
      public SwerveModulePosition getModulePosition(){

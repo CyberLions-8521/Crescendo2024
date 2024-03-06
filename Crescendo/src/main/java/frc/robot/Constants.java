@@ -117,7 +117,12 @@ public final class Constants {
     public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
 
-    public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(TOP_LEFT_MODULE_POSITION, TOP_RIGHT_MODULE_POSITION, BOTTOM_LEFT_MODULE_POSITION, BOTTOM_RIGHT_MODULE_POSITION);
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+      new Translation2d(WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
+      new Translation2d(WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2),
+      new Translation2d(-WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
+      new Translation2d(-WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2));
+
 
     public static final double TURN_GEAR_RATIO = 150.0/7;//12.8;
     public static final double DRIVE_GEAR_RATIO = 5.9028;//8.14;//6.12;//6.75;
@@ -139,10 +144,10 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.175781 *360;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.098145*360;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.138428*360;//-61.17;//-0.341309*360;//-0.359131*360;
-    public static final double TOP_LEFT_ENCODER_OFFSET = -0.030762*360;//10.45;//-0.023438*360;//-0.006836*360;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.175781;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.098145;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.138428;//-61.17;//-0.341309*360;//-0.359131*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = -0.030762;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0.0;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
