@@ -55,7 +55,7 @@ public class SwerveModule {
      private CANcoder m_canCoder;
      boolean lol = false;
 
-     private PIDController m_turnPID = new PIDController(0.01, 0, 0);
+     private PIDController m_turnPID = new PIDController(0.1, 0, 0);
 
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
@@ -81,21 +81,22 @@ public class SwerveModule {
           //CREATE TURN ENCODER
           m_turnEncoder = m_turnMotor.getEncoder();
 
-          var slot_amongus = new FeedbackConfigs();
-          slot_amongus.SensorToMechanismRatio = Constants.SwerveModuleConstants.CIRCUMFERENCE/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          //var slot_amongus = new FeedbackConfigs();
+          //slot_amongus.SensorToMechanismRatio = Constants.SwerveModuleConstants.CIRCUMFERENCE/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
 
-          m_driveMotor.getConfigurator().apply(slot_amongus);
+          //m_driveMotor.getConfigurator().apply(slot_amongus);
           var slot_0Output = new MotorOutputConfigs();
-           m_driveMotor.getConfigurator().refresh(slot_0Output);
-          if(isInverted){
+          m_driveMotor.getConfigurator().refresh(slot_0Output);
+
+
           
-          System.out.println("Inverted");
-          lol = true;
-          m_driveMotor.setInverted(lol);
-          slot_0Output.Inverted = InvertedValue.Clockwise_Positive;
+          // System.out.println("Inverted");
+          // lol = true;
+          // m_driveMotor.setInverted(lol);
+          slot_0Output.Inverted = InvertedValue.CounterClockwise_Positive;
           m_driveMotor.getConfigurator().refresh(slot_0Output);
           m_driveMotor.getConfigurator().apply(slot_0Output);
-          }
+          
 
           m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
@@ -168,7 +169,8 @@ public class SwerveModule {
           
 
           m_turnMotor.set(m_turnPID. calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
-          SmartDashboard.putNumber("whatfic", m_turnEncoder.getPosition());
+          SmartDashboard.putNumber("measured", m_turnEncoder.getPosition());
+          SmartDashboard.putNumber("setpoint", desiredTurn.angle.getRotations());
           // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
      }
 
@@ -233,8 +235,7 @@ public class SwerveModule {
           m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
           m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
           m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
-
-          m_turnController.setP(2);
+          m_turnController.setP(0.04);
 
           //CONFIGURE CURRENT LIMITS
           CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
@@ -250,9 +251,9 @@ public class SwerveModule {
 
 
           //APPLY CURRENT LIMITS
-          m_driveControllerConfig.CurrentLimits = m_driveCurrentLimits;
-          m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
-          m_turnMotor.setSmartCurrentLimit(40,40);  
+          //m_driveControllerConfig.CurrentLimits = m_driveCurrentLimits;
+          //m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
+          //m_turnMotor.setSmartCurrentLimit(40,40);  
 
           //RESTORE FACTORY DEFAULT
           m_turnMotor.restoreFactoryDefaults();

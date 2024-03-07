@@ -107,8 +107,8 @@ public class RobotContainer {
     
 
     //joint
-   // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
-   // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
+   //m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
+   //m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
 
     //hood wrist
     // m_driverController.button(5)
