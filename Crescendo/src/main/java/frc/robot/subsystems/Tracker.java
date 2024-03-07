@@ -17,7 +17,7 @@ public class Tracker extends SubsystemBase{
     private Field2d field = new Field2d();
     
     private SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
-        DRIVE_KINEMATICS, 
+        kDriveKinematics, 
         m_drive.getDriveHeading(),
         m_drive.getModulePositions(), 
         new Pose2d());

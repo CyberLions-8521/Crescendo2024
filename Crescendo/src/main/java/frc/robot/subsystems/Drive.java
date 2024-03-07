@@ -16,6 +16,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.SwerveModuleConstants.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import frc.robot.Constants;
 
 //import frc.robot.Util.PPSwerveControllerCommand;
 
@@ -31,7 +35,8 @@ import frc.robot.Util.SwerveModule;
 
 public class Drive extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private Drive() {
+
+  public Drive() {
     m_gyro.reset();
     // m_gyro.calibrate();
 
@@ -39,7 +44,12 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive P", DRIVE_KP);
     SmartDashboard.putNumber("Drive D", DRIVE_KD);
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
+    publisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
   }
+    private StructArrayPublisher<SwerveModuleState> publisher;
+
+  
     //odometry
     //gyroscope
     //swerve modules
@@ -47,6 +57,8 @@ public class Drive extends SubsystemBase {
     //set states
 
     private static Drive m_instance = new Drive();
+
+  
 
     public static Drive getInstance(){
       return m_instance;
@@ -62,21 +74,33 @@ public class Drive extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] states){
       SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
       SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
-      SmartDashboard.putNumber("front left error", Math.abs(Math.abs(states[0].speedMetersPerSecond) - Math.abs(m_topLeft.getDriveVelocity())));
 
-      m_topLeft.setState(states[2]);
-      m_topRight.setState(states[3]);
-      m_bottomLeft.setState(states[0]);
-      m_bottomRight.setState(states[1]);
+      m_topLeft.setState(states[0]);
+      m_topRight.setState(states[1]);
+      m_bottomLeft.setState(states[2]);
+      m_bottomRight.setState(states[3]);
   }
 
+  public void driveRel(double vx, double vy, double rot ){
+    var states = Constants.SwerveModuleConstants.kDriveKinematics.toSwerveModuleStates(
+      ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
+    );
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
+    m_topLeft.setState(states[0]);
+    m_topRight.setState(states[1]);
+    m_bottomLeft.setState(states[2]);
+    m_bottomRight.setState(states[3]);
+  }
+
+
    public SwerveModulePosition[] getModulePositions(){
-    SwerveModulePosition[] modulePositions = {m_bottomLeft.getModulePosition(), m_bottomRight.getModulePosition(), m_topLeft.getModulePosition(), m_topRight.getModulePosition()};
+    SwerveModulePosition[] modulePositions = {m_topLeft.getModulePosition(), m_topRight.getModulePosition(), m_bottomLeft.getModulePosition(), m_bottomRight.getModulePosition()};
     return modulePositions;
   }
 
   public SwerveModuleState[] getModuleStates(){
-    SwerveModuleState[] moduleStates = {m_bottomLeft.getState(), m_bottomRight.getState(), m_topLeft.getState(), m_topRight.getState()};
+    SwerveModuleState[] moduleStates = {m_topLeft.getState(), m_topRight.getState(), m_bottomLeft.getState(), m_bottomRight.getState()};
     return moduleStates;
   }
 
@@ -85,7 +109,7 @@ public class Drive extends SubsystemBase {
   }
 
   public ChassisSpeeds getRelativeSpeeds(){
-    return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
+    return kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
   
   public void readConfigGains(){
@@ -97,7 +121,7 @@ public class Drive extends SubsystemBase {
   }
   
   public void driveFromChassis(ChassisSpeeds speeds){
-    SwerveModuleState[] states = DRIVE_KINEMATICS.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.MAX_TANGENTIAL_VELOCITY);
     setModuleStates(states);
   }
@@ -107,18 +131,14 @@ public class Drive extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putNumber("Drive Velocity", Math.abs(m_topRight.getDriveVelocity()));
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
 
     SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
-
     SmartDashboard.putNumber("Gyro Degrees", m_gyro.getAngle());
-
     SmartDashboard.putNumber("front left abs", m_topLeft.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("front right abs", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left abs", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear right abs", m_bottomRight.getAbsoluteTurnAngle().getDegrees());
-
     SmartDashboard.putNumber("front left", m_topLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("front right", m_topRight.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left", m_bottomLeft.getTurnAngle().getDegrees());
@@ -129,6 +149,12 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    publisher.set(new SwerveModuleState[] {
+      m_topRight.getState(),
+      m_topLeft.getState(),
+      m_bottomLeft.getState(),
+      m_bottomRight.getState()
+    });
     // This method will be called once per scheduler run
     logData();
   }

@@ -53,11 +53,13 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    m_drive.setDefaultCommand(new DriveTele(
+    /*m_drive.setDefaultCommand(new DriveTele(
       () -> m_driverController.getLeftY(),
       () -> m_driverController.getLeftX(),
       () -> m_driverController.getRightX()
-    , m_drive));
+    , m_drive));*/
+
+    m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(m_driverController.getLeftY() * 4, m_driverController.getLeftX() * 4, m_driverController.getRightX() * 4),m_drive));
   }
 
   private void configureBindings() {
@@ -95,7 +97,7 @@ public class RobotContainer {
     //ELEAVATOR
     // //y
     //m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.5)));
-     //m_driverController.button(5).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
+    // m_driverController.button(5).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
     // //x
     //m_driverController.button(6).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
     //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(15)));
@@ -105,8 +107,8 @@ public class RobotContainer {
     
 
     //joint
-    //m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.5)));
-    //m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.5)));
+   // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
+   // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
 
     //hood wrist
     // m_driverController.button(5)

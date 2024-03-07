@@ -47,14 +47,12 @@ public class SwerveModule {
      RelativeEncoder m_turnEncoder;
 
      //CREATE CONFIGURATION OBJECT
-     TalonFXConfiguration m_driveControllerConfig;
 
-     CANcoderConfiguration m_config;
 
      //CANCODER OBJECT 
      private CANcoder m_canCoder;
 
-     private PIDController m_turnPID = new PIDController(0.1, 0, 0);
+     private PIDController m_turnPID = new PIDController(0.001, 0, 0);
 
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
@@ -80,36 +78,42 @@ public class SwerveModule {
           //CREATE TURN ENCODER
           m_turnEncoder = m_turnMotor.getEncoder();
 
-          //CONFIGURATIONS
-          configGains();
-          configCANcoder(angleOffset);
-          //rezeroTurnMotors();
-
           var slot_amongus = new FeedbackConfigs();
           slot_amongus.SensorToMechanismRatio = Constants.SwerveModuleConstants.CIRCUMFERENCE/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
           
           m_driveMotor.getConfigurator().apply(slot_amongus);
+          //CONFIGURATIONS
+          configGains();
+          configMotors(false);
+          configCANcoder(angleOffset);
+          // rezeroTurnMotors();
+
+         
      }
 
      public void configCANcoder(double angleOffset){
           //CONFIGURE CANCODER
+          var m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-          // m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
           m_config.MagnetSensor.MagnetOffset = angleOffset;
           //m_config.MagnetSensor.MagnetOffset = angleOffset / 180;
 
           m_canCoder.getConfigurator().apply(m_config);
      }
 
+
+
      public void configGains(){
           //CONFIGURE TURN CONTROLLER GAINS
           m_turnController.setP(SmartDashboard.getNumber("Turn P", 0));
-
+          
+          var m_driveControllerConfig = new TalonFXConfiguration();
+          
           //CONFIGURE DRIVE CONTROLLER GAINS
-          m_driveControllerConfig.Slot0.kP = (SmartDashboard.getNumber("Drive P", 0));
-          m_driveControllerConfig.Slot0.kD = (SmartDashboard.getNumber("Drive D", 0));
-          m_driveControllerConfig.Slot0.kV = (SmartDashboard.getNumber("Drive FF", 0));
+          m_driveControllerConfig.Slot0.kP = 0.01;
+          m_driveControllerConfig.Slot0.kD = 0;
+          m_driveControllerConfig.Slot0.kV = 0;
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
      }
 
@@ -126,6 +130,20 @@ public class SwerveModule {
           //m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() / (360) * (SwerveModuleConstants.TURN_GEAR_RATIO));
           // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
+
+     public void setTurnDegrees(Rotation2d turnSetpoint){
+          //Rotations * Gear Ratio
+          //Rotations * (Motor Revolutions / 1 Rotation)
+          //Motor Revolutions
+
+          m_turnMotor.set(m_turnPID.calculate(getAbsoluteTurnAngle().getDegrees(),turnSetpoint.getDegrees()));
+          // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
+     }
+
+
+
+
+
 
      public void setDriveVelocity(double metersPerSec){
           if(metersPerSec == 0){
@@ -145,18 +163,18 @@ public class SwerveModule {
 
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
           
-          m_turnMotor.set(m_turnPID.calculate(getTurnAngle().getRotations(),optimizedState.angle.getRotations()));
+          // m_turnMotor.set(m_turnPID.calculate(m_canCoder.getAbsolutePosition().getValueAsDouble(),optimizedState.angle.getRotations() ));
           // SwerveModuleState.optimize(state, getTurnAngle());
           // setDriveVelocity(optimizedState.speedMetersPerSecond);
-          // setTurnDegrees(optimizedState.angle);
+          setTurnDegrees(optimizedState.angle);
      }
 
      public SwerveModuleState getState(){
-          return new SwerveModuleState(getDriveVelocity(), getTurnAngle());
+          return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble(), getTurnAngle());
      }
 
      public Rotation2d getTurnAngle(){
-          //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
+                    //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
           return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
           // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
@@ -168,31 +186,14 @@ public class SwerveModule {
           // return Rotation2d.fromRotations(angleGetter.getValue());
           return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
      }
-     
-     public double getDriveVelocity(){
-          //RPs --> m/s
-          //rotations per sec * gear ratio
-          //rotations per second * (motor turns / 1 rotation)
-          //motor turns per second
-          //motor turns per second * circumference
-          double motorRPS = m_driveMotor.getVelocity().getValue();
-          double wheelRPS = motorRPS / SwerveModuleConstants.DRIVE_GEAR_RATIO;
-          return (wheelRPS * SwerveModuleConstants.CIRCUMFERENCE);
-     }
 
-     public double getDrivePosition(){
-          //motor turns / gear ratio
-          //motor turns / (motor turns / 1 revolution)
-          //1 revolution * circumference
-          return m_driveMotor.getPosition().getValueAsDouble();
-     }
 
      public SwerveModulePosition getModulePosition(){
-          return new SwerveModulePosition(getDrivePosition(), getTurnAngle());
+          return new SwerveModulePosition(m_driveMotor.getPosition().getValueAsDouble(), getTurnAngle());
      }
 
      public void configMotors(boolean isInverted){
-          m_driveControllerConfig = new TalonFXConfiguration();
+          var m_driveControllerConfig = new TalonFXConfiguration();
 
           //CONFIGURE PID VALUES
           m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;

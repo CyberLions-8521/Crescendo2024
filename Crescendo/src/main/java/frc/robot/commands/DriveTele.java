@@ -6,13 +6,14 @@ package frc.robot.commands;
 
 import static frc.robot.Constants.DriveConstants.MAX_ANGULAR_VELOCITY;
 import static frc.robot.Constants.DriveConstants.MAX_TANGENTIAL_VELOCITY;
-import static frc.robot.Constants.SwerveModuleConstants.DRIVE_KINEMATICS;
+// import static frc.robot.Constants.SwerveModuleConstants.DRIVE_KINEMATICS;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
@@ -64,13 +65,14 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -modifyInputs(fwd.getAsDouble(), false);
+    double vx = modifyInputs(fwd.getAsDouble(), false);
     double vy = modifyInputs(str.getAsDouble(), false);
-    double omega = -modifyInputs(rot.getAsDouble(), true);
+    double omega = modifyInputs(rot.getAsDouble(), true);
 
     //makes everything like a 3rd person robot
     //might have to add - in front 
-    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_tracker.getPose().getRotation()));
+    SmartDashboard.putNumber("Angle desired", omega);
+    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(5, 5, 0 * Math.PI * 2, m_tracker.getPose().getRotation()));
   }
 
   // Called once the command ends or is interrupted.
