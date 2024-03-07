@@ -59,7 +59,9 @@ public class RobotContainer {
       () -> m_driverController.getRightX()
     , m_drive));*/
 
-    m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(-m_driverController.getLeftY() * 6, -m_driverController.getLeftX() * 6, -m_driverController.getRightX() * 6),m_drive));
+    // m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(-m_driverController.getLeftY() * 6, -m_driverController.getLeftX() * 6, -m_driverController.getRightX() * 6),m_drive));
+
+    m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
   }
 
   private void configureBindings() {

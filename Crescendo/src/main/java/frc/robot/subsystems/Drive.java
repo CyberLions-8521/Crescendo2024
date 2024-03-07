@@ -44,10 +44,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive P", DRIVE_KP);
     SmartDashboard.putNumber("Drive D", DRIVE_KD);
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
-    publisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+    // publisher = NetworkTableInstance.getDefault()
+    //   .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
   }
-    private StructArrayPublisher<SwerveModuleState> publisher;
+    // private StructArrayPublisher<SwerveModuleState> publisher;
 
   
     //odometry
@@ -81,17 +81,17 @@ public class Drive extends SubsystemBase {
       m_bottomRight.setState(states[3]);
   }
 
-  public void driveRel(double vx, double vy, double rot ){
-    var states = Constants.SwerveModuleConstants.kDriveKinematics.toSwerveModuleStates(
-      ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
-    );
+  // public void driveRel(double vx, double vy, double rot ){
+  //   var states = Constants.SwerveModuleConstants.kDriveKinematics.toSwerveModuleStates(
+  //     ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
+  //   );
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
-    m_topLeft.setState(states[0]);
-    m_topRight.setState(states[1]);
-    m_bottomLeft.setState(states[2]);
-    m_bottomRight.setState(states[3]);
-  }
+  //   SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
+  //   m_topLeft.setState(states[0]);
+  //   m_topRight.setState(states[1]);
+  //   m_bottomLeft.setState(states[2]);
+  //   m_bottomRight.setState(states[3]);
+  // }
 
 
    public SwerveModulePosition[] getModulePositions(){
@@ -153,18 +153,23 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Velocity X", getRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("Velocity Y", getRelativeSpeeds().vyMetersPerSecond);
 
+    SmartDashboard.putNumber("top left can coder", m_topLeft.getAbsoluteTurnAngle().getDegrees());
+    SmartDashboard.putNumber("top right can coder", m_topRight.getAbsoluteTurnAngle().getDegrees());
+    SmartDashboard.putNumber("bottom left can coder", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
+    SmartDashboard.putNumber("bottom right can coder", m_bottomRight.getAbsoluteTurnAngle().getDegrees());
+
   }
 
   
 
   @Override
   public void periodic() {
-    publisher.set(new SwerveModuleState[] {
-      m_topRight.getState(),
-      m_topLeft.getState(),
-      m_bottomLeft.getState(),
-      m_bottomRight.getState()
-    });
+    // publisher.set(new SwerveModuleState[] {
+    //   m_topRight.getState(),
+    //   m_topLeft.getState(),
+    //   m_bottomLeft.getState(),
+    //   m_bottomRight.getState()
+    // });
     // This method will be called once per scheduler run
     logData();
   }

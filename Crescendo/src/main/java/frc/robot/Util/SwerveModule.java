@@ -1,4 +1,7 @@
 package frc.robot.Util;
+import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
+import static frc.robot.Constants.SwerveModuleConstants.kDriveKinematics;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -55,7 +58,7 @@ public class SwerveModule {
      private CANcoder m_canCoder;
      boolean lol = false;
 
-     private PIDController m_turnPID = new PIDController(0.01, 0, 0);
+     // private PIDController m_turnPID = new PIDController(0.01, 0, 0);
 
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
@@ -100,18 +103,24 @@ public class SwerveModule {
           // System.out.println("Inverted");
           // lol = true;
           // m_driveMotor.setInverted(lol);
-          slot_0Output.Inverted = InvertedValue.CounterClockwise_Positive;
+          if(drivePort == 3){
+               slot_0Output.Inverted = InvertedValue.CounterClockwise_Positive;
+          }else{
+               slot_0Output.Inverted = InvertedValue.Clockwise_Positive;
+          }
+          
           // m_driveMotor.getConfigurator().refresh(slot_0Output);
           m_driveMotor.getConfigurator().apply(slot_0Output);
 
           m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
 
+          m_turnController.setP(Constants.SwerveModuleConstants.TURN_KP);
           //CONFIGURATIONS
-          configGains();
+          // configGains();
           configMotors(false);
           configCANcoder(angleOffset);
-          resetToAbsolute();
+          // resetToAbsolute();
 
          
      }
@@ -148,13 +157,13 @@ public class SwerveModule {
      }
 
      public void setAngle(SwerveModuleState desiredState){
-          m_turnController.setReference(desiredState.angle.getRotations(), ControlType.kPosition);
+          m_turnController.setReference(desiredState.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
      }
 
      public Rotation2d getCanCoder(){
           return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
      }
-
+     //
      public void resetToAbsolute(){
           double absolutePosition = getCanCoder().getRotations();
           m_turnEncoder.setPosition(absolutePosition);
@@ -173,8 +182,9 @@ public class SwerveModule {
           //Rotations * (Motor Revolutions / 1 Rotation)
           //Motor Revolutions 
           
+          m_turnController.setReference(desiredTurn.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
 
-          m_turnMotor.set(m_turnPID. calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
+          // m_turnMotor.set(m_turnPID.calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
           SmartDashboard.putNumber("measured", m_turnEncoder.getPosition());
           SmartDashboard.putNumber("setpoint", desiredTurn.angle.getRotations());
           // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
@@ -217,7 +227,8 @@ public class SwerveModule {
 
      public Rotation2d getTurnAngle(){
                     //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
-          return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
+         // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
+          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
           // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
      
