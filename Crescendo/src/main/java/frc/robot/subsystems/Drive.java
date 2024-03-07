@@ -64,10 +64,10 @@ public class Drive extends SubsystemBase {
       return m_instance;
     }
     
-    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
+    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, false);
+    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, false);
     private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
+    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, false);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -87,10 +87,10 @@ public class Drive extends SubsystemBase {
     );
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
-    m_topLeft.setState(states[0]);
-    m_topRight.setState(states[1]);
-    m_bottomLeft.setState(states[2]);
-    m_bottomRight.setState(states[3]);
+    m_topLeft.setState(states[1]);
+    m_topRight.setState(states[0]);
+    m_bottomLeft.setState(states[3]);
+    m_bottomRight.setState(states[2]);
   }
 
 
@@ -130,6 +130,12 @@ public class Drive extends SubsystemBase {
     m_gyro.reset();
   }
 
+  public void resetSwerveHeading(){
+    SwerveModuleState[] states = getModuleStates();
+    kDriveKinematics.resetHeadings(states[0].angle, states[1].angle, states[2].angle, states[3].angle);
+
+  }
+
   public void logData(){
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
 
@@ -143,6 +149,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("front right", m_topRight.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left", m_bottomLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear right", m_bottomRight.getTurnAngle().getDegrees());
+
+    SmartDashboard.putNumber("Velocity X", getRelativeSpeeds().vxMetersPerSecond);
+    SmartDashboard.putNumber("Velocity Y", getRelativeSpeeds().vyMetersPerSecond);
+
   }
 
   

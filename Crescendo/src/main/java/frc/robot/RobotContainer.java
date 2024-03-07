@@ -59,13 +59,13 @@ public class RobotContainer {
       () -> m_driverController.getRightX()
     , m_drive));*/
 
-    m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(m_driverController.getLeftY() * 4, m_driverController.getLeftX() * 4, m_driverController.getRightX() * 4),m_drive));
+    m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(-m_driverController.getLeftY() * 6, -m_driverController.getLeftX() * 6, -m_driverController.getRightX() * 6),m_drive));
   }
 
   private void configureBindings() {
     //DRIVEBASE
       m_driverController.button(2).onTrue(new InstantCommand(m_drive::readConfigGains));
-      m_driverController.button(4).onTrue(new InstantCommand(m_drive::resetHeading));
+      m_driverController.button(4).onTrue(new InstantCommand(m_drive::resetSwerveHeading));
     
     
     //SUBSYSTEMS
