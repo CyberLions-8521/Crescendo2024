@@ -55,7 +55,7 @@ public class SwerveModule {
      private CANcoder m_canCoder;
      boolean lol = false;
 
-     private PIDController m_turnPID = new PIDController(0.1, 0, 0);
+     private PIDController m_turnPID = new PIDController(0.01, 0, 0);
 
      
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
@@ -64,9 +64,20 @@ public class SwerveModule {
      // private VoltageOut targetVoltageOut;
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
+          var m_driveControllerConfig = new TalonFXConfiguration();
+
+          //CONFIGURE PID VALUES
+          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
+          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
+          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
+
+
+          
           //CREATE MOTORS
           m_driveMotor = new TalonFX(drivePort, "Ryan");
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
+
+          m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
 
           //CREATE CANCODER
           m_canCoder  = new CANcoder(encoderPort, "rio");
@@ -86,17 +97,12 @@ public class SwerveModule {
 
           //m_driveMotor.getConfigurator().apply(slot_amongus);
           var slot_0Output = new MotorOutputConfigs();
-          m_driveMotor.getConfigurator().refresh(slot_0Output);
-
-
-          
           // System.out.println("Inverted");
           // lol = true;
           // m_driveMotor.setInverted(lol);
           slot_0Output.Inverted = InvertedValue.CounterClockwise_Positive;
-          m_driveMotor.getConfigurator().refresh(slot_0Output);
+          // m_driveMotor.getConfigurator().refresh(slot_0Output);
           m_driveMotor.getConfigurator().apply(slot_0Output);
-          
 
           m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
@@ -229,21 +235,16 @@ public class SwerveModule {
      }
 
      public void configMotors(boolean isInverted){
-          var m_driveControllerConfig = new TalonFXConfiguration();
-
-          //CONFIGURE PID VALUES
-          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
-          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
-          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
+          
           m_turnController.setP(0.04);
 
           //CONFIGURE CURRENT LIMITS
-          CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
-          m_driveCurrentLimits.StatorCurrentLimit = 40;
-          m_driveCurrentLimits.StatorCurrentLimitEnable = true;   
+          // CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
+          // m_driveCurrentLimits.StatorCurrentLimit = 40;
+          // m_driveCurrentLimits.StatorCurrentLimitEnable = true;   
 
           //CONFIGURE IDLE MODE
-          m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
+          
           m_turnMotor.setIdleMode(IdleMode.kBrake);
 
           //CONFIGURE INVERSION
@@ -256,7 +257,6 @@ public class SwerveModule {
           //m_turnMotor.setSmartCurrentLimit(40,40);  
 
           //RESTORE FACTORY DEFAULT
-          m_turnMotor.restoreFactoryDefaults();
           zeroEncoders();
      }
 }
