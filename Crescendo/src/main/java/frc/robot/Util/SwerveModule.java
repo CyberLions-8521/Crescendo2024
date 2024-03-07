@@ -81,6 +81,7 @@ public class SwerveModule {
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
 
           m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
+          m_turnMotor.setIdleMode(IdleMode.kBrake);
 
           //CREATE CANCODER
           m_canCoder  = new CANcoder(encoderPort, "rio");
@@ -115,13 +116,13 @@ public class SwerveModule {
           m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
 
-          m_turnController.setP(Constants.SwerveModuleConstants.TURN_KP);
+          // m_turnController.setP(Constants.SwerveModuleConstants.TURN_KP);
           //CONFIGURATIONS
           // configGains();
-          configMotors(false);
+          // configMotors(false);
           configCANcoder(angleOffset);
           // resetToAbsolute();
-
+          zeroEncoders();
          
      }
 
@@ -145,7 +146,7 @@ public class SwerveModule {
           var m_driveControllerConfig = new TalonFXConfiguration();
           
           //CONFIGURE DRIVE CONTROLLER GAINS
-          m_driveControllerConfig.Slot0.kP = 0.01;
+          m_driveControllerConfig.Slot0.kP = 0;
           m_driveControllerConfig.Slot0.kD = 0;
           m_driveControllerConfig.Slot0.kV = 0;
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
@@ -182,8 +183,8 @@ public class SwerveModule {
           //Rotations * (Motor Revolutions / 1 Rotation)
           //Motor Revolutions 
           
-          m_turnController.setReference(desiredTurn.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
-
+          // m_turnController.setReference(desiredTurn.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
+          m_turnMotor.set(0.2);
           // m_turnMotor.set(m_turnPID.calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
           SmartDashboard.putNumber("measured", m_turnEncoder.getPosition());
           SmartDashboard.putNumber("setpoint", desiredTurn.angle.getRotations());
@@ -203,7 +204,7 @@ public class SwerveModule {
           // m_driveController.setReference(RPM, ControlType.kVelocity);
           //setControl uses RPS
           double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-          m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+          m_driveMotor.setControl(targetSpeed.withVelocity(0));
           // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
           // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
      }
@@ -247,7 +248,7 @@ public class SwerveModule {
 
      public void configMotors(boolean isInverted){
           
-          m_turnController.setP(0.04);
+          // m_turnController.setP(0.04);
 
           //CONFIGURE CURRENT LIMITS
           // CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
