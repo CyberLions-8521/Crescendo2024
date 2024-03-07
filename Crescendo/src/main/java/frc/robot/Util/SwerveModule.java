@@ -165,10 +165,10 @@ public class SwerveModule {
           //Rotations * Gear Ratio
           //Rotations * (Motor Revolutions / 1 Rotation)
           //Motor Revolutions 
+          
 
-          m_turnMotor.set(0.5);
-
-          // m_turnMotor.set(m_turnPID. calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
+          m_turnMotor.set(m_turnPID. calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
+          SmartDashboard.putNumber("whatfic", m_turnEncoder.getPosition());
           // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
      }
 
