@@ -97,14 +97,14 @@ public class SwerveModule {
           m_driveMotor.getConfigurator().apply(slot_0Output);
           }
 
-          // m_turnEncoder.setPositionConversionFactor()
+          m_turnEncoder.setPositionConversionFactor(1);
 
 
           //CONFIGURATIONS
           configGains();
           configMotors(false);
           configCANcoder(angleOffset);
-          rezeroTurnMotors();
+          resetToAbsolute();
 
          
      }
@@ -138,6 +138,19 @@ public class SwerveModule {
      public void zeroEncoders(){
           //ZERO ENCODERS
           m_driveMotor.setPosition(0);
+     }
+
+     public void setAngle(SwerveModuleState desiredState){
+          m_turnController.setReference(desiredState.angle.getRotations(), ControlType.kPosition);
+     }
+
+     public Rotation2d getCanCoder(){
+          return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValueAsDouble());
+     }
+
+     public void resetToAbsolute(){
+          double absolutePosition = getCanCoder().getRotations();
+          m_turnEncoder.setPosition(absolutePosition);
      }
 
      public void rezeroTurnMotors(){
@@ -180,6 +193,7 @@ public class SwerveModule {
 
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
           
+          setAngle(state);
           // m_turnMotor.set(m_turnPID.calculate(m_canCoder.getAbsolutePosition().getValueAsDouble(),optimizedState.angle.getRotations() ));
           // SwerveModuleState.optimize(state, getTurnAngle());
           // setDriveVelocity(optimizedState.speedMetersPerSecond);
@@ -217,7 +231,7 @@ public class SwerveModule {
           m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
           m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
 
-          m_turnController.setP(SwerveModuleConstants.TURN_KP);
+          m_turnController.setP(2);
 
           //CONFIGURE CURRENT LIMITS
           CurrentLimitsConfigs m_driveCurrentLimits = new CurrentLimitsConfigs();
