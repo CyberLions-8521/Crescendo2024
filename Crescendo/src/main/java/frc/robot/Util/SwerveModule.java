@@ -97,7 +97,7 @@ public class SwerveModule {
           m_driveMotor.getConfigurator().apply(slot_0Output);
           }
 
-          m_turnEncoder.setPositionConversionFactor(1);
+          m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
 
           //CONFIGURATIONS
@@ -161,12 +161,14 @@ public class SwerveModule {
           // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
 
-     public void setTurnDegrees(Rotation2d turnSetpoint){
+     public void setTurnDegrees(SwerveModuleState desiredTurn){
           //Rotations * Gear Ratio
           //Rotations * (Motor Revolutions / 1 Rotation)
-          //Motor Revolutions
+          //Motor Revolutions 
 
-          m_turnMotor.set(m_turnPID.calculate(getAbsoluteTurnAngle().getDegrees(),turnSetpoint.getDegrees()));
+          m_turnMotor.set(0.5);
+
+          // m_turnMotor.set(m_turnPID. calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
           // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
      }
 
@@ -193,11 +195,12 @@ public class SwerveModule {
 
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
           
-          setAngle(state);
+          // setAngle(optimizedState);
+          // m_turnMotor.set(m_turnPID.calculate(0, 0));
           // m_turnMotor.set(m_turnPID.calculate(m_canCoder.getAbsolutePosition().getValueAsDouble(),optimizedState.angle.getRotations() ));
           // SwerveModuleState.optimize(state, getTurnAngle());
           // setDriveVelocity(optimizedState.speedMetersPerSecond);
-          // setTurnDegrees(optimizedState.angle);
+          setTurnDegrees(optimizedState);
      }
 
      public SwerveModuleState getState(){

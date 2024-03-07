@@ -87,10 +87,10 @@ public class Drive extends SubsystemBase {
     );
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
-    m_topLeft.setState(states[1]);
-    m_topRight.setState(states[0]);
-    m_bottomLeft.setState(states[3]);
-    m_bottomRight.setState(states[2]);
+    m_topLeft.setState(states[0]);
+    m_topRight.setState(states[1]);
+    m_bottomLeft.setState(states[2]);
+    m_bottomRight.setState(states[3]);
   }
 
 
