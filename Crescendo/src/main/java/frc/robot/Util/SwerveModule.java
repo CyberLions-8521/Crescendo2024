@@ -115,7 +115,7 @@ public class SwerveModule {
           // m_driveMotor.getConfigurator().refresh(slot_0Output);
           m_driveMotor.getConfigurator().apply(slot_0Output);
 
-          m_turnEncoder.setPositionConversionFactor(Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
+          // m_turnEncoder.setPositionConversionFactor(1/Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
 
 
           // m_turnController.setP(Constants.SwerveModuleConstants.TURN_KP);
