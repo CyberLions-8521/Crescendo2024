@@ -68,6 +68,7 @@ public class SwerveModule {
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
           var m_driveControllerConfig = new TalonFXConfiguration();
+          
 
           //CONFIGURE PID VALUES
           m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
@@ -79,6 +80,7 @@ public class SwerveModule {
           //CREATE MOTORS
           m_driveMotor = new TalonFX(drivePort, "Ryan");
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
+          m_turnMotor.burnFlash();
 
           m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
           m_turnMotor.setIdleMode(IdleMode.kBrake);
@@ -183,19 +185,13 @@ public class SwerveModule {
           //Rotations * (Motor Revolutions / 1 Rotation)
           //Motor Revolutions 
           
-          // m_turnController.setReference(desiredTurn.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
-          m_turnMotor.set(0.2);
+          m_turnController.setReference(desiredTurn.angle.getRotations()*TURN_GEAR_RATIO, ControlType.kPosition);
+          // m_turnMotor.set(0);
           // m_turnMotor.set(m_turnPID.calculate(m_turnEncoder.getPosition(),desiredTurn.angle.getRotations()));
           SmartDashboard.putNumber("measured", m_turnEncoder.getPosition());
           SmartDashboard.putNumber("setpoint", desiredTurn.angle.getRotations());
           // m_turnController.setReference(turnSetpoint.getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO, ControlType.kPosition);
      }
-
-
-
-
-
-
      public void setDriveVelocity(double metersPerSec){
           if(metersPerSec == 0){
                m_driveMotor.set(0);
@@ -204,7 +200,7 @@ public class SwerveModule {
           // m_driveController.setReference(RPM, ControlType.kVelocity);
           //setControl uses RPS
           double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-          m_driveMotor.setControl(targetSpeed.withVelocity(0));
+          m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
           // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
           // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
      }
@@ -212,14 +208,15 @@ public class SwerveModule {
      public void setState(SwerveModuleState state){
           SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
 
-          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
+          // m_driveMotor.setControl(targetSpeed.withVelocity(0));
           
           // setAngle(optimizedState);
           // m_turnMotor.set(m_turnPID.calculate(0, 0));
           // m_turnMotor.set(m_turnPID.calculate(m_canCoder.getAbsolutePosition().getValueAsDouble(),optimizedState.angle.getRotations() ));
           // SwerveModuleState.optimize(state, getTurnAngle());
-          // setDriveVelocity(optimizedState.speedMetersPerSecond);
+          setDriveVelocity(optimizedState.speedMetersPerSecond);
           setTurnDegrees(optimizedState);
+          // m_turnMotor.set(0.2);
      }
 
      public SwerveModuleState getState(){

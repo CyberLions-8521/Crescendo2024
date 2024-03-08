@@ -97,20 +97,25 @@ public class RobotContainer {
       // m_driverController.button(1).onFalse(new RunCommand(() -> m_hood.setState(HoodState.OFF)));
 
     //ELEAVATOR
-    // //y
-    //m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.5)));
+    // top left bumper
+    // m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.5)));
     // m_driverController.button(5).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
-    // //x
-    //m_driverController.button(6).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
-    //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(15)));
-    //m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setState(ElevatorState.ZERO)));
-    //m_driverController.button(1).onTrue(new InstantCommand(m_elevator::configElevatorPID));
-    //m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
+    // // //x
+    // //top right bumper
+    // m_driverController.button(6).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
+    // //y / up button
+    // m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(10)));
+    // //backk
+    // m_driverController.button(2).whileTrue(new RunCommand(() -> m_elevator.setState(ElevatorState.ZERO)));
+    // //a / down button
+    // m_driverController.button(1).onTrue(new InstantCommand(m_elevator::configElevatorPID));
+    // //x / left
+    // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
     
 
     //joint
-   //m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
-   //m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
+  m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
+   m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
 
     //hood wrist
     // m_driverController.button(5)

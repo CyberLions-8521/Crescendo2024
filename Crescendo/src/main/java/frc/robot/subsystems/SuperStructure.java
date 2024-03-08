@@ -92,6 +92,7 @@ public class SuperStructure extends SubsystemBase {
         //m_indexer.setState(IndexerState.ON);
         m_toaster.setState(ToasterState.INTAKE);
         //m_hood.setState(HoodState.OFF);
+        m_elevator.setSetpoint(5);
         break;
     
       case SOURCE:
