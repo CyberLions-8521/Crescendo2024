@@ -65,9 +65,9 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = modifyInputs(fwd.getAsDouble(), false);
+    double vx = -modifyInputs(fwd.getAsDouble(), false);
     double vy = -modifyInputs(str.getAsDouble(), false);
-    double omega = modifyInputs(rot.getAsDouble(), true);
+    double omega = -modifyInputs(rot.getAsDouble(), true);
 
     //makes everything like a 3rd person robot
     //might have to add - in front 

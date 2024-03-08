@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -67,6 +68,7 @@ public class RobotContainer {
   private void configureBindings() {
     //DRIVEBASE
       m_driverController.button(2).onTrue(new InstantCommand(m_drive::readConfigGains));
+      m_driverController.button(3).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
       m_driverController.button(4).onTrue(new InstantCommand(m_drive::resetSwerveHeading));
     
     
@@ -114,8 +116,10 @@ public class RobotContainer {
     
 
     //joint
-  // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
-  //  m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
+    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
+    m_driverController.button(5).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(0));, null))
+    
 
     //hood wrist
     // m_driverController.button(5)

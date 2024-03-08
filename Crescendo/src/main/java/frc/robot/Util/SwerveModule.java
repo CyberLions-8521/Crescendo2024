@@ -1,4 +1,5 @@
 package frc.robot.Util;
+import static frc.robot.Constants.SwerveModuleConstants.CIRCUMFERENCE;
 import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
 import static frc.robot.Constants.SwerveModuleConstants.kDriveKinematics;
 
@@ -49,7 +50,7 @@ public class SwerveModule {
      SparkPIDController m_turnController;
 
      //ENCODER OBJECTS
-     RelativeEncoder m_turnEncoder;
+     public RelativeEncoder m_turnEncoder;
 
      //CREATE CONFIGURATION OBJECT
 
@@ -85,6 +86,7 @@ public class SwerveModule {
 
           m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
           m_turnMotor.setIdleMode(IdleMode.kBrake);
+          m_turnMotor.setInverted(isInverted);
           m_turnMotor.burnFlash();
 
           //CREATE CANCODER
@@ -93,6 +95,8 @@ public class SwerveModule {
 
           //CREATE PID CONTROLLER
           m_turnController = m_turnMotor.getPIDController();
+          // m_turnController.setPositionPIDWrappingEnabled(true);
+          //m_turnController.enableContinuousInput(-180, 180);
 
           // targetVoltage = new VelocityVoltage(0).withSlot(0);
           // targetVoltageOut = new VoltageOut(0);
@@ -211,7 +215,7 @@ public class SwerveModule {
      }
 
      public void setState(SwerveModuleState state){
-          SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());
 
           // m_driveMotor.setControl(targetSpeed.withVelocity(0));
           
@@ -235,7 +239,7 @@ public class SwerveModule {
           // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
      public double getDrivePosition(){
-          return m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
+          return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
      }
      
      public Rotation2d getAbsoluteTurnAngle(){

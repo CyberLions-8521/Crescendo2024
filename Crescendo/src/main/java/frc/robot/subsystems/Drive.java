@@ -64,10 +64,10 @@ public class Drive extends SubsystemBase {
       return m_instance;
     }
     
-    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, false);
-    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, false);
-    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, false);
-    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, false);
+    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
+    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
+    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
+    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -117,9 +117,14 @@ public class Drive extends SubsystemBase {
     m_topRight.configGains();
     m_bottomLeft.configGains();
     m_bottomRight.configGains();
-
   }
   
+  public void rezeroTurnMotors(){
+    m_topLeft.rezeroTurnMotors();
+    m_topRight.rezeroTurnMotors();
+    m_bottomLeft.rezeroTurnMotors();
+    m_bottomRight.rezeroTurnMotors();
+  }
   public void driveFromChassis(ChassisSpeeds speeds){
     SwerveModuleState[] states = kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.MAX_TANGENTIAL_VELOCITY);
@@ -162,6 +167,8 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("neo encoder top right", m_topRight.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("neo encoder bottom left", m_bottomLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("neo encoder bottom right", m_bottomRight.getTurnAngle().getDegrees());
+
+    SmartDashboard.putNumber("front left actual angle", m_topLeft.getTurnAngle().getDegrees());
 
 
   }
