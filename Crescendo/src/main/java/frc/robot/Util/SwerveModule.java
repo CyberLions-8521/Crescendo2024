@@ -80,10 +80,12 @@ public class SwerveModule {
           //CREATE MOTORS
           m_driveMotor = new TalonFX(drivePort, "Ryan");
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
-          m_turnMotor.burnFlash();
+
+          m_turnMotor.restoreFactoryDefaults();
 
           m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
           m_turnMotor.setIdleMode(IdleMode.kBrake);
+          m_turnMotor.burnFlash();
 
           //CREATE CANCODER
           m_canCoder  = new CANcoder(encoderPort, "rio");

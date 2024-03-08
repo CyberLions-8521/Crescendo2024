@@ -158,6 +158,12 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("bottom left can coder", m_bottomLeft.getAbsoluteTurnAngle().getRotations());
     SmartDashboard.putNumber("bottom right can coder", m_bottomRight.getAbsoluteTurnAngle().getRotations());
 
+    SmartDashboard.putNumber("neo encoder top left", m_topLeft.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("neo encoder top right", m_topRight.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("neo encoder bottom left", m_bottomLeft.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("neo encoder bottom right", m_bottomRight.getTurnAngle().getDegrees());
+
+
   }
 
   
