@@ -72,7 +72,7 @@ public class DriveTele extends Command {
     //makes everything like a 3rd person robot
     //might have to add - in front 
     SmartDashboard.putNumber("Angle desired", omega);
-    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(5, 5, 0 * Math.PI * 2, m_tracker.getPose().getRotation()));
+    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_tracker.getPose().getRotation()));
   }
 
   // Called once the command ends or is interrupted.

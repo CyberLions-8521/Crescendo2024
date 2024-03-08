@@ -144,15 +144,15 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = -0.307617;  ;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0.092041;   ;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = 0.144287; ;//-61.17;//-0.341309*360;//-0.359131*360;
-    public static final double TOP_LEFT_ENCODER_OFFSET = -0.024902;  ;//10.45;//-0.023438*360;//-0.006836*360;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.314453;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.096924;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = 0.338379;//-61.17;//-0.341309*360;//-0.359131*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = 0.010986;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
-    public static final double DRIVE_KFF = 0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
+    public static final double DRIVE_KFF = 0;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
     public static final double DRIVE_KD = 0;//0.001;//0.00001;//.00029;//0.00015;
-    public static final double TURN_KP = 0.05;//0.05;//0.5;
+    public static final double TURN_KP = 0;//0.05;//0.05;//0.5;
 
     public static final double LOWER_BOUND = 0.0;
     public static final double UPPER_BOUND = 360.0;

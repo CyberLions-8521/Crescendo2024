@@ -122,8 +122,9 @@ public class SwerveModule {
           //CONFIGURATIONS
           // configGains();
           // configMotors(false);
-          configCANcoder(angleOffset);
+          configCANcoder(-angleOffset);
           // resetToAbsolute();
+          rezeroTurnMotors();
           zeroEncoders();
          
      }
@@ -148,9 +149,9 @@ public class SwerveModule {
           var m_driveControllerConfig = new TalonFXConfiguration();
           
           //CONFIGURE DRIVE CONTROLLER GAINS
-          m_driveControllerConfig.Slot0.kP = 0;
-          m_driveControllerConfig.Slot0.kD = 0;
-          m_driveControllerConfig.Slot0.kV = 0;
+          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
+          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
+          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
      }
 
@@ -175,8 +176,8 @@ public class SwerveModule {
      public void rezeroTurnMotors(){
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          // m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
-          //m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() / (360) * (SwerveModuleConstants.TURN_GEAR_RATIO));
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
+          // m_turnEncoder.setPosition(m_canCoder.getAbsolutePosition() / (360) * (SwerveModuleConstants.TURN_GEAR_RATIO));
           // m_turnEncoder.setFeedbackDevice(m_canCoder);
      }
 

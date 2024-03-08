@@ -153,10 +153,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Velocity X", getRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("Velocity Y", getRelativeSpeeds().vyMetersPerSecond);
 
-    SmartDashboard.putNumber("top left can coder", m_topLeft.getAbsoluteTurnAngle().getDegrees());
-    SmartDashboard.putNumber("top right can coder", m_topRight.getAbsoluteTurnAngle().getDegrees());
-    SmartDashboard.putNumber("bottom left can coder", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
-    SmartDashboard.putNumber("bottom right can coder", m_bottomRight.getAbsoluteTurnAngle().getDegrees());
+    SmartDashboard.putNumber("top left can coder", m_topLeft.getAbsoluteTurnAngle().getRotations());
+    SmartDashboard.putNumber("top right can coder", m_topRight.getAbsoluteTurnAngle().getRotations());
+    SmartDashboard.putNumber("bottom left can coder", m_bottomLeft.getAbsoluteTurnAngle().getRotations());
+    SmartDashboard.putNumber("bottom right can coder", m_bottomRight.getAbsoluteTurnAngle().getRotations());
 
   }
 
