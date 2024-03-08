@@ -232,6 +232,9 @@ public class SwerveModule {
           return Rotation2d.fromRotations(m_turnEncoder.getPosition() / Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
           // return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue() / SwerveModuleConstants.TURN_GEAR_RATIO); 
      }
+     public double getDrivePosition(){
+          return m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO;
+     }
      
      public Rotation2d getAbsoluteTurnAngle(){
           // angleGetter.refresh();
@@ -243,7 +246,10 @@ public class SwerveModule {
 
 
      public SwerveModulePosition getModulePosition(){
-          return new SwerveModulePosition(m_driveMotor.getPosition().getValueAsDouble(), getTurnAngle());
+          //mt / gear
+          //m / mt/r
+          //m (r/mt)
+          return new SwerveModulePosition(getDrivePosition(), getTurnAngle());
      }
 
      public void configMotors(boolean isInverted){
