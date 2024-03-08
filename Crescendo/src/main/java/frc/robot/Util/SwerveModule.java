@@ -196,12 +196,14 @@ public class SwerveModule {
      public void setDriveVelocity(double metersPerSec){
           if(metersPerSec == 0){
                m_driveMotor.set(0);
+          }else{
+               double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
+               m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
           }
           // double RPM = ((metersPerSec * 60) / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
           // m_driveController.setReference(RPM, ControlType.kVelocity);
           //setControl uses RPS
-          double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-          m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+          
           // m_driveMotor.setControl(targetVoltage.withVelocity(RPS));
           // m_driveMotor.setControl(targetVoltageOut.withOutput(0.3));
      }
