@@ -55,14 +55,6 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    // m_drive.setDefaultCommand(new DriveTele(
-    //   () -> m_driverController.getLeftY(),
-    //   () -> m_driverController.getLeftX(),
-    //   () -> m_driverController.getRightX()
-    // , m_drive));
-
-    // m_drive.setDefaultCommand(new RunCommand(() -> m_drive.driveRel(-m_driverController.getLeftY() * 6, -m_driverController.getLeftX() * 6, -m_driverController.getRightX() * 6),m_drive));
-
     m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
   }
 
@@ -102,57 +94,37 @@ public class RobotContainer {
       // m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setState(HoodState.ON)));
       // m_driverController.button(1).onFalse(new RunCommand(() -> m_hood.setState(HoodState.OFF)));
 
-    //ELEAVATOR
-    // top left bumper
-    // m_driverController.button(4).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.5)));
 
-    // m_driverController.button(5).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
-    // // //x
-    // //top right bumpervvv
-    // m_driverController.button(6).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
-    // //y / up button
+    //ELEAVATOR
+    // m_driverController.button(4).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.5)));
+    // m_driverController.button(5).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
+
     // m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(10)));
-    // //backk
+
     // m_driverController.button(2).whileTrue(new RunCommand(() -> m_elevator.setState(ElevatorState.ZERO)));
-    // //a / down button
+
     // m_driverController.button(1).onTrue(new InstantCommand(m_elevator::configElevatorPID));
-    // //x / left
+
     // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
     
 
-    //joint
+    //JOINT
     // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
     // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
     // m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(10)));
     // m_driverController.button(5).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(8))));
-    // m_driverController.button(6).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(0))));
-    
-    // m_driverConoroller.button(5).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(0));, null))
-    
 
-    //hood wrist
-    // m_driverController.button(5)
-    //   .whileTrue((new RunCommand(() -> m_hoodWrist.setSpeed(0.3)))
-    //   .alongWith(new WaitCommand(0.2)) 
-    //   .andThen(new RunCommand(() -> m_hoodWrist.setSpeed(-0.1))));
-    // m_driverController.button(6)
-    //   .whileTrue((new RunCommand(() -> m_hoodWrist.setSpeed(-0.3))).alongWith(new WaitCommand(0.2)).andThen(new RunCommand(() -> m_hoodWrist.setSpeed(0.1))));
+    //HOOD WRIST
+
     // m_driverController.button(9).whileTrue(new RunCommand(() -> m_hoodWrist.setSetpoint(4)));
     // m_driverController.button(10).whileTrue(new RunCommand(() -> m_hoodWrist.setSetpoint(0)));
 
     // m_driverController.button(9).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(0.15)));
     // m_driverController.button(10).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(-0.15)));
-// 
-    //Superstructure 
-    // m_driverController.button(1).whileTrue();
+
   }
   
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(m_exampleSubsystem);
