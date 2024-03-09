@@ -80,7 +80,7 @@ public class Joint extends SubsystemBase {
   public void goToSetpoint(){
     m_JointController.setReference(setpoint.getRotations() / Constants.JointConstants.GEAR_RATIO, ControlType.kPosition);
   }
-
+//alsdkfjadslkfs
   /*public boolean atSetpoint(){
     return Math.abs(setpoint - m_jointLeftEncoder.getPosition()) < JointConstants.JOINT_TOLERANCE.getRotations();
   }*/
