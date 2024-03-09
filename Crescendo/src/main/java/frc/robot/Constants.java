@@ -94,6 +94,7 @@ public final class Constants {
     public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
+    public static final double GEAR_RATIO = 79.5;
   }
 
   public static class HoodWristConstants{

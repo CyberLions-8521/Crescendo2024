@@ -171,10 +171,13 @@ public class SwerveModule {
           m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
           m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
 
+          //INVERSION
           m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
+          //NEUTRAL MODE
           m_driveControllerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
+          //APPLY IT
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
 
           zeroEncoders();

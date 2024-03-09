@@ -13,10 +13,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 public class Joint extends SubsystemBase {
@@ -51,14 +50,11 @@ public class Joint extends SubsystemBase {
   private RelativeEncoder m_jointRightEncoder = m_jointRight.getEncoder();
   private RelativeEncoder m_jointLeftEncoder = m_jointLeft.getEncoder();
 
-  //LIMIT SWITCH OBJECT
-  // private DigitalInput m_limitSwitch = new DigitalInput(4);
-
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
   
   //JOG VALUE & SETPOINT
-  private double setpoint = 0;
+  private Rotation2d setpoint = new Rotation2d();
 
   //GET INSTANCE
   public static Joint getInstance(){
@@ -82,18 +78,19 @@ public class Joint extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_JointController.setReference(setpoint, ControlType.kPosition);
+    m_JointController.setReference(setpoint.getRotations() / Constants.JointConstants.GEAR_RATIO, ControlType.kPosition);
   }
 
-  public boolean atSetpoint(){
+  /*public boolean atSetpoint(){
     return Math.abs(setpoint - m_jointLeftEncoder.getPosition()) < JointConstants.JOINT_TOLERANCE.getRotations();
-  }
-  public void setSetpoint(double setpoint){
+  }*/
+
+  public void setSetpoint(Rotation2d setpoint){
     this.setpoint = setpoint;
     setState(JointState.POSITION);
   }
 
-  public double getSetpoint(){
+  public Rotation2d getSetpoint(){
     return setpoint;
   }
 
@@ -134,12 +131,8 @@ public class Joint extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putString("Joint State", getState().toString());
-    SmartDashboard.putNumber("Joint Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getRotations());
     SmartDashboard.putNumber("Joint Position", getPosition());
-    // SmartDashboard.putBoolean("Joint Limit Switch", m_limitSwitch.get());
-    SmartDashboard.putBoolean("Joint at Position", atSetpoint());
-    
-    
   }
 
   public void configJointPID(){
