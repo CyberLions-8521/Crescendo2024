@@ -26,6 +26,8 @@ public class Joint extends SubsystemBase {
     configMotors();
     configJointPID();
     resetEncoder();
+    SmartDashboard.putNumber("Joint kP", 0);
+    SmartDashboard.putNumber("Joint kd", 0);
   }
 
   //STATES
@@ -50,13 +52,13 @@ public class Joint extends SubsystemBase {
   private RelativeEncoder m_jointLeftEncoder = m_jointLeft.getEncoder();
 
   //LIMIT SWITCH OBJECT
-  private DigitalInput m_limitSwitch = new DigitalInput(4);
+  // private DigitalInput m_limitSwitch = new DigitalInput(4);
 
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
   
   //JOG VALUE & SETPOINT
-  private Rotation2d setpoint;
+  private double setpoint = 0;
 
   //GET INSTANCE
   public static Joint getInstance(){
@@ -80,15 +82,18 @@ public class Joint extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_JointController.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_JointController.setReference(setpoint, ControlType.kPosition);
   }
 
-  public void setSetpoint(Rotation2d setpoint){
+  public boolean atSetpoint(){
+    return Math.abs(setpoint - m_jointLeftEncoder.getPosition()) < JointConstants.JOINT_TOLERANCE.getRotations();
+  }
+  public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
     setState(JointState.POSITION);
   }
 
-  public Rotation2d getSetpoint(){
+  public double getSetpoint(){
     return setpoint;
   }
 
@@ -103,12 +108,12 @@ public class Joint extends SubsystemBase {
   }
 
   public void zero(){
-    if(!m_limitSwitch.get()){
-      set(1);
-    }else{
-    setState(JointState.OFF);
-    resetEncoder();
-  }
+    // if(!m_limitSwitch.get()){
+      set(-0.3);
+    // }else{
+    // setState(JointState.OFF);
+    // resetEncoder();
+  // }
 }
   
   @Override
@@ -123,21 +128,28 @@ public class Joint extends SubsystemBase {
       case ZERO:
         zero();
         break;
-    }     
+    }   
+    logData();  
   }
 
   public void logData(){
     SmartDashboard.putString("Joint State", getState().toString());
-    SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getRotations());
+    SmartDashboard.putNumber("Joint Setpoint", getSetpoint());
     SmartDashboard.putNumber("Joint Position", getPosition());
+    // SmartDashboard.putBoolean("Joint Limit Switch", m_limitSwitch.get());
+    SmartDashboard.putBoolean("Joint at Position", atSetpoint());
+    
+    
   }
 
   public void configJointPID(){
-    m_JointController.setP(JointConstants.JOINT_KP);
-    m_JointController.setD(JointConstants.JOINT_KD);
+    m_JointController.setP(SmartDashboard.getNumber("Joint kP", 0));
+    m_JointController.setD(SmartDashboard.getNumber("Joint kd", 0));
   }
 
   public void configMotors(){
+    m_JointController.setP(JointConstants.JOINT_KP);
+    m_JointController.setD(JointConstants.JOINT_KD);
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();

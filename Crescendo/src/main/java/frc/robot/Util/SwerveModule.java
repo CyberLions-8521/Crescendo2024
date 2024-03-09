@@ -155,9 +155,9 @@ public class SwerveModule {
           var m_driveControllerConfig = new TalonFXConfiguration();
           
           //CONFIGURE DRIVE CONTROLLER GAINS
-          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
-          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
-          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
+          m_driveControllerConfig.Slot0.kP = SmartDashboard.getNumber("Drive P", 0);
+          m_driveControllerConfig.Slot0.kD = SmartDashboard.getNumber("Drive D", 0);
+          m_driveControllerConfig.Slot0.kV = SmartDashboard.getNumber("Drive FF", 0);
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
      }
 
@@ -240,6 +240,9 @@ public class SwerveModule {
      }
      public double getDrivePosition(){
           return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
+     }
+     public double getDriveVelocity(){
+          return (m_driveMotor.getVelocity().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
      }
      
      public Rotation2d getAbsoluteTurnAngle(){

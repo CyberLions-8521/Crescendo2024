@@ -44,17 +44,17 @@ public final class Constants {
     public static final double MAX_VELOCITY = 0;
   }
   public static class HoodConstants{
-    public static final double HOOD_SPEED = 0.8;
+    public static final double HOOD_SPEED = 0.9;
   }
 
   public static class ElevatorConstants{
-    public static final double ELEVATOR_KP = 0;
-    public static final double ELEVATOR_KD = 0;
+    public static final double ELEVATOR_KP = 0.65;
+    public static final double ELEVATOR_KD = 0.005;
 
     public static final double MAX_ACCELERATION = 0.01;
     public static final double MAX_VELOCITY = 0.1;
 
-    public static final double ELEVATOR_HEIGHT_TOLERANCE = 1;
+    public static final double ELEVATOR_HEIGHT_TOLERANCE = 0.025;
     public static final double ZEROING_SPEED = -0.05;
     public static final double GEAR_RATIO = 13;
 
@@ -74,7 +74,7 @@ public final class Constants {
     public static final double intakeSpeed = -0.25;
 
     //SPEAKER
-    public static final double SpeakerShooterSpeed = .9;
+    public static final double SpeakerShooterSpeed = 0.9;
     public static final double SpeakerHolderSpeed = 0.9;
     public static final double SpeakerWaitTime = 0.75;
 
@@ -93,11 +93,13 @@ public final class Constants {
     public static final Rotation2d SOURCE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
+    public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
   }
 
   public static class HoodWristConstants{
     public static final double HOOD_WRIST_KP = 0;
     public static final double HOOD_WRIST_KD = 0;
+    public static final double HOOD_WRIST_TOLERANCE = 0.05;
   }
 
   public static class DriveConstants {
@@ -144,10 +146,10 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.308350 ;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.101807;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.152344;//-61.17;//-0.341309*360;//-0.359131*360;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 0.020020;//10.45;//-0.023438*360;//-0.006836*360;
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = -0.172119;//0.316650;//-0.3*360;//107.9;//0.444824*360;//0.440918*360;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = 0.406738;//0.391113;//-82;//0.409424*360;//-0.104492 *360;//-0.395508*360;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = 	0.361084;//-0.151611;//-61.17;//-0.341309*360;//-0.359131*360;
+    public static final double TOP_LEFT_ENCODER_OFFSET = -0.475342;//0.037354;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;

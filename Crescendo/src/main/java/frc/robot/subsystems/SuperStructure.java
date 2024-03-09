@@ -67,7 +67,7 @@ public class SuperStructure extends SubsystemBase {
   }
 
   public void goToElevatorPosition(Rotation2d jointSetpoint, double elevatorSetpoint){
-    m_joint.setSetpoint(jointSetpoint);
+    //m_joint.setSetpoint(jointSetpoint);
     m_elevator.setSetpoint(elevatorSetpoint);
   }
 

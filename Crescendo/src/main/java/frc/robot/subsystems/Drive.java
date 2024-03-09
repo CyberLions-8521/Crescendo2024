@@ -169,7 +169,8 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("neo encoder bottom right", m_bottomRight.getTurnAngle().getDegrees());
 
     SmartDashboard.putNumber("front left actual angle", m_topLeft.getTurnAngle().getDegrees());
-
+    SmartDashboard.putNumber("front left actual velocity", Math.abs(m_topLeft.getDriveVelocity()));
+    
 
   }
 

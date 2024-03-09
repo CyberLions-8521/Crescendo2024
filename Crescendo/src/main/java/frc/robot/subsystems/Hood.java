@@ -71,7 +71,7 @@ public class Hood extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putString("Wrist State", getState().toString());
+    SmartDashboard.putString("hood State", getState().toString());
   }
 
   public void configMotors(){

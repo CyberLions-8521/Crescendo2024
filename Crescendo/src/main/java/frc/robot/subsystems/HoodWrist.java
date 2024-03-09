@@ -25,6 +25,8 @@ public class HoodWrist extends SubsystemBase {
   private HoodWrist() {
     configMotors();
     resetEncoder();
+        SmartDashboard.putNumber("hood wrist kP", 0);
+    SmartDashboard.putNumber("hood wrist kD", 0);
   }
 
   //STATES
@@ -92,7 +94,7 @@ public class HoodWrist extends SubsystemBase {
   }
 
   public boolean atSetpoint(){
-    return Math.abs(setpoint - getWristPostion()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
+    return Math.abs(setpoint - getWristPostion()) < HoodWristConstants.HOOD_WRIST_TOLERANCE;
   }
 
   //ZERO METHODS / Encoders
@@ -139,6 +141,14 @@ public class HoodWrist extends SubsystemBase {
     SmartDashboard.putString("hood wrist State", getState().toString());
     SmartDashboard.putNumber("hood wrist Setpoint", getSetpoint());
     SmartDashboard.putNumber("hood wrist Encoder Position", m_hoodEncoder.getPosition());
+    // SmartDashboard.putBoolean("hood wrist Limit Switch", m_limitSwitch.get());
+    SmartDashboard.putBoolean("hood wrist at Position", atSetpoint());
+
+  }
+
+  public void configHoodWristPID(){
+    m_hoodController.setP(SmartDashboard.getNumber("hood wrist kP", 0));
+    m_hoodController.setD(SmartDashboard.getNumber("hood wrist kD", 0));
   }
 
   public void configMotors(){
@@ -147,8 +157,8 @@ public class HoodWrist extends SubsystemBase {
     m_hoodWristMaster.setIdleMode(IdleMode.kBrake);
     m_hoodWristMaster.setSmartCurrentLimit(40, 40);
     
-    m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
-    m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
+    //m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
+    //m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
 
     m_hoodController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     //m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);
