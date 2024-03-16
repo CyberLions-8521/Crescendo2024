@@ -1,6 +1,7 @@
 package frc.robot.Util;
 import static frc.robot.Constants.SwerveModuleConstants.CIRCUMFERENCE;
 import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
+import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -64,7 +65,7 @@ public class SwerveModule {
 
           //CONFIGURATIONS
           configMotors(isInverted);
-          configCANcoder(-angleOffset);
+          configCANcoder(angleOffset);
           rezeroTurnMotors();
           zeroEncoders();
      }
@@ -73,7 +74,7 @@ public class SwerveModule {
           //CONFIGURE CANCODER
           var m_config = new CANcoderConfiguration();
           m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+          m_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
           m_config.MagnetSensor.MagnetOffset = angleOffset;
 
           m_canCoder.getConfigurator().apply(m_config);
@@ -159,10 +160,11 @@ public class SwerveModule {
      public void configMotors(boolean isInverted){
           //TURN MOTOR
           m_turnMotor.restoreFactoryDefaults();
-          m_turnMotor.setIdleMode(IdleMode.kBrake);
+          m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(true);
           m_turnMotor.burnFlash();
 
+          m_turnController.setP(TURN_KP);
           //DRIVE MOTOR
           TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
           

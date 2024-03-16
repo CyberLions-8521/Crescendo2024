@@ -153,9 +153,9 @@ public final class Constants {
     public static final double TOP_LEFT_ENCODER_OFFSET = -0.475342;//0.037354;//10.45;//-0.023438*360;//-0.006836*360;
 
     public static final double DRIVE_KP = 0;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
-    public static final double DRIVE_KFF = 0;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
+    public static final double DRIVE_KFF = 0.005;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
     public static final double DRIVE_KD = 0;//0.001;//0.00001;//.00029;//0.00015;
-    public static final double TURN_KP = 0;//0.16;
+    public static final double TURN_KP = 0.3;//0.16;
 
     public static final double LOWER_BOUND = 0.0;
     public static final double UPPER_BOUND = 360.0;

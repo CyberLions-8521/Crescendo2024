@@ -64,10 +64,10 @@ public class Drive extends SubsystemBase {
       return m_instance;
     }
     
-    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
-    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
+    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, false);
+    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, false);
+    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, false);
+    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, false);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -111,7 +111,7 @@ public class Drive extends SubsystemBase {
   public ChassisSpeeds getRelativeSpeeds(){
     return kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
-  
+
   public void readConfigGains(){
     m_topLeft.configGains();
     m_topRight.configGains();
@@ -150,23 +150,14 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("front right abs", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left abs", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear right abs", m_bottomRight.getAbsoluteTurnAngle().getDegrees());
-    SmartDashboard.putNumber("front left", m_topLeft.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("front right", m_topRight.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("rear left", m_bottomLeft.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("rear right", m_bottomRight.getTurnAngle().getDegrees());
+
+    SmartDashboard.putNumber("front left relative", m_topLeft.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("front right relative", m_topRight.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("rear left relative", m_bottomLeft.getTurnAngle().getDegrees());
+    SmartDashboard.putNumber("rear right relative", m_bottomRight.getTurnAngle().getDegrees());
 
     SmartDashboard.putNumber("Velocity X", getRelativeSpeeds().vxMetersPerSecond);
     SmartDashboard.putNumber("Velocity Y", getRelativeSpeeds().vyMetersPerSecond);
-
-    SmartDashboard.putNumber("top left can coder", m_topLeft.getAbsoluteTurnAngle().getRotations());
-    SmartDashboard.putNumber("top right can coder", m_topRight.getAbsoluteTurnAngle().getRotations());
-    SmartDashboard.putNumber("bottom left can coder", m_bottomLeft.getAbsoluteTurnAngle().getRotations());
-    SmartDashboard.putNumber("bottom right can coder", m_bottomRight.getAbsoluteTurnAngle().getRotations());
-
-    SmartDashboard.putNumber("neo encoder top left", m_topLeft.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("neo encoder top right", m_topRight.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("neo encoder bottom left", m_bottomLeft.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("neo encoder bottom right", m_bottomRight.getTurnAngle().getDegrees());
 
     SmartDashboard.putNumber("front left actual angle", m_topLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("front left actual velocity", Math.abs(m_topLeft.getDriveVelocity()));
