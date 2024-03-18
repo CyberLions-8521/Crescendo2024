@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -24,7 +26,6 @@ public class Joint extends SubsystemBase {
   private Joint() {
     configMotors();
     configJointPID();
-    resetEncoder();
     SmartDashboard.putNumber("Joint kP", 0);
     SmartDashboard.putNumber("Joint kd", 0);
   }
@@ -47,8 +48,7 @@ public class Joint extends SubsystemBase {
   private CANSparkMax m_jointLeft = new CANSparkMax(MotorConstants.JOINT_LEFT_MOTOR, MotorType.kBrushless);
 
   //ENCODER OBJECT
-  private RelativeEncoder m_jointRightEncoder = m_jointRight.getEncoder();
-  private RelativeEncoder m_jointLeftEncoder = m_jointLeft.getEncoder();
+  public final AbsoluteEncoder m_jointEncoder = m_jointRight.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_JointController = m_jointRight.getPIDController();
@@ -95,22 +95,16 @@ public class Joint extends SubsystemBase {
   }
 
   public double getPosition(){
-    return m_jointLeftEncoder.getPosition();
-  }
-
-  //ZERO/RESET METHODS
-  public void resetEncoder(){
-    m_jointRightEncoder.setPosition(0);
-    m_jointLeftEncoder.setPosition(0);
+    return m_jointEncoder.getPosition();
   }
 
   public void zero(){
-    // if(!m_limitSwitch.get()){
+    if(getPosition() > 0.03){
       set(-0.3);
-    // }else{
-    // setState(JointState.OFF);
-    // resetEncoder();
-  // }
+    }
+    else{
+     setState(JointState.OFF);
+    }
 }
   
   @Override
@@ -159,9 +153,11 @@ public class Joint extends SubsystemBase {
     m_jointRight.setSmartCurrentLimit(40, 40);
     m_jointLeft.setSmartCurrentLimit(40, 40);
 
+    //m_jointLeft.follow(m_jointRight);
+
     //SET SMART MOTION 
-    m_JointController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    m_JointController.setSmartMotionMaxAccel(JointConstants.MAX_ACCELERATION, 0);
-    m_JointController.setSmartMotionMaxVelocity(JointConstants.MAX_VELOCITY, 0);    
+    // m_JointController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    // m_JointController.setSmartMotionMaxAccel(JointConstants.MAX_ACCELERATION, 0);
+    // m_JointController.setSmartMotionMaxVelocity(JointConstants.MAX_VELOCITY, 0);    
   }
 }

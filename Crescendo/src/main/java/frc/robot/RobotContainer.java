@@ -60,12 +60,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     //DRIVEBASE
-      //m_driverController.button(1).onTrue(new InstantCommand(m_drive::readConfigGains));
-      //m_driverController.button(2).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
-      //m_driverController.button(3).onTrue(new InstantCommand(m_drive::resetHeading));
-      // m_driverController.button(1).onTrue(new InstantCommand(m_elevator::configElevatorPID, m_elevator).alongWith(new InstantCommand(m_joint::configJointPID, m_joint)).alongWith(new InstantCommand(m_hoodWrist::configHoodWristPID, m_hoodWrist))); 
-      // m_driverController.button(1).onTrue(new InstantCommand(m_elevator::resetEncoder, m_elevator).alongWith(new InstantCommand(m_joint::resetEncoder, m_joint)).alongWith(new InstantCommand(m_hoodWrist::resetEncoder, m_hoodWrist))); 
-    
+      m_driverController.button(1).onTrue(new InstantCommand(m_drive::readConfigGains));
+      m_driverController.button(2).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
+      m_driverController.button(3).onTrue(new InstantCommand(m_drive::resetHeading));
+     
     //SUBSYSTEMS
       //Y
       ///m_driverController.button(4).whileTrue(new AmpShoot(m_superStructure));
@@ -77,7 +75,7 @@ public class RobotContainer {
       //m_driverController.button(1).whileTrue(new Source(m_superStructure));
         
       // //Triangle
-      m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)));
+      /*m_driverController.button(4).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)));
       m_driverController.button(4).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
       //m_driverController.button(6).whileTrue(new RunCommand(() -> m_hood.setSpeed(HoodConstants.HOOD_SPEED)));
       //m_driverController.button(6).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
@@ -89,14 +87,14 @@ public class RobotContainer {
       //O
       m_driverController.button(6).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT)));
       m_driverController.button(6).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
-
+*/
       //Square
       //m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setState(HoodState.ON)));
       //m_driverController.button(1).onFalse(new RunCommand(() -> m_hood.setState(HoodState.OFF)));
 
 
     //ELEAVATOR
-    m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.8)));
+    //m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.8)));
     m_driverController.button(9).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
     m_driverController.button(10).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
 
@@ -112,8 +110,9 @@ public class RobotContainer {
     //JOINT
     m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.3)));
      m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.3)));
-    // m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(10)));
-    // m_driverController.button(5).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(8))));
+    //m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(10))));
+    //m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
+    //m_driverController.button(3).onTrue(new RunCommand(() -> m_joint.zero()));*/
 
     //HOOD WRIST
 
