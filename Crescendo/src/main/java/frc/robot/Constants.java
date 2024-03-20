@@ -119,11 +119,12 @@ public final class Constants {
     public static final int BOTTOM_LEFT_TURN_PORT = 10;
     public static final int TOP_RIGHT_TURN_PORT = 6;
     public static final int TOP_LEFT_TURN_PORT = 11;
+    
     public static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    public static final double WHEELBASE_WIDTH = 0.7366;//0.6604;
-    public static final double WHEELBASE_LENGTH = 0.7366;//0.6604;
+    public static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
+    public static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
 
     public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
@@ -145,10 +146,10 @@ public final class Constants {
     public static final int TOP_RIGHT_ENCODER_PORT = 11;
     public static final int TOP_LEFT_ENCODER_PORT = 10;
 
-    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.312744;//-0.172119;
-    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.103516;//0.406738;
-    public static final double TOP_RIGHT_ENCODER_OFFSET = 	-0.148926;//0.361084;
-    public static final double TOP_LEFT_ENCODER_OFFSET = 0.025146;//-0.475342
+    public static final double BOTTOM_RIGHT_ENCODER_OFFSET = 0.309326;//0.312744;//-0.172119;
+    public static final double BOTTOM_LEFT_ENCODER_OFFSET = -0.107666;//-0.103516;//0.406738;
+    public static final double TOP_RIGHT_ENCODER_OFFSET = -0.155518;//-0.148926;vwww//0.361084;
+    public static final double TOP_LEFT_ENCODER_OFFSET = 0.019287;//0.025146;//-0.475342
 
     public static final double DRIVE_KP = 0;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0.005;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;

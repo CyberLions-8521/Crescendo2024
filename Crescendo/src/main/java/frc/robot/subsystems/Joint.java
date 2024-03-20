@@ -34,6 +34,7 @@ public class Joint extends SubsystemBase {
   public enum JointState{
         OFF,
         POSITION,
+        JOG,
         ZERO
     }
 
@@ -48,13 +49,17 @@ public class Joint extends SubsystemBase {
   private CANSparkMax m_jointLeft = new CANSparkMax(MotorConstants.JOINT_LEFT_MOTOR, MotorType.kBrushless);
 
   //ENCODER OBJECT
-  public final AbsoluteEncoder m_jointEncoder = m_jointRight.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+  //public final AbsoluteEncoder m_jointEncoder = m_jointRight.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+  public RelativeEncoder m_jointEncoderRight = m_jointRight.getEncoder();
+  public RelativeEncoder m_jointEncoderLeft = m_jointLeft.getEncoder();
 
   //MOTOR CONTROLLER OBJECT
-  private SparkPIDController m_JointController = m_jointRight.getPIDController();
+  private SparkPIDController m_jointControllerRight = m_jointRight.getPIDController();
+  private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
   
   //JOG VALUE & SETPOINT
   private Rotation2d setpoint = new Rotation2d();
+  private double jogValue = 0;
 
   //GET INSTANCE
   public static Joint getInstance(){
@@ -76,9 +81,15 @@ public class Joint extends SubsystemBase {
     m_jointLeft.set(value);
   }
 
+  public void setJog(double jog){
+    jogValue = jog;
+    setState(JointState.JOG);
+  }
+
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_JointController.setReference(setpoint.getRotations() / Constants.JointConstants.GEAR_RATIO, ControlType.kPosition);
+    m_jointControllerRight.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
   }
 //alsdkfjadslkfs
   /*public boolean atSetpoint(){
@@ -95,23 +106,31 @@ public class Joint extends SubsystemBase {
   }
 
   public double getPosition(){
-    return m_jointEncoder.getPosition();
+    return m_jointEncoderRight.getPosition();
   }
 
   public void zero(){
-    if(getPosition() > 0.03){
-      set(-0.3);
+    if(getPosition() > 0.02){
+      set(-0.15);
     }
     else{
      setState(JointState.OFF);
     }
-}
+  }
+
+  public void rezero(){
+    m_jointEncoderRight.setPosition(0);
+    m_jointEncoderLeft.setPosition(0);
+  }
   
   @Override
   public void periodic() {
     switch(m_state){
       case OFF:
         set(0);
+        break;
+      case JOG:
+        set(jogValue);
         break;
       case POSITION:
         goToSetpoint();
@@ -130,13 +149,19 @@ public class Joint extends SubsystemBase {
   }
 
   public void configJointPID(){
-    m_JointController.setP(SmartDashboard.getNumber("Joint kP", 0));
-    m_JointController.setD(SmartDashboard.getNumber("Joint kd", 0));
+    m_jointControllerRight.setP(SmartDashboard.getNumber("Joint kP", 0));
+    m_jointControllerRight.setD(SmartDashboard.getNumber("Joint kd", 0));
+
+    m_jointControllerLeft.setP(SmartDashboard.getNumber("Joint kP", 0));
+    m_jointControllerLeft.setD(SmartDashboard.getNumber("Joint kd", 0));
   }
 
   public void configMotors(){
-    m_JointController.setP(JointConstants.JOINT_KP);
-    m_JointController.setD(JointConstants.JOINT_KD);
+    m_jointControllerRight.setP(JointConstants.JOINT_KP);
+    m_jointControllerRight.setD(JointConstants.JOINT_KD);
+
+    m_jointControllerLeft.setP(JointConstants.JOINT_KP);
+    m_jointControllerLeft.setD(JointConstants.JOINT_KD);
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
