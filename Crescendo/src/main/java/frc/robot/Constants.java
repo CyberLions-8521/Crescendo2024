@@ -92,7 +92,7 @@ public final class Constants {
     public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
-    public static final double GEAR_RATIO = 79.5;
+    public static final double GEAR_RATIO = 179.5;
   }
 
   public static class HoodWristConstants{
@@ -119,7 +119,7 @@ public final class Constants {
     public static final int BOTTOM_LEFT_TURN_PORT = 10;
     public static final int TOP_RIGHT_TURN_PORT = 6;
     public static final int TOP_LEFT_TURN_PORT = 11;
-    
+
     public static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 

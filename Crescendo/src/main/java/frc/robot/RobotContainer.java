@@ -116,18 +116,21 @@ public class RobotContainer {
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
     m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.2)));
     m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
- 
-    /*m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(9.3))));
-    m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
-         m_driverController.button(3).onTrue(new RunCommand(() -> m_joint.zero()));
-    m_driverController.button(4).onTrue(new InstantCommand(() -> m_joint.rezero()));*/
 
+
+    //m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(9.3))));
+    //m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
+    //m_driverController.button(3).onTrue(new RunCommand(() -> m_joint.zero()));
+   
     m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setGoal(7, 0)));
     m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
     //0.17
     //0.025
     m_driverController.button(3).onTrue(new InstantCommand(() -> m_joint.rezero()));
     m_driverController.button(4).whileTrue(new RunCommand(() -> m_joint.goToSetpoint()));
+
+    //m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.2)));
+    //m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.2)));
 
     //HOOD WRIST
     // m_driverController.button(9).whileTrue(new RunCommand(() -> m_hoodWrist.setSetpoint(4)));
