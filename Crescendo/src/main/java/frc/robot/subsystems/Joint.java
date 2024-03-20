@@ -6,18 +6,16 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 public class Joint extends SubsystemBase {
@@ -56,10 +54,18 @@ public class Joint extends SubsystemBase {
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_jointControllerRight = m_jointRight.getPIDController();
   private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
+
+  //TRAPEZOID PROFILE OBJECT
+  //1.75, 0.75
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.75, 0.25));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
   
   //JOG VALUE & SETPOINT
   private Rotation2d setpoint = new Rotation2d();
   private double jogValue = 0;
+
+  //-----------------------
 
   //GET INSTANCE
   public static Joint getInstance(){
@@ -75,6 +81,10 @@ public class Joint extends SubsystemBase {
     return m_state;
   }
 
+  public void setGoal(double desiredPosition, double desiredVelocity){
+    m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
+  }
+
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_jointRight.set(value);
@@ -88,10 +98,14 @@ public class Joint extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_jointControllerRight.setReference(setpoint.getRotations(), ControlType.kPosition);
-    m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
+    //m_jointControllerRight.setReference(setpoint.getRotations(), ControlType.kPosition);
+    //m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
+    m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+    m_setpoint = m_profile.calculate(10, m_setpoint, m_goal);
+    m_jointControllerRight.setReference(m_setpoint.position, ControlType.kPosition);
+    m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
   }
-//alsdkfjadslkfs
+
   /*public boolean atSetpoint(){
     return Math.abs(setpoint - m_jointLeftEncoder.getPosition()) < JointConstants.JOINT_TOLERANCE.getRotations();
   }*/
@@ -146,6 +160,9 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putString("Joint State", getState().toString());
     SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getRotations());
     SmartDashboard.putNumber("Joint Position", getPosition());
+
+    SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
+    SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
   }
 
   public void configJointPID(){
