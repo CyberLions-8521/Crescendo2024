@@ -82,8 +82,8 @@ public final class Constants {
   }
   
   public static class JointConstants{
-    public static final double JOINT_KP = 0;
-    public static final double JOINT_KD = 0;
+    public static final double JOINT_KP = 0.1;
+    public static final double JOINT_KD = 0.025;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;
     public static final Rotation2d AMP_POSITION = Rotation2d.fromRotations(0);

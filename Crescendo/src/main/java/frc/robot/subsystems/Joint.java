@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -25,13 +26,9 @@ public class Joint extends SubsystemBase {
   //CONSTRUCTOR
   private Joint() {
     configMotors();
-    configJointPID();
-    SmartDashboard.putNumber("Joint kP", 0);
-    SmartDashboard.putNumber("Joint kd", 0);
-
-    System.out.println("HOLA");
-
-    //m_jointEncoderRight.setPositionConversionFactor(JointConstants.GEAR_RATIO);
+    rezero();
+    SmartDashboard.putNumber("Joint kP", m_jointControllerLeft.getP());
+    SmartDashboard.putNumber("Joint kd", m_jointControllerLeft.getD());
   }
 
   //STATES
@@ -62,9 +59,10 @@ public class Joint extends SubsystemBase {
   private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
 
   //TRAPEZOID PROFILE OBJECT
-  //1.75, 0.75
-  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(750, 250));
-  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(7, 0);
+  //500,250
+
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(500, 150));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
   
   //JOG VALUE & SETPOINT
@@ -108,13 +106,13 @@ public class Joint extends SubsystemBase {
     //m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
 
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    m_jointControllerRight.setReference(m_setpoint.position, ControlType.kPosition);
     m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
+    //m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
   }
 
-  /*public boolean atSetpoint(){
-    return Math.abs(setpoint - m_jointLeftEncoder.getPosition()) < JointConstants.JOINT_TOLERANCE.getRotations();
-  }*/
+  public boolean atSetpoint(){
+    return MathUtil.isNear(m_goal.position, getPosition(), 0.1);
+  }
 
   public void setSetpoint(Rotation2d setpoint){
     this.setpoint = setpoint;
@@ -123,6 +121,10 @@ public class Joint extends SubsystemBase {
 
   public Rotation2d getSetpoint(){
     return setpoint;
+  }
+
+  public void refreshSetpoint(){
+    m_setpoint = new TrapezoidProfile.State(getPosition(), m_jointEncoderLeft.getVelocity());
   }
 
   public double getPosition(){
@@ -135,7 +137,7 @@ public class Joint extends SubsystemBase {
   }
 
   public void zero(){
-    if(getPosition() > 0.02){
+    if(getPosition() > 0){
       set(-0.15);
     }
     else{
@@ -176,28 +178,16 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
     SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
 
-    SmartDashboard.putNumber("joint velocity", m_jointEncoderRight.getVelocity());
+    SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
 
     SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
 
-    SmartDashboard.putBoolean("follower", getFollower());
+    SmartDashboard.putBoolean("At setpoint", atSetpoint());
   }
 
-  public void configJointPID(){
-    m_jointControllerRight.setP(SmartDashboard.getNumber("Joint kP", 0));
-    m_jointControllerRight.setD(SmartDashboard.getNumber("Joint kd", 0));
-
-    m_jointControllerLeft.setP(SmartDashboard.getNumber("Joint kP", 0));
-    m_jointControllerLeft.setD(SmartDashboard.getNumber("Joint kd", 0));
-  }
 
   public void configMotors(){
-    m_jointControllerRight.setP(JointConstants.JOINT_KP);
-    m_jointControllerRight.setD(JointConstants.JOINT_KD);
-
-    m_jointControllerLeft.setP(JointConstants.JOINT_KP);
-    m_jointControllerLeft.setD(JointConstants.JOINT_KD);
 
     //SET MOTORS FOLLOW EACH OTHER
     //m_jointLeft.follow(m_jointRight);
@@ -206,13 +196,16 @@ public class Joint extends SubsystemBase {
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
 
+    m_jointControllerLeft.setP(JointConstants.JOINT_KP);
+    m_jointControllerLeft.setD(JointConstants.JOINT_KD);
+
     //INVERSION
-    //m_jointRight.setInverted(true);
-    //m_jointLeft.setInverted(!m_jointRight.getInverted());
+    /*m_jointRight.setInverted(true);
+    m_jointLeft.setInverted(!m_jointRight.getInverted());
 
     //IDLE MODE
     m_jointRight.setIdleMode(IdleMode.kBrake);
-    m_jointLeft.setIdleMode(m_jointRight.getIdleMode());
+    m_jointLeft.setIdleMode(m_jointRight.getIdleMode());*/
 
     //SET SMART CURRENT LIMIT
     m_jointRight.setSmartCurrentLimit(40, 40);
