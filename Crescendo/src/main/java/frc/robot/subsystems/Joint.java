@@ -29,6 +29,9 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint kP", 0);
     SmartDashboard.putNumber("Joint kd", 0);
 
+    m_jointRight.follow(m_jointLeft, true);
+    m_jointLeft.follow(m_jointRight, false);
+
     //m_jointEncoderRight.setPositionConversionFactor(JointConstants.GEAR_RATIO);
   }
 
@@ -62,8 +65,8 @@ public class Joint extends SubsystemBase {
   //TRAPEZOID PROFILE OBJECT
   //1.75, 0.75
   private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(750, 250));
-  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
-  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(7, 0);
+  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
   
   //JOG VALUE & SETPOINT
   private Rotation2d setpoint = new Rotation2d();
@@ -91,7 +94,7 @@ public class Joint extends SubsystemBase {
 
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
-    m_jointRight.set(value);
+    //m_jointRight.set(value);
     m_jointLeft.set(value);
   }
 
@@ -105,7 +108,6 @@ public class Joint extends SubsystemBase {
     //m_jointControllerRight.setReference(setpoint.getRotations(), ControlType.kPosition);
     //m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
 
-    m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     m_jointControllerRight.setReference(m_setpoint.position, ControlType.kPosition);
     m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
@@ -126,7 +128,7 @@ public class Joint extends SubsystemBase {
 
   public double getPosition(){
     //return (m_jointEncoderRight.getPosition() / JointConstants.GEAR_RATIO);
-    return m_jointEncoderRight.getPosition();
+    return (m_jointEncoderLeft.getPosition());
   }
 
   public void zero(){
@@ -171,6 +173,9 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
 
     SmartDashboard.putNumber("joint velocity", m_jointEncoderRight.getVelocity());
+
+    SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
+    SmartDashboard.putNumber("Joint Right", m_jointRight.get());
   }
 
   public void configJointPID(){
@@ -196,8 +201,8 @@ public class Joint extends SubsystemBase {
     m_jointLeft.restoreFactoryDefaults();
 
     //INVERSION
-    m_jointRight.setInverted(true);
-    m_jointLeft.setInverted(!m_jointRight.getInverted());
+    //m_jointRight.setInverted(true);
+    //m_jointLeft.setInverted(!m_jointRight.getInverted());
 
     //IDLE MODE
     m_jointRight.setIdleMode(IdleMode.kBrake);
@@ -207,7 +212,8 @@ public class Joint extends SubsystemBase {
     m_jointRight.setSmartCurrentLimit(40, 40);
     m_jointLeft.setSmartCurrentLimit(40, 40);
 
-    //m_jointLeft.follow(m_jointRight);
+    m_jointRight.burnFlash();
+    m_jointLeft.burnFlash();
 
     //SET SMART MOTION 
     // m_JointController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);

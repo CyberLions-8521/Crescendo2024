@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.time.Instant;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -112,9 +114,9 @@ public class RobotContainer {
     // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
 
     //JOINT
-    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.2)));
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.05)));
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
-    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.2)));
+    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.05)));
     m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
 
 
@@ -122,7 +124,7 @@ public class RobotContainer {
     //m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
     //m_driverController.button(3).onTrue(new RunCommand(() -> m_joint.zero()));
    
-    m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setGoal(7, 0)));
+    //m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setGoal(7, 0)));
     m_driverController.button(2).onTrue(new InstantCommand(() -> m_joint.configJointPID()));
     //0.17
     //0.025
