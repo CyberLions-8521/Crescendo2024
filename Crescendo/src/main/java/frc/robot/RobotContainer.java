@@ -114,9 +114,9 @@ public class RobotContainer {
     // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
 
     //JOINT
-    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.05)));
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.2)));
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
-    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.05)));
+    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.2)));
     m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
 
 

@@ -29,8 +29,7 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint kP", 0);
     SmartDashboard.putNumber("Joint kd", 0);
 
-    m_jointRight.follow(m_jointLeft, true);
-    m_jointLeft.follow(m_jointRight, false);
+    System.out.println("HOLA");
 
     //m_jointEncoderRight.setPositionConversionFactor(JointConstants.GEAR_RATIO);
   }
@@ -131,6 +130,10 @@ public class Joint extends SubsystemBase {
     return (m_jointEncoderLeft.getPosition());
   }
 
+  public boolean getFollower(){
+    return (m_jointRight.isFollower());
+  }
+
   public void zero(){
     if(getPosition() > 0.02){
       set(-0.15);
@@ -162,6 +165,7 @@ public class Joint extends SubsystemBase {
         break;
     }   
     logData();  
+    m_jointRight.follow(m_jointLeft, true);
   }
 
   public void logData(){
@@ -176,6 +180,8 @@ public class Joint extends SubsystemBase {
 
     SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
+
+    SmartDashboard.putBoolean("follower", getFollower());
   }
 
   public void configJointPID(){
