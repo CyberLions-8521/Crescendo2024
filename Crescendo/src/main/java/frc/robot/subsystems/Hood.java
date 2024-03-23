@@ -58,6 +58,8 @@ public class Hood extends SubsystemBase {
     m_hoodMaster.set(value);
   }
 
+  
+
   @Override
   public void periodic() {
     switch(m_state){
@@ -67,6 +69,7 @@ public class Hood extends SubsystemBase {
       case ON:
         setSpeed(HoodConstants.HOOD_SPEED);
         break;
+      
     }   
   }
 

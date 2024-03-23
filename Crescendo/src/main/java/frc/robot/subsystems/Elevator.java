@@ -48,8 +48,6 @@ public class Elevator extends SubsystemBase {
   //ENCODER OBJECT
   private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
 
-  //LIMIT SWITCH OBJECT
-  private DigitalInput m_limitSwitch = new DigitalInput(0);
 
   //PID CONTROLLER OBJECT
   private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
@@ -61,7 +59,6 @@ public class Elevator extends SubsystemBase {
   public static Elevator getInstance(){
     return instance;
   }  
-
 
   //STATE METHODS
   public void setState(ElevatorState m_state){
@@ -101,10 +98,6 @@ public class Elevator extends SubsystemBase {
     return Math.abs(setpoint - getElevatorHeight()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
   }
 
-  public boolean atZero(){
-    return m_limitSwitch.get();
-  }
-
   //GETTER METHODS
   public double getElevatorHeight(){
     return m_elevatorEncoder.getPosition();
@@ -120,7 +113,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void zero(){
-    if(!atZero()) {
+    if(m_elevatorEncoder.getPosition() > 0) {
       set(-0.2);
     }
     else {

@@ -45,12 +45,6 @@ public class Toaster extends SubsystemBase {
 
   Timer m_timer = new Timer();
 
-  //ENCODER OBJECT
-  private RelativeEncoder m_rightEncoder = m_toasterRight.getEncoder();
-
-  //PID CONTROLLER
-  private SparkPIDController m_toasterController = m_toasterRight.getPIDController();
-
   //GET INSTANCE
   public static Toaster getInstance(){
     return m_instance;
@@ -96,8 +90,6 @@ public class Toaster extends SubsystemBase {
       case SPEAKER_SHOOT:
         m_timer.start();
         setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
-        //setShooterSpeed(0.5);
-        //setHolderSpeed(0.5);
         if (m_timer.get() > ToasterConstants.waitTime){
           setHolderSpeed(ToasterConstants.SpeakerHolderSpeed);
         }
@@ -135,5 +127,9 @@ public class Toaster extends SubsystemBase {
     m_toasterRight.setSmartCurrentLimit(40, 40);
     m_toasterLeft.setSmartCurrentLimit(40, 40);
     m_holder.setSmartCurrentLimit(40, 40);
+
+    m_toasterRight.burnFlash();
+    m_toasterLeft.burnFlash();
+    m_holder.burnFlash();
   }
 }

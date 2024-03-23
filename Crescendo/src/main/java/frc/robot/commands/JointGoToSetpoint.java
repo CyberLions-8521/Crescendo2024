@@ -14,14 +14,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class JointGoToSetpoint extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Joint m_joint;
+  private final double goalPosition;
+  private final double goalVelocity;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public JointGoToSetpoint(Joint joint) {
+  public JointGoToSetpoint(double desiredGoal, double desiredVelocity, Joint joint) {
     m_joint = joint;
+    goalPosition = desiredGoal;
+    goalVelocity = desiredVelocity;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(joint);
   }
@@ -33,7 +37,7 @@ public class JointGoToSetpoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_joint.goToSetpoint();
+    m_joint.setGoal(goalPosition, goalVelocity);
   }
 
   // Called once the command ends or is interrupted.

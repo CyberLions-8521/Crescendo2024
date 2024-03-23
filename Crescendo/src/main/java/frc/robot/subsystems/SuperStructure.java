@@ -42,7 +42,6 @@ public class SuperStructure extends SubsystemBase {
 
   public enum SuperStructureState{
     ZERO,
-    GROUND_INTAKE,
     SOURCE,
     SPEAKER_SHOOT,
     AMP_SHOOT,
@@ -81,18 +80,6 @@ public class SuperStructure extends SubsystemBase {
     switch (m_state) {
       case ZERO:
         zeroAll();
-        break;
-
-      case GROUND_INTAKE:
-        //WRISTS
-        //m_indexerWrist.setSetpoint(0);
-        m_hoodWrist.setSetpoint(0);
-
-        goToElevatorPosition(null,ElevatorConstants.GROUND_INTAKE_POSITION);
-        //m_indexer.setState(IndexerState.ON);
-        m_toaster.setState(ToasterState.INTAKE);
-        //m_hood.setState(HoodState.OFF);
-        m_elevator.setSetpoint(5);
         break;
     
       case SOURCE:

@@ -96,8 +96,8 @@ public final class Constants {
   }
 
   public static class HoodWristConstants{
-    public static final double HOOD_WRIST_KP = 0;
-    public static final double HOOD_WRIST_KD = 0;
+    public static final double HOOD_WRIST_KP = 0.18521;
+    public static final double HOOD_WRIST_KD = 0.05;
     public static final double HOOD_WRIST_TOLERANCE = 0.05;
   }
 
@@ -154,7 +154,7 @@ public final class Constants {
     public static final double DRIVE_KP = 0;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0.005;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
     public static final double DRIVE_KD = 0;//0.001;//0.00001;//.00029;//0.00015;
-    public static final double TURN_KP = 0.3;//0.16;
+    public static final double TURN_KP = 0.3;//0.3;//0.16;
 
     public static final double LOWER_BOUND = 0.0;
     public static final double UPPER_BOUND = 360.0;

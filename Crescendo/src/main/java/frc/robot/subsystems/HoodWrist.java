@@ -13,11 +13,14 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
+import frc.robot.subsystems.Joint.JointState;
 
 public class HoodWrist extends SubsystemBase {
   
@@ -25,14 +28,13 @@ public class HoodWrist extends SubsystemBase {
   private HoodWrist() {
     configMotors();
     resetEncoder();
-        SmartDashboard.putNumber("hood wrist kP", 0);
-    SmartDashboard.putNumber("hood wrist kD", 0);
   }
 
   //STATES
   public enum HoodWristState{
         OFF,
         POSITION,
+        JOG,
         ZERO
     }
   
@@ -54,6 +56,12 @@ public class HoodWrist extends SubsystemBase {
   //LIMIT SWITCH
   private DigitalInput m_limitSwitch = new DigitalInput(1);
 
+  private double jogValue;
+
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0, 0));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
+  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+
   //PID CONTROLLER
   private SparkPIDController m_hoodController = m_hoodWristMaster.getPIDController();
 
@@ -71,17 +79,37 @@ public class HoodWrist extends SubsystemBase {
     return m_state;
   }
 
+  public double getPosition(){
+    return m_hoodEncoder.getPosition();
+  }
+
+  public void setGoal(double desiredPosition, double desiredVelocity){
+    m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
+    setState(HoodWristState.POSITION);
+  }
+
+  public double getGoal(){
+    return m_goal.position;
+  }
+
   //SET MOTOR OUTPUT METHODS
   public void setSpeed(double value){
     m_hoodWristMaster.set(value);
   }
 
+  public double getJogValue(){
+    return jogValue;
+  }
+
+  public void setJogValue(double jogValue){
+    this.jogValue = jogValue;
+    setState(HoodWristState.JOG);
+  }
+
   //SETPOINT METHODS
   public void goToSetpoint(){
-    m_hoodController.setReference(setpoint, ControlType.kPosition);
-    if(atSetpoint()){
-      setState(HoodWristState.OFF);
-    }
+    m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
+    m_hoodController.setReference(m_setpoint.position, ControlType.kPosition);
   }
 
   public void setSetpoint(double setpoint){
@@ -120,12 +148,19 @@ public class HoodWrist extends SubsystemBase {
       resetEncoder();
     }
 }
+
+  public void reZero(){
+    m_hoodEncoder.setPosition(0);
+  }
   
   @Override
   public void periodic() {
     switch(m_state){
       case OFF:
         setSpeed(0);
+        break;
+      case JOG:
+        setSpeed(jogValue);
         break;
       case POSITION:
         goToSetpoint();
@@ -141,17 +176,20 @@ public class HoodWrist extends SubsystemBase {
     SmartDashboard.putString("hood wrist State", getState().toString());
     SmartDashboard.putNumber("hood wrist Setpoint", getSetpoint());
     SmartDashboard.putNumber("hood wrist Encoder Position", m_hoodEncoder.getPosition());
-    // SmartDashboard.putBoolean("hood wrist Limit Switch", m_limitSwitch.get());
     SmartDashboard.putBoolean("hood wrist at Position", atSetpoint());
-
+    SmartDashboard.putNumber("hood Wrist KP", Constants.HoodWristConstants.HOOD_WRIST_KP);
+    SmartDashboard.putNumber("hood Wrist KD", Constants.HoodWristConstants.HOOD_WRIST_KD);
   }
 
   public void configHoodWristPID(){
-    m_hoodController.setP(SmartDashboard.getNumber("hood wrist kP", 0));
-    m_hoodController.setD(SmartDashboard.getNumber("hood wrist kD", 0));
+    m_hoodController.setP(SmartDashboard.getNumber("hood wrist kP", Constants.HoodWristConstants.HOOD_WRIST_KP));
+    m_hoodController.setD(SmartDashboard.getNumber("hood wrist kD", Constants.HoodWristConstants.HOOD_WRIST_KD));
   }
 
   public void configMotors(){
+    m_hoodController.setP(Constants.HoodWristConstants.HOOD_WRIST_KP);
+    m_hoodController.setD(Constants.HoodWristConstants.HOOD_WRIST_KD);
+
     m_hoodWristMaster.restoreFactoryDefaults();
     m_hoodWristMaster.setInverted(false);
     m_hoodWristMaster.setIdleMode(IdleMode.kBrake);
@@ -161,6 +199,7 @@ public class HoodWrist extends SubsystemBase {
     //m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
 
     m_hoodController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    m_hoodWristMaster.burnFlash();
     //m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);
     //m_hoodController.setSmartMotionMaxVelocity(HoodWristConstants.MAX_VELOCITY, 0);    
   }

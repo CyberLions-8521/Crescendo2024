@@ -20,7 +20,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AmpShoot;
 // import frc.robot.commands.Autos;
 import frc.robot.commands.DriveTele;
-import frc.robot.commands.GroundIntake;
 import frc.robot.commands.JointGoToSetpoint;
 import frc.robot.commands.Source;
 import frc.robot.commands.SpeakerShoot;
@@ -30,6 +29,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Hood.HoodState;
+import frc.robot.subsystems.HoodWrist.HoodWristState;
 import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
@@ -101,8 +101,14 @@ public class RobotContainer {
     //m_driverController.button(2).whileTrue(new RunCommand(() -> m_hood.setSpeed(-0.8)));
       //  m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.8)));
 
-    //m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(0.2)));//0.15
-    //m_driverController.button(9).whileTrue(new RunCommand(() -> m_hoodWrist.setSpeed(-0.2)));//-0.6
+    m_driverController.button(1).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));//0.15
+    m_driverController.button(1).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
+    m_driverController.button(2).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(-0.2)));//-0.6
+        m_driverController.button(2).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
+    m_driverController.button(4).onTrue(new RunCommand(() -> m_hoodWrist.configHoodWristPID()));
+    m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setGoal(5, 0)));
+    m_driverController.button(5).onTrue(new InstantCommand(() -> m_hoodWrist.reZero())); 
+
  // m_driverController.button(9).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
    // m_driverController.button(10).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
 
@@ -115,10 +121,10 @@ public class RobotContainer {
     // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
 
     //JOINT
-    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.2)));
+  /*  m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.2)));
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
     m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.2)));
-    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
+    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));*/
 
 
     //m_driverController.button(1).whileTrue(new RunCommand(() -> m_joint.setSetpoint(Rotation2d.fromRotations(9.3))));
@@ -130,10 +136,10 @@ public class RobotContainer {
     //0.17
     //0.025
   
+  /*   m_driverController.button(1).onTrue(new InstantCommand(() -> m_joint.refreshSetpoint()));
+    //m_driverController.button(2).onTrue(new JointGoToSetpoint(10,0, m_joint));
     m_driverController.button(3).onTrue(new InstantCommand(() -> m_joint.rezero()));
-    m_driverController.button(4).onTrue(new RunCommand(() -> m_joint.goToSetpoint()));
-    m_driverController.button(1).onTrue(new InstantCommand(() -> m_joint.refreshSetpoint()));
-    m_driverController.button(2).onTrue(new JointGoToSetpoint(m_joint));
+    m_driverController.button(4).onTrue(new RunCommand(() -> m_joint.setGoal(0,0)));*/
 
     //m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.set(0.2)));
     //m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.set(-0.2)));

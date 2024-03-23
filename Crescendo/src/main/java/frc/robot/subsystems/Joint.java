@@ -10,14 +10,10 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkPIDController.AccelStrategy;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -55,18 +51,16 @@ public class Joint extends SubsystemBase {
   public RelativeEncoder m_jointEncoderLeft = m_jointLeft.getEncoder();
 
   //MOTOR CONTROLLER OBJECT
-  private SparkPIDController m_jointControllerRight = m_jointRight.getPIDController();
   private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
 
   //TRAPEZOID PROFILE OBJECT
   //500,250
 
-  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(500, 150));
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(550, 150));
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
   
   //JOG VALUE & SETPOINT
-  private Rotation2d setpoint = new Rotation2d();
   private double jogValue = 0;
 
   //-----------------------
@@ -87,11 +81,15 @@ public class Joint extends SubsystemBase {
 
   public void setGoal(double desiredPosition, double desiredVelocity){
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
+    setState(JointState.POSITION);
+  }
+
+  public double getGoal(){
+    return m_goal.position;
   }
 
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
-    //m_jointRight.set(value);
     m_jointLeft.set(value);
   }
 
@@ -102,25 +100,12 @@ public class Joint extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    //m_jointControllerRight.setReference(setpoint.getRotations(), ControlType.kPosition);
-    //m_jointControllerLeft.setReference(setpoint.getRotations(), ControlType.kPosition);
-
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
-    //m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
   }
 
   public boolean atSetpoint(){
     return MathUtil.isNear(m_goal.position, getPosition(), 0.1);
-  }
-
-  public void setSetpoint(Rotation2d setpoint){
-    this.setpoint = setpoint;
-    setState(JointState.POSITION);
-  }
-
-  public Rotation2d getSetpoint(){
-    return setpoint;
   }
 
   public void refreshSetpoint(){
@@ -128,7 +113,6 @@ public class Joint extends SubsystemBase {
   }
 
   public double getPosition(){
-    //return (m_jointEncoderRight.getPosition() / JointConstants.GEAR_RATIO);
     return (m_jointEncoderLeft.getPosition());
   }
 
@@ -172,8 +156,6 @@ public class Joint extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putString("Joint State", getState().toString());
-    SmartDashboard.putNumber("Joint Setpoint", getSetpoint().getRotations());
-    SmartDashboard.putNumber("Joint Position", getPosition());
 
     SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
     SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
@@ -184,13 +166,12 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
 
     SmartDashboard.putBoolean("At setpoint", atSetpoint());
+
+    SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
   }
 
 
   public void configMotors(){
-
-    //SET MOTORS FOLLOW EACH OTHER
-    //m_jointLeft.follow(m_jointRight);
 
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();
@@ -201,11 +182,11 @@ public class Joint extends SubsystemBase {
 
     //INVERSION
     /*m_jointRight.setInverted(true);
-    m_jointLeft.setInverted(!m_jointRight.getInverted());
+    m_jointLeft.setInverted(!m_jointRight.getInverted());*/
 
     //IDLE MODE
     m_jointRight.setIdleMode(IdleMode.kBrake);
-    m_jointLeft.setIdleMode(m_jointRight.getIdleMode());*/
+    m_jointLeft.setIdleMode(m_jointRight.getIdleMode());
 
     //SET SMART CURRENT LIMIT
     m_jointRight.setSmartCurrentLimit(40, 40);
@@ -213,10 +194,5 @@ public class Joint extends SubsystemBase {
 
     m_jointRight.burnFlash();
     m_jointLeft.burnFlash();
-
-    //SET SMART MOTION 
-    // m_JointController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    // m_JointController.setSmartMotionMaxAccel(JointConstants.MAX_ACCELERATION, 0);
-    // m_JointController.setSmartMotionMaxVelocity(JointConstants.MAX_VELOCITY, 0);    
   }
 }
