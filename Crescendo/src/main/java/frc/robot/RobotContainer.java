@@ -101,16 +101,22 @@ public class RobotContainer {
     //m_driverController.button(2).whileTrue(new RunCommand(() -> m_hood.setSpeed(-0.8)));
       //  m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.8)));
 
-    m_driverController.button(1).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));//0.15
+    /*m_driverController.button(1).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));//0.15
     m_driverController.button(1).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
     m_driverController.button(2).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(-0.2)));//-0.6
         m_driverController.button(2).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
     m_driverController.button(4).onTrue(new RunCommand(() -> m_hoodWrist.configHoodWristPID()));
-    m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setGoal(5, 0)));
-    m_driverController.button(5).onTrue(new InstantCommand(() -> m_hoodWrist.reZero())); 
+    m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setGoal(2, 0)));
+    m_driverController.button(5).onTrue(new InstantCommand(() -> m_hoodWrist.reZero())); */
 
- // m_driverController.button(9).whileTrue(new RunCommand(() -> m_elevator.set(-0.3)));
-   // m_driverController.button(10).whileTrue(new RunCommand(() -> m_elevator.set(0.3)));
+  m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.3)));
+  m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+  m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.3)));
+  m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+  m_driverController.button(1).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(10)));
+  m_driverController.button(2).onTrue(new RunCommand(() -> m_elevator.resetEncoder()));
+
+
 
     //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(10)));
 

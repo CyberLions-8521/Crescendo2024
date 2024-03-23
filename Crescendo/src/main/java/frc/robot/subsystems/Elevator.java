@@ -33,6 +33,7 @@ public class Elevator extends SubsystemBase {
   public enum ElevatorState{
     OFF,
     SETPOINT,
+    JOG,
     ZERO
   }
 
@@ -47,6 +48,8 @@ public class Elevator extends SubsystemBase {
 
   //ENCODER OBJECT
   private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
+
+  private double jogValue;
 
 
   //PID CONTROLLER OBJECT
@@ -72,6 +75,15 @@ public class Elevator extends SubsystemBase {
   //SET MOTOR OUTPUT METHODS
   public void set(double value){
     m_elevatorMaster.set(value);
+  }
+
+  public void setJog(double jogValue){
+    this.jogValue = jogValue;
+    setState(ElevatorState.JOG);
+  }
+
+  public double getJog(){
+    return jogValue;
   }
 
   //SETPOINT METHODS
@@ -127,6 +139,9 @@ public class Elevator extends SubsystemBase {
     switch(m_state){
       case OFF:
         set(0);
+        break;
+      case JOG:
+        set(jogValue);
         break;
       case SETPOINT:
         goToSetpoint();

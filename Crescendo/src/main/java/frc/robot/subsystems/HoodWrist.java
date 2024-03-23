@@ -58,7 +58,7 @@ public class HoodWrist extends SubsystemBase {
 
   private double jogValue;
 
-  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0, 0));
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(20, 4));
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
 
