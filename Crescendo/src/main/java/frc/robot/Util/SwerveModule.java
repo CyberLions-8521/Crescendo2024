@@ -119,9 +119,11 @@ public class SwerveModule {
           if(metersPerSec == 0){
                m_driveMotor.set(0);
           }else{
-               double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
-               m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+               //double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
+               //m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
+               m_driveMotor.setControl(targetSpeed.withVelocity(metersPerSec));
           }
+
      }
 
      public void setState(SwerveModuleState state){
@@ -135,14 +137,15 @@ public class SwerveModule {
      }
 
      public Rotation2d getTurnAngle(){
-                    //mt / (mt / rotation) -- > mt (r/mt) -- > rotations
           return Rotation2d.fromRotations(m_turnEncoder.getPosition() / Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
      }
      public double getDrivePosition(){
-          return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
+         //return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
+         return m_driveMotor.getPosition().getValueAsDouble();
      }
      public double getDriveVelocity(){
-          return (m_driveMotor.getVelocity().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
+          //return (m_driveMotor.getVelocity().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
+          return m_driveMotor.getVelocity().getValueAsDouble();
      }
      
      public Rotation2d getAbsoluteTurnAngle(){
@@ -178,6 +181,8 @@ public class SwerveModule {
 
           //INVERSION
           m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+
+          m_driveControllerConfig.Feedback.SensorToMechanismRatio = Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO / Constants.SwerveModuleConstants.CIRCUMFERENCE;
 
           //NEUTRAL MODE
           m_driveControllerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

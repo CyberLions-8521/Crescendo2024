@@ -8,6 +8,7 @@ import java.time.Instant;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -54,11 +55,41 @@ public class RobotContainer {
   private final Joint m_joint = Joint.getInstance();
   private final HoodWrist m_hoodWrist = HoodWrist.getInstance();
 
-  private Command m_goOut = Commands.parallel(new ElevatorGoToSetpoint(m_elevator, 24), new JointGoToSetpoint(10,0, m_joint), new HoodWristGoToSetpoint(m_hoodWrist, 11.2));
-  private Command m_goIn = Commands.parallel(new ElevatorGoToSetpoint(m_elevator, 0), new JointGoToSetpoint(0,0, m_joint), new HoodWristGoToSetpoint(m_hoodWrist, 0));
+  private Command m_goOut = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 12.4), 
+    new JointGoToSetpoint(24.8,0, m_joint), 
+    new HoodWristGoToSetpoint(m_hoodWrist, 12.2)
+    );
+
+  private Command m_goIn = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 0), 
+    new JointGoToSetpoint(0,0, m_joint), 
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+    );
+
+  private Command m_ampScore = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 5), 
+    new JointGoToSetpoint(26.57,0, m_joint), 
+    new HoodWristGoToSetpoint(m_hoodWrist, 11.6)
+  );
+
+
+
+
+
+  private Command m_goSpeaker = Commands.parallel(
+    new HoodWristGoToSetpoint(m_hoodWrist, 0), 
+    new ElevatorGoToSetpoint(m_elevator, 0), 
+    new JointGoToSetpoint(0, 0, m_joint));
+
+  private Command shootCommnad = Commands.sequence(
+    m_goSpeaker,
+    new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT))
+  );
  
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_auxController = new CommandXboxController(2);
 
   private final SuperStructure m_superStructure = SuperStructure.getInstance();
 // private final PathHandler m_pathHandler = new PathHandler(m_superStructure);
@@ -70,26 +101,17 @@ public class RobotContainer {
 
   private void configureBindings() {
     //DRIVEBASE
-      /*m_driverController.button(1).onTrue(new InstantCommand(m_drive::readConfigGains));
+     /*  m_driverController.button(1).onTrue(new InstantCommand(m_drive::readConfigGains));
       m_driverController.button(2).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
-      m_driverController.button(3).onTrue(new InstantCommand(m_drive::resetHeading));*/
-     
+      m_driverController.button(3).onTrue(new InstantCommand(m_drive::resetHeading));
+     */
     //SUBSYSTEMS
-      //Y
-      ///m_driverController.button(4).whileTrue(new AmpShoot(m_superStructure));
-      //X
-      //m_driverController.button(2).whileTrue(new GroundIntake(m_superStructure));
-      //B
-      // m_driverController.button(3).whileTrue(new SpeakerShoot(m_superStructure));
-      //A
-      //m_driverController.button(1).whileTrue(new Source(m_superStructure));
-        
       // //Triangle
       //m_driverController.button(4).whileTrue( new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)).alongWith(new RunCommand(() -> m_hood.setSpeed(0.8))));
       //m_driverController.button(4).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
       //m_driverController.button(6).whileTrue(new RunCommand(() -> m_hood.setSpeed(HoodConstants.HOOD_SPEED)));
       //m_driverController.button(6).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
-
+    
       //X
       //m_driverController.button(5).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)));
       //m_driverController.button(5).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
@@ -102,61 +124,45 @@ public class RobotContainer {
       //m_driverController.button(3).whileTrue(new RunCommand(() -> m_hood.setState(HoodState.ON)));
       //m_driverController.button(3).onFalse(new RunCommand(() -> m_hood.setState(HoodState.OFF)));
 
+   m_auxController.button(5).whileTrue( new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)).alongWith(new RunCommand(() -> m_hood.setSpeed(-0.7))));
+  m_auxController.button(5).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
 
-    //ELEAVATOR
-    //m_driverController.button(2).whileTrue(new RunCommand(() -> m_hood.setSpeed(-0.8)));
-      //  m_driverController.button(1).whileTrue(new RunCommand(() -> m_hood.setSpeed(0.8)));
+   m_auxController.button(6).whileTrue( new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT)).alongWith(new RunCommand(() -> m_hood.setSpeed(0.5))));
+  m_auxController.button(6).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)));
 
-    /*m_driverController.button(1).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));//0.15
+    m_driverController.button(1).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));//0.15
     m_driverController.button(1).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
     m_driverController.button(2).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(-0.2)));//-0.6
-    m_driverController.button(2).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));*/
+    m_driverController.button(2).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
 
 
-  /*   m_driverController.button(4).onTrue(new RunCommand(() -> m_hoodWrist.configHoodWristPID()));
-    m_driverController.button(3).onTrue(new HoodWristGoToSetpoint(m_hoodWrist, 11.2));
-    m_driverController.button(7).onTrue(new HoodWristGoToSetpoint(m_hoodWrist, 0));
-    m_driverController.button(8).onTrue(new HoodWristGoToSetpoint(m_hoodWrist, 6));
-    m_driverController.button(5).onTrue(new InstantCommand(() -> m_hoodWrist.reZero())); */
-
+  
+ 
  m_driverController.button(3).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.3)));
   m_driverController.button(3).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
   m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setJog(0.3)));
   m_driverController.button(4).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
-/* 
-  m_driverController.button(1).onTrue(new ElevatorGoToSetpoint(m_elevator, 24.8));
-  //m_driverController.button(1).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
-  m_driverController.button(2).onTrue(new InstantCommand(() -> m_elevator.resetEncoder()));
 
-  m_driverController.x().onTrue(new ElevatorGoToSetpoint(m_elevator, 0));*/
-
-
-
-    //m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setSetpoint(10)));
-
-    // m_driverController.button(2).whileTrue(new RunCommand(() -> m_elevator.setState(ElevatorState.ZERO)));
-
-    // m_driverController.button(1).onTrue(new InstantCommand(m_elevator::configElevatorPID));
-
-    // m_driverController.button(3).onTrue(new InstantCommand(m_elevator::resetEncoder));
 
     //JOINT
-    /*m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.2)));
+    
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.2)));
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
     m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.2)));
-    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));*/
+    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
 
-    //m_driverController.button(7).onTrue(new JointGoToSetpoint(10,0, m_joint));
-    //m_driverController.button(8).onTrue(new JointGoToSetpoint(0,0, m_joint));
-   
+    
+    SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
+    SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
+    SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(() -> m_hoodWrist.reZero()));
+    
 
-   // m_driverController.button(5).onTrue(new ElevatorGoToSetpoint(m_elevator, 15));
-    //m_driverController.button(3).onTrue(new ElevatorGoToSetpoint(m_elevator, 0));
-     m_driverController.button(1).onTrue(new InstantCommand(() -> m_joint.rezero()));
+    m_driverController.button(1).onTrue(new InstantCommand(() -> m_joint.rezero()));
     m_driverController.button(2).onTrue(new InstantCommand(() -> m_elevator.resetEncoder()));
 
-    m_driverController.button(7).onTrue(m_goOut);
-    m_driverController.button(8).onTrue(m_goIn);
+    m_auxController.button(1).onTrue(m_goOut);
+    m_auxController.button(2).onTrue(m_goIn);
+    m_auxController.button(3).onTrue(m_ampScore);
   }
   
 

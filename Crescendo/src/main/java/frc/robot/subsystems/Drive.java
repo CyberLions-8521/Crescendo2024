@@ -49,16 +49,7 @@ public class Drive extends SubsystemBase {
   }
     // private StructArrayPublisher<SwerveModuleState> publisher;
 
-  
-    //odometry
-    //gyroscope
-    //swerve modules
-    //setpositions
-    //set states
-
     private static Drive m_instance = new Drive();
-
-  
 
     public static Drive getInstance(){
       return m_instance;
@@ -125,6 +116,7 @@ public class Drive extends SubsystemBase {
     m_bottomLeft.rezeroTurnMotors();
     m_bottomRight.rezeroTurnMotors();
   }
+  
   public void driveFromChassis(ChassisSpeeds speeds){
     SwerveModuleState[] states = kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.MAX_TANGENTIAL_VELOCITY);

@@ -161,7 +161,7 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        set(0);
+        set(0.00348837 * getElevatorHeight());
         break;
       case JOG:
         set(jogValue);

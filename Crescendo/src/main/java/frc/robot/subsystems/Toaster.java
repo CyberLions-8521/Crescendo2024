@@ -43,6 +43,9 @@ public class Toaster extends SubsystemBase {
   private CANSparkMax m_toasterLeft = new CANSparkMax(MotorConstants.TOASTER_LEFT_MOTOR, MotorType.kBrushless);
   private CANSparkMax m_holder = new CANSparkMax(MotorConstants.HOLDER_MOTOR, MotorType.kBrushless);
 
+    private RelativeEncoder m_toasterEncoder = m_toasterRight.getEncoder();
+
+
   Timer m_timer = new Timer();
 
   //GET INSTANCE
@@ -75,6 +78,14 @@ public class Toaster extends SubsystemBase {
     m_holder.set(holderValue);
   }
 
+  public double getRPM(){
+    return m_toasterEncoder.getVelocity();
+  }
+
+  public boolean atShootingSpeed(){
+    return (getRPM() >= 5000);
+  }
+
   @Override
   public void periodic() {
     switch(m_state){
@@ -104,6 +115,9 @@ public class Toaster extends SubsystemBase {
     SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
     SmartDashboard.putNumber("Timer", m_timer.get());
+
+    SmartDashboard.putNumber("Toaster RPM", getRPM());
+    SmartDashboard.putBoolean("Shooting Correct Speed", atShootingSpeed());
   }
 
   public void configMotors(){

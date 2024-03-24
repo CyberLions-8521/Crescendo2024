@@ -138,7 +138,7 @@ public class Joint extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        set(0);
+        set(0.000806452 * getPosition());
         break;
       case JOG:
         set(jogValue);
