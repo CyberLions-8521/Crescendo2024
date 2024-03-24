@@ -65,10 +65,10 @@ public class SuperStructure extends SubsystemBase {
     m_elevator.setState(ElevatorState.ZERO);
   }
 
-  public void goToElevatorPosition(Rotation2d jointSetpoint, double elevatorSetpoint){
+ /*  public void goToElevatorPosition(Rotation2d jointSetpoint, double elevatorSetpoint){
     //m_joint.setSetpoint(jointSetpoint);
     m_elevator.setSetpoint(elevatorSetpoint);
-  }
+  }*/
 
   public void hoodGoToSetpoint(double hoodSetpoint){
     m_hoodWrist.setSetpoint(hoodSetpoint);
@@ -88,7 +88,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
-        goToElevatorPosition(null,ElevatorConstants.SOURCE_POSITION);
+       // goToElevatorPosition(null,ElevatorConstants.SOURCE_POSITION);
         //m_hood.setState(HoodState.OFF);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.INTAKE);
@@ -100,7 +100,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(0);
 
         //REGULAR SUBSYSTEM
-        goToElevatorPosition(null,ElevatorConstants.SPEAKER_POSITION);
+        //goToElevatorPosition(null,ElevatorConstants.SPEAKER_POSITION);
         //m_hood.setState(HoodState.OFF);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.SPEAKER_SHOOT);
@@ -112,7 +112,7 @@ public class SuperStructure extends SubsystemBase {
         m_hoodWrist.setSetpoint(5);
 
         //REGULAR SUBYSTEM
-        goToElevatorPosition(null,ElevatorConstants.AMP_POSITION);
+        //goToElevatorPosition(null,ElevatorConstants.AMP_POSITION);
         //m_hood.setState(HoodState.ON);
         //m_indexer.setState(IndexerState.OFF);
         m_toaster.setState(ToasterState.AMP_SHOOT);

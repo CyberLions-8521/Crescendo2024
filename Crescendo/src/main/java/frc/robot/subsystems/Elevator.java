@@ -12,18 +12,22 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.MotorConstants;
+import frc.robot.subsystems.Joint.JointState;
 public class Elevator extends SubsystemBase {
 
   //CONSTRUCTOR
   private Elevator() {
     configMotors();
     resetEncoder();
-    configElevatorPID();
+    //configElevatorPID();
     
     SmartDashboard.putNumber("Elevator kP", ElevatorConstants.ELEVATOR_KP);
     SmartDashboard.putNumber("Elevator kD", ElevatorConstants.ELEVATOR_KD);
@@ -51,12 +55,15 @@ public class Elevator extends SubsystemBase {
 
   private double jogValue;
 
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(200, 100));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
+  
+
 
   //PID CONTROLLER OBJECT
   private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
   
-  //JOG VALUE AND SETPOINT
-  private double setpoint;
 
   //INSTANCE
   public static Elevator getInstance(){
@@ -70,6 +77,19 @@ public class Elevator extends SubsystemBase {
   
   public ElevatorState getState(){
     return m_state;
+  }
+
+  public void setGoal(double desiredPosition, double desiredVelocity){
+    m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
+    setState(ElevatorState.SETPOINT);
+  }
+
+  public double getGoal(){
+    return m_goal.position;
+  }
+
+  public double getPosition(){
+    return m_elevatorEncoder.getPosition();
   }
 
   //SET MOTOR OUTPUT METHODS
@@ -88,36 +108,39 @@ public class Elevator extends SubsystemBase {
 
   //SETPOINT METHODS
   public void goToSetpoint(){
-    /*if(m_elevatorEncoder.getPosition() > 25){
-      set(0);
-    }*/
-    m_elevatorController.setReference(setpoint, ControlType.kPosition);
-    if(atSetpoint()){
-      setState(ElevatorState.OFF);
-    }
+    m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
+    m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition);
+  }
+  
+  public boolean atSetpoint(){
+    return MathUtil.isNear(m_goal.position, getPosition(), 0.1);
   }
 
-  public void setSetpoint(double setpoint){
+  public void refreshSetpoint(){
+    m_setpoint = new TrapezoidProfile.State(getPosition(), m_elevatorEncoder.getVelocity());
+  }
+
+ /*  public void setSetpoint(double setpoint){
     this.setpoint = setpoint;
     setState(ElevatorState.SETPOINT);
   }
 
   public double getSetpoint(){
     return setpoint;
-  }
-
+  }*/
+/* 
   public boolean atSetpoint(){
     return Math.abs(setpoint - getElevatorHeight()) < ElevatorConstants.ELEVATOR_HEIGHT_TOLERANCE;
-  }
+  }*/
 
   //GETTER METHODS
   public double getElevatorHeight(){
     return m_elevatorEncoder.getPosition();
   }
 
-  private double getError(){
+  /*private double getError(){
     return Math.abs(setpoint - getElevatorHeight());
-  }
+  }*/
 
   //RESET/ZERO METHODS
   public void resetEncoder(){
@@ -154,22 +177,27 @@ public class Elevator extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putNumber("Elevator Setpoint", setpoint);
+    //SmartDashboard.putNumber("Elevator Setpoint", setpoint);
     SmartDashboard.putString("Elevator State", m_state.toString());
     SmartDashboard.putNumber("Elevator Position", getElevatorHeight());
+    SmartDashboard.putNumber("Elevator Velocity", m_elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator output", m_elevatorMaster.getAppliedOutput());
+    SmartDashboard.putNumber("Elevator goal position", m_goal.position);
     // SmartDashboard.putBoolean("elevator Limit Switch", m_limitSwitch.get());
-    SmartDashboard.putBoolean("Elevator at Position", atSetpoint());        
+    //SmartDashboard.putBoolean("Elevator at Position", atSetpoint());     
+    SmartDashboard.putNumber("Elevator setpoint position", m_setpoint.position);   
+    SmartDashboard.putBoolean("Elevator setpoint reached", atSetpoint());
   }
 
-  public void configElevatorPID(){
+  /*public void configElevatorPID(){
     //SET PID VALUES
     //m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
     //m_elevatorController.setFF(ElevatorConstants.ELEVATOR_KFF);
     //m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
 
-    m_elevatorController.setP(SmartDashboard.getNumber("Elevator kP", 0));
+    m_elevatorController.setP(SmartDashboard.getNumber("Elevator kP", Constants.ELevatorConstants.ELEVATOR_KP));
     m_elevatorController.setD(SmartDashboard.getNumber("Elevator kD", 0));
-  }
+  }*/
 
   public void configMotors(){
     //RESTORE FACTORY DEFAULT
@@ -181,12 +209,19 @@ public class Elevator extends SubsystemBase {
     //SET IDLE MODE
     m_elevatorMaster.setIdleMode(IdleMode.kBrake);
 
+
+    m_elevatorController.setP(Constants.ElevatorConstants.ELEVATOR_KP);
+    m_elevatorController.setD(Constants.ElevatorConstants.ELEVATOR_KD);
+
+
     //SET SMART CURRENT LIMIT
-    m_elevatorMaster.setSmartCurrentLimit(40, 40);
+    //m_elevatorMaster.setSmartCurrentLimit(40, 40);
+
+    m_elevatorMaster.burnFlash();
 
     //SET SMART MOTION STRATEGIES
-    m_elevatorController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    /*m_elevatorController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     m_elevatorController.setSmartMotionMaxAccel(ElevatorConstants.MAX_ACCELERATION, 0);
-    m_elevatorController.setSmartMotionMaxVelocity(ElevatorConstants.MAX_VELOCITY, 0);    
+    m_elevatorController.setSmartMotionMaxVelocity(ElevatorConstants.MAX_VELOCITY, 0);   */ 
   }
 }

@@ -25,6 +25,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -50,6 +51,8 @@ public class SwerveModule {
 
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
+          Timer.delay(0.1);
+
           //CREATE MOTORS
           m_driveMotor = new TalonFX(drivePort, "Ryan");
           m_turnMotor  = new CANSparkMax(turnPort, MotorType.kBrushless);
@@ -162,9 +165,9 @@ public class SwerveModule {
           m_turnMotor.restoreFactoryDefaults();
           m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(true);
-          m_turnMotor.burnFlash();
 
           m_turnController.setP(TURN_KP);
+          m_turnMotor.burnFlash();
           //DRIVE MOTOR
           TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
           

@@ -96,7 +96,7 @@ public final class Constants {
   }
 
   public static class HoodWristConstants{
-    public static final double HOOD_WRIST_KP = 0.10521;
+    public static final double HOOD_WRIST_KP = 0.6;
     public static final double HOOD_WRIST_KD = 0.05;
     public static final double HOOD_WRIST_TOLERANCE = 0.05;
   }

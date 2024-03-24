@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.AccelStrategy;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -58,12 +59,14 @@ public class HoodWrist extends SubsystemBase {
 
   private double jogValue;
 
-  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(20, 4));
-  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
+  private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(95, 85));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
 
   //PID CONTROLLER
   private SparkPIDController m_hoodController = m_hoodWristMaster.getPIDController();
+
+  private RelativeEncoder m_hoodWristEncoder = m_hoodWristMaster.getEncoder();
 
   //GET INSTANCE
   public static HoodWrist getInstance(){
@@ -122,8 +125,9 @@ public class HoodWrist extends SubsystemBase {
   }
 
   public boolean atSetpoint(){
-    return Math.abs(setpoint - getWristPostion()) < HoodWristConstants.HOOD_WRIST_TOLERANCE;
+    return MathUtil.isNear(m_goal.position, getPosition(), 0.1);
   }
+
 
   //ZERO METHODS / Encoders
   public void resetEncoder(){
@@ -152,6 +156,10 @@ public class HoodWrist extends SubsystemBase {
   public void reZero(){
     m_hoodEncoder.setPosition(0);
   }
+
+  public void refreshSetpoint(){
+    m_setpoint = new TrapezoidProfile.State(getPosition(), m_hoodWristEncoder.getVelocity());
+  }
   
   @Override
   public void periodic() {
@@ -174,11 +182,12 @@ public class HoodWrist extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putString("hood wrist State", getState().toString());
-    SmartDashboard.putNumber("hood wrist Setpoint", getSetpoint());
     SmartDashboard.putNumber("hood wrist Encoder Position", m_hoodEncoder.getPosition());
-    SmartDashboard.putBoolean("hood wrist at Position", atSetpoint());
-    SmartDashboard.putNumber("hood Wrist KP", Constants.HoodWristConstants.HOOD_WRIST_KP);
-    SmartDashboard.putNumber("hood Wrist KD", Constants.HoodWristConstants.HOOD_WRIST_KD);
+    SmartDashboard.putNumber("hood wrist at Position", m_setpoint.position);
+    SmartDashboard.putNumber("Hood Wrist Setpoint Position", m_setpoint.position);
+    SmartDashboard.putNumber("Hood Wrist Goal Position", m_goal.position);
+    SmartDashboard.putNumber("hood Wrist KP", m_hoodController.getP());
+    SmartDashboard.putNumber("hood Wrist KD", m_hoodController.getD());
   }
 
   public void configHoodWristPID(){
@@ -187,18 +196,15 @@ public class HoodWrist extends SubsystemBase {
   }
 
   public void configMotors(){
-    m_hoodController.setP(Constants.HoodWristConstants.HOOD_WRIST_KP);
-    m_hoodController.setD(Constants.HoodWristConstants.HOOD_WRIST_KD);
 
     m_hoodWristMaster.restoreFactoryDefaults();
     m_hoodWristMaster.setInverted(false);
     m_hoodWristMaster.setIdleMode(IdleMode.kBrake);
-    m_hoodWristMaster.setSmartCurrentLimit(40, 40);
-    
-    //m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
-    //m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
 
-    m_hoodController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    m_hoodController.setP(Constants.HoodWristConstants.HOOD_WRIST_KP);
+    m_hoodController.setD(Constants.HoodWristConstants.HOOD_WRIST_KD);
+    
+
     m_hoodWristMaster.burnFlash();
     //m_hoodController.setSmartMotionMaxAccel(HoodWristConstants.MAX_ACCELERATION, 0);
     //m_hoodController.setSmartMotionMaxVelocity(HoodWristConstants.MAX_VELOCITY, 0);    
