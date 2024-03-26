@@ -109,7 +109,8 @@ public class Elevator extends SubsystemBase {
   //SETPOINT METHODS
   public void goToSetpoint(){
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    m_elevatorController.setReference(m_setpoint.position, ControlType.kPosition);
+    double m_output = MathUtil.clamp(m_setpoint.position, 0, 26);
+    m_elevatorController.setReference(m_output, ControlType.kPosition);
   }
   
   public boolean atSetpoint(){
@@ -161,7 +162,8 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        set(0.00348837 * getElevatorHeight());
+        //m_elevatorController.set
+        set(0.00348837 * getElevatorHeight() * 0.5);
         break;
       case JOG:
         set(jogValue);

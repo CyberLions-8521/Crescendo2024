@@ -38,6 +38,7 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     m_gyro.reset();
+
     // m_gyro.calibrate();
 
     SmartDashboard.putNumber("Turn P", TURN_KP);

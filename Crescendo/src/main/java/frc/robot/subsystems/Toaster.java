@@ -138,9 +138,9 @@ public class Toaster extends SubsystemBase {
     m_holder.setIdleMode(IdleMode.kBrake);
 
     //SET SMART CURRENT LIMIT
-    m_toasterRight.setSmartCurrentLimit(40, 40);
-    m_toasterLeft.setSmartCurrentLimit(40, 40);
-    m_holder.setSmartCurrentLimit(40, 40);
+    m_toasterRight.setSmartCurrentLimit(100, 100);
+    m_toasterLeft.setSmartCurrentLimit(100, 100);
+    m_holder.setSmartCurrentLimit(100, 100);
 
     m_toasterRight.burnFlash();
     m_toasterLeft.burnFlash();

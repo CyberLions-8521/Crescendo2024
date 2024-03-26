@@ -42,7 +42,7 @@ public final class Constants {
     public static final double MAX_VELOCITY = 0;
   }
   public static class HoodConstants{
-    public static final double HOOD_SPEED = 0.9;
+    public static final double HOOD_SPEED = 0.7;
   }
 
   public static class ElevatorConstants{
@@ -72,9 +72,9 @@ public final class Constants {
     public static final double intakeSpeed = -0.25;
 
     //SPEAKER
-    public static final double SpeakerShooterSpeed = 0.9;
+    public static final double SpeakerShooterSpeed = 1;
     public static final double SpeakerHolderSpeed = 0.9;
-    public static final double SpeakerWaitTime = 0.75;
+    public static final double SpeakerWaitTime = 2;
 
     //AMP
     public static final double AmpShooterSpeed = 0.3;
@@ -82,7 +82,7 @@ public final class Constants {
   }
   
   public static class JointConstants{
-    public static final double JOINT_KP = 0.1;
+    public static final double JOINT_KP = 0.12;
     public static final double JOINT_KD = 0.025;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_VELOCITY = 0;

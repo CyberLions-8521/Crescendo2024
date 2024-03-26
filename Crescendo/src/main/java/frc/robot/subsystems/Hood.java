@@ -64,17 +64,18 @@ public class Hood extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        setSpeed(0);
+       // setSpeed(0);
         break;
       case ON:
         setSpeed(HoodConstants.HOOD_SPEED);
         break;
-      
     }   
+    logData();
   }
 
   public void logData(){
     SmartDashboard.putString("hood State", getState().toString());
+    SmartDashboard.putNumber("hood motor output", m_hoodMaster.get());
   }
 
   public void configMotors(){

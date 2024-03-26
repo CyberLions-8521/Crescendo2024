@@ -101,11 +101,12 @@ public class Joint extends SubsystemBase {
   //SETPOINT METHODS
   public void goToSetpoint(){
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    m_jointControllerLeft.setReference(m_setpoint.position, ControlType.kPosition);
+    double output = MathUtil.clamp(m_setpoint.position, 0, 19);
+    m_jointControllerLeft.setReference(output, ControlType.kPosition);
   }
 
   public boolean atSetpoint(){
-    return MathUtil.isNear(m_goal.position, getPosition(), 0.1);
+    return MathUtil.isNear(m_goal.position, getPosition(), 0.5);
   }
 
   public void refreshSetpoint(){
