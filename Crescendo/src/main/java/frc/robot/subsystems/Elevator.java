@@ -163,7 +163,7 @@ public class Elevator extends SubsystemBase {
     switch(m_state){
       case OFF:
         //m_elevatorController.set
-        set(0.00348837 * getElevatorHeight() * 0.5);
+        set(0.00348837 * getElevatorHeight() * 0.3);
         break;
       case JOG:
         set(jogValue);

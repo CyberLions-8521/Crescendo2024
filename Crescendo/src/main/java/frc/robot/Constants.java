@@ -77,8 +77,8 @@ public final class Constants {
     public static final double SpeakerWaitTime = 2;
 
     //AMP
-    public static final double AmpShooterSpeed = 0.3;
-    public static final double AmpHolderSpeed = 0.3;
+    public static final double AmpShooterSpeed = 0.7;
+    public static final double AmpHolderSpeed = 0.5;
   }
   
   public static class JointConstants{
