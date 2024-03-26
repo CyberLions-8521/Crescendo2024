@@ -103,7 +103,7 @@ public final class Constants {
 
   public static class DriveConstants {
     public static final double MAX_ANGULAR_VELOCITY = 2 * Math.PI;
-    public static final double MAX_TANGENTIAL_VELOCITY = 4;
+    public static final double MAX_TANGENTIAL_VELOCITY = 6;
   }
 
   public static class SwerveModuleConstants{
@@ -151,7 +151,7 @@ public final class Constants {
     public static final double TOP_RIGHT_ENCODER_OFFSET = -0.155518;//-0.148926;vwww//0.361084;
     public static final double TOP_LEFT_ENCODER_OFFSET = 0.019287;//0.025146;//-0.475342
 
-    public static final double DRIVE_KP = 0.3;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
+    public static final double DRIVE_KP = 0.35;//0.001;//0.00015;//0.00003;//0.00013;//0.000165;
     public static final double DRIVE_KFF = 0.01;//0.0105;//0.0105;//0.000195;//0.00017;//0.00017;//0.00004;
     public static final double DRIVE_KD = 0;//0.001;//0.00001;//.00029;//0.00015;
     public static final double TURN_KP = 0.3;//0.3;//0.16;

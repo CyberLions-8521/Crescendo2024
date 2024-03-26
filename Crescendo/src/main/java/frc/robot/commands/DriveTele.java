@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Util.mathProfiles;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Tracker;
 
@@ -29,6 +30,7 @@ public class DriveTele extends Command {
 
   private DoubleSupplier fwd, str, rot;
   private Drive drive;
+  private mathProfiles m_profiles = new mathProfiles();
 
   private double modifyInputs(double value, boolean isRot){
     if(isRot){
@@ -65,12 +67,10 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = -modifyInputs(fwd.getAsDouble(), false);
-    double vy = -modifyInputs(str.getAsDouble(), false);
+    double vx = mathProfiles.exponentialDrive( -modifyInputs(fwd.getAsDouble(), false),2);
+    double vy = mathProfiles.exponentialDrive( -modifyInputs(str.getAsDouble(), false), 2);
     double omega = -modifyInputs(rot.getAsDouble(), true);
 
-    //makes everything like a 3rd person robot
-    //might have to add - in front 
     SmartDashboard.putNumber("Angle desired", omega);
     m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_tracker.getPose().getRotation()));
   }
