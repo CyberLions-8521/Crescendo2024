@@ -121,7 +121,7 @@ public class SwerveModule {
           }else{
                //double RPS = (metersPerSec / SwerveModuleConstants.CIRCUMFERENCE) * SwerveModuleConstants.DRIVE_GEAR_RATIO;
                //m_driveMotor.setControl(targetSpeed.withVelocity(RPS));
-               m_driveMotor.setControl(targetSpeed.withVelocity(metersPerSec).withEnableFOC(false));
+               m_driveMotor.setControl(targetSpeed.withVelocity(metersPerSec).withEnableFOC(true));
           }
 
      }

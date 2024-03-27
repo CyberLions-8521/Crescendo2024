@@ -10,6 +10,7 @@ import static frc.robot.Constants.DriveConstants.MAX_TANGENTIAL_VELOCITY;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -30,7 +31,6 @@ public class DriveTele extends Command {
 
   private DoubleSupplier fwd, str, rot;
   private Drive drive;
-  private mathProfiles m_profiles = new mathProfiles();
 
   private double modifyInputs(double value, boolean isRot){
     if(isRot){
@@ -67,12 +67,16 @@ public class DriveTele extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = mathProfiles.exponentialDrive( -modifyInputs(fwd.getAsDouble(), false),2);
-    double vy = mathProfiles.exponentialDrive( -modifyInputs(str.getAsDouble(), false), 2);
+    double vx = -modifyInputs(fwd.getAsDouble(), false);
+    double vy = -modifyInputs(str.getAsDouble(), false);
     double omega = -modifyInputs(rot.getAsDouble(), true);
 
+    
+    //makes everything like a 3rd person robot
+    //might have to add - in front 
     SmartDashboard.putNumber("Angle desired", omega);
-    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega, m_tracker.getPose().getRotation()));
+    //m_drive.m_gyro.getYaw();
+    m_drive.driveFromChassis(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omega,  Rotation2d.fromDegrees(m_drive.getHeading())));
   }
 
   // Called once the command ends or is interrupted.

@@ -125,13 +125,18 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetHeading(){
-    m_gyro.reset();
+    // m_gyro.reset();
+    m_gyro.zeroYaw();
   }
 
   public void resetSwerveHeading(){
     SwerveModuleState[] states = getModuleStates();
     kDriveKinematics.resetHeadings(states[0].angle, states[1].angle, states[2].angle, states[3].angle);
 
+  }
+
+  public double getHeading() {
+    return -m_gyro.getYaw();
   }
 
   public void logData(){
@@ -155,6 +160,7 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("front left actual angle", m_topLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("front left actual velocity", Math.abs(m_topLeft.getDriveVelocity()));
     
+    SmartDashboard.putNumber("Heading", getHeading());
 
   }
 
