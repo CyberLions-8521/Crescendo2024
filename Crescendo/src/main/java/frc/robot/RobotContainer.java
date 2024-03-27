@@ -5,6 +5,8 @@
 package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Util.mathProfiles;
 import frc.robot.commands.DriveTele;
 import frc.robot.commands.ElevatorGoToSetpoint;
 import frc.robot.commands.HoodWristGoToSetpoint;
@@ -28,6 +32,7 @@ import frc.robot.subsystems.Joint;
 import frc.robot.subsystems.PathHandler;
 import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Tracker;
+import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Toaster.ToasterState;
 
 public class RobotContainer {
@@ -61,12 +66,12 @@ public class RobotContainer {
   );
 
   private Command m_shootAmp = Commands.sequence(
-    new WaitCommand(1.5),
-    new HoodWristGoToSetpoint(m_hoodWrist, 5)
+    new WaitCommand(.4),
+    new HoodWristGoToSetpoint(m_hoodWrist, 6)
   );
 
   private Command m_ampScore = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, 21), 
+    new ElevatorGoToSetpoint(m_elevator, 23), 
     new JointGoToSetpoint(22,0, m_joint),
     m_shootAmp
   );
@@ -120,8 +125,20 @@ public class RobotContainer {
 
     SmartDashboard.putData("Chooser", m_chooser);
 
-    m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
-  }
+    //m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
+
+    m_drive.setDefaultCommand(
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+      new RunCommand(
+          () -> 
+          m_drive.drive(
+            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
+            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
+              -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+              true, true),
+          m_drive));
+}
 
   private void configureBindings() {
     //DRIVEBASE
@@ -147,17 +164,17 @@ public class RobotContainer {
 
   
  
-//  m_driverController.button(3).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
-//   m_driverController.button(3).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
-//   m_driverController.button(4).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
-//   m_driverController.button(4).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+ m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
+  m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+  m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
+  m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
 
-    
+    /* 
     m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
     m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
     m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
     m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
-
+*/
     
     SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
     SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
