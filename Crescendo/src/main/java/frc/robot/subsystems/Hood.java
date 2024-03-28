@@ -58,13 +58,10 @@ public class Hood extends SubsystemBase {
     m_hoodMaster.set(value);
   }
 
-  
-
   @Override
   public void periodic() {
     switch(m_state){
       case OFF:
-       // setSpeed(0);
         break;
       case ON:
         setSpeed(HoodConstants.HOOD_SPEED);
@@ -82,6 +79,5 @@ public class Hood extends SubsystemBase {
     m_hoodMaster.restoreFactoryDefaults();
     m_hoodMaster.setInverted(false);
     m_hoodMaster.setIdleMode(IdleMode.kBrake);
-    m_hoodMaster.setSmartCurrentLimit(40, 40);
   }
 }

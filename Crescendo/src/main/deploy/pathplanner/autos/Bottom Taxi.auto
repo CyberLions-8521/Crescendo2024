@@ -2,15 +2,34 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 0.80522453174536,
+      "y": 4.381082489016831
     },
-    "rotation": 0
+    "rotation": 129.8287177156321
   },
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LOLOL"
+          }
+        }
+      ]
     }
   },
   "folder": null,

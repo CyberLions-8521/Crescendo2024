@@ -101,7 +101,7 @@ public class Joint extends SubsystemBase {
   //SETPOINT METHODS
   public void goToSetpoint(){
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    double output = MathUtil.clamp(m_setpoint.position, 0, 30);
+    double output = MathUtil.clamp(m_setpoint.position, 0, 32);
     m_jointControllerLeft.setReference(output, ControlType.kPosition);
   }
 
@@ -180,11 +180,6 @@ public class Joint extends SubsystemBase {
 
     m_jointControllerLeft.setP(JointConstants.JOINT_KP);
     m_jointControllerLeft.setD(JointConstants.JOINT_KD);
-
-    //INVERSION
-    /*m_jointRight.setInverted(true);
-    m_jointLeft.setInverted(!m_jointRight.getInverted());*/
-
     //IDLE MODE
     m_jointRight.setIdleMode(IdleMode.kBrake);
     m_jointLeft.setIdleMode(m_jointRight.getIdleMode());

@@ -36,51 +36,44 @@ import frc.robot.Util.SwerveModule;
 import frc.robot.Util.SwerveUtils;
 
 public class Drive extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-
   public Drive() {
     m_gyro.reset();
-
-    // m_gyro.calibrate();
 
     SmartDashboard.putNumber("Turn P", TURN_KP);
     SmartDashboard.putNumber("Drive P", DRIVE_KP);
     SmartDashboard.putNumber("Drive D", DRIVE_KD);
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
-    // publisher = NetworkTableInstance.getDefault()
-    //   .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
   }
-    // private StructArrayPublisher<SwerveModuleState> publisher;
 
-    private static Drive m_instance = new Drive();
+  private static Drive m_instance = new Drive();
 
-    private double m_currentRotation = 0.0;
-    private double m_currentTranslationDir = 0.0;
-    private double m_currentTranslationMag = 0.0;
+  private double m_currentRotation = 0.0;
+  private double m_currentTranslationDir = 0.0;
+  private double m_currentTranslationMag = 0.0;
 
-    private SlewRateLimiter m_magLimiter = new SlewRateLimiter(1.8);
-    private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2.0);
-    private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(1.8);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2.0);
+  private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-    public static Drive getInstance(){
-      return m_instance;
-    }
-    
-    private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
-    private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
-    private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
+  public static Drive getInstance(){
+    return m_instance;
+  }
+  
+  private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
+  private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
+  private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
+  private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
 
-    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-    public void setModuleStates(SwerveModuleState[] states){
-      SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
-      SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
+  public void setModuleStates(SwerveModuleState[] states){
+    SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
 
-      m_topLeft.setState(states[0]);
-      m_topRight.setState(states[1]);
-      m_bottomLeft.setState(states[2]);
-      m_bottomRight.setState(states[3]);
+    m_topLeft.setState(states[0]);
+    m_topRight.setState(states[1]);
+    m_bottomLeft.setState(states[2]);
+    m_bottomRight.setState(states[3]);
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
@@ -152,32 +145,7 @@ public class Drive extends SubsystemBase {
     m_topRight.setState(swerveModuleStates[1]);
     m_bottomLeft.setState(swerveModuleStates[2]);
     m_bottomRight.setState(swerveModuleStates[3]);
-
-  //   var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-  //     fieldRelative
-  //         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
-  //         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-  // SwerveDriveKinematics.desaturateWheelSpeeds(
-  //     swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-  // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-  // m_frontRight.setDesiredState(swerveModuleStates[1]);
-  // m_rearLeft.setDesiredState(swerveModuleStates[2]);
-  // m_rearRight.setDesiredState(swerveModuleStates[3]);
-  
   }
-
-  // public void driveRel(double vx, double vy, double rot ){
-  //   var states = Constants.SwerveModuleConstants.kDriveKinematics.toSwerveModuleStates(
-  //     ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, rot, Rotation2d.fromDegrees(m_gyro.getYaw()))
-  //   );
-
-  //   SwerveDriveKinematics.desaturateWheelSpeeds(states, 4);
-  //   m_topLeft.setState(states[0]);
-  //   m_topRight.setState(states[1]);
-  //   m_bottomLeft.setState(states[2]);
-  //   m_bottomRight.setState(states[3]);
-  // }
-
 
    public SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] modulePositions = {m_topLeft.getModulePosition(), m_topRight.getModulePosition(), m_bottomLeft.getModulePosition(), m_bottomRight.getModulePosition()};
@@ -218,14 +186,12 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetHeading(){
-    // m_gyro.reset();
     m_gyro.zeroYaw();
   }
 
   public void resetSwerveHeading(){
     SwerveModuleState[] states = getModuleStates();
     kDriveKinematics.resetHeadings(states[0].angle, states[1].angle, states[2].angle, states[3].angle);
-
   }
 
   public double getHeading() {
@@ -237,6 +203,7 @@ public class Drive extends SubsystemBase {
 
     SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("Gyro Degrees", m_gyro.getAngle());
+    
     SmartDashboard.putNumber("front left abs", m_topLeft.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("front right abs", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left abs", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
@@ -257,17 +224,8 @@ public class Drive extends SubsystemBase {
 
   }
 
-  
-
   @Override
   public void periodic() {
-    // publisher.set(new SwerveModuleState[] {
-    //   m_topRight.getState(),
-    //   m_topLeft.getState(),
-    //   m_bottomLeft.getState(),
-    //   m_bottomRight.getState()
-    // });
-    // This method will be called once per scheduler run
     logData();
   }
 
