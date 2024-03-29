@@ -170,6 +170,10 @@ public class SwerveModule {
           m_turnMotor.setInverted(true);
 
           m_turnController.setP(TURN_KP);
+
+          //NEW LINE
+          m_turnMotor.setSmartCurrentLimit(40,40);
+
           m_turnMotor.burnFlash();
           //DRIVE MOTOR
           TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
@@ -178,6 +182,9 @@ public class SwerveModule {
           m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
           m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
           m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
+
+          //NEW LINE
+          m_driveControllerConfig.CurrentLimits.StatorCurrentLimit = 70;
 
           //INVERSION
           m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;

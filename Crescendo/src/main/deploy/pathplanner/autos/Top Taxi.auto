@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 0.8893234380355224,
+      "y": 6.664650745604257
     },
-    "rotation": 0
+    "rotation": -125.19444195258758
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shoot (Side)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
@@ -24,9 +30,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Red Left(1) - 4 notes - Pos(3)"
+            "pathName": "top taxi"
           }
         }
       ]

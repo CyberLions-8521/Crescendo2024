@@ -29,6 +29,7 @@ import frc.robot.subsystems.Joint;
 import frc.robot.subsystems.PathHandler;
 import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Tracker;
+import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Toaster.ToasterState;
 
 public class RobotContainer {
@@ -101,18 +102,32 @@ public class RobotContainer {
     new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT))
   );
 
-  private Command m_goSpeaker = Commands.parallel(
+  private Command m_goSideSpeaker = Commands.parallel(
+    new JointGoToSetpoint(32, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
+
+  private Command m_goMiddleSpeaker = Commands.parallel(
     new JointGoToSetpoint(29, 0, m_joint),
     new HoodWristGoToSetpoint(m_hoodWrist, 0)
   );
 
   // AUTO SPEAKER SHOOTING
-  private Command autoSpeakerShootCommand = Commands.sequence(
-    m_goSpeaker,
+  private Command autoMiddleSpeakerShootCommand = Commands.sequence(
+    m_goMiddleSpeaker,
     new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
     new WaitCommand(3),
     new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
   );
+
+  private Command autoSideSpeakerShootCommand = Commands.sequence(
+    m_goSideSpeaker,
+    new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
+    new WaitCommand(3),
+    new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
+  );
+
+  
 
   //TURN OFF TOASTER
   private Command turnOffToaster = Commands.parallel(
@@ -128,14 +143,17 @@ public class RobotContainer {
   //////////
   public RobotContainer() {
     configureBindings();
-    NamedCommands.registerCommand("shoot", autoSpeakerShootCommand);
-   NamedCommands.registerCommand("down", m_zero);
+    NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
+    NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
+    NamedCommands.registerCommand("down", m_zero);
 
-     
+    m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
     m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
     m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
+
     m_chooser.addOption("no auto", Commands.none());
-    SmartDashboard.putData("shoot",autoSpeakerShootCommand);
+    SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
+    SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
    // SmartDashboard.putData("auto",new PathPlannerAuto("Bottom Taxi"));
     //SmartDashboard.putData("plz follow path",new PathPlannerAuto("Test Path"));
 
@@ -169,10 +187,10 @@ public class RobotContainer {
     // m_driverController.button(4).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
   
     //ELEVATOR
-    // m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
-    // m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
-    // m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
-    // m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
+    m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+    m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
+    m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
 
     //JOINT
     // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
