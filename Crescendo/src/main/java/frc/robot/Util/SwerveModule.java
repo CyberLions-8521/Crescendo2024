@@ -184,7 +184,8 @@ public class SwerveModule {
           m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
 
           //NEW LINE
-          m_driveControllerConfig.CurrentLimits.StatorCurrentLimit = 70;
+          m_driveControllerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+          m_driveControllerConfig.CurrentLimits.SupplyCurrentLimit = 80;
 
           //INVERSION
           m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;

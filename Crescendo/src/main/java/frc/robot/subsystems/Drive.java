@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
   private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
   private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
 
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   public void setModuleStates(SwerveModuleState[] states){
     SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
@@ -203,7 +203,7 @@ public class Drive extends SubsystemBase {
 
     SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("Gyro Degrees", m_gyro.getAngle());
-    
+
     SmartDashboard.putNumber("front left abs", m_topLeft.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("front right abs", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("rear left abs", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());

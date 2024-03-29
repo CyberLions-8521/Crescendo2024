@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SuperStructure.SuperStructureState;
 
 public class PathHandler {
@@ -38,6 +39,7 @@ public class PathHandler {
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
         return AutoBuilder.followPath(path);
     }
+
 
     public void configEvents(){
         NamedCommands.registerCommand("print", new PrintCommand("Hello World!"));

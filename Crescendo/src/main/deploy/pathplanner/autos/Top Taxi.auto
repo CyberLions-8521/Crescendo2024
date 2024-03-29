@@ -2,15 +2,27 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8893234380355224,
-      "y": 6.664650745604257
+      "x": 0.7691293439355439,
+      "y": 6.575774830952864
     },
-    "rotation": -125.19444195258758
+    "rotation": 12.449723001369819
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Rezero Turn Motor"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -20,7 +32,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 1.5
           }
         },
         {
@@ -32,7 +44,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.5
           }
         },
         {

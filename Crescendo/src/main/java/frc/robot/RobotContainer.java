@@ -145,15 +145,19 @@ public class RobotContainer {
     configureBindings();
     NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
     NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
+    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(() -> m_drive.resetHeading()));
+    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(() -> m_drive.rezeroTurnMotors()));
     NamedCommands.registerCommand("down", m_zero);
 
     m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
     m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
     m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
+    m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
 
     m_chooser.addOption("no auto", Commands.none());
     SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
     SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
+
    // SmartDashboard.putData("auto",new PathPlannerAuto("Bottom Taxi"));
     //SmartDashboard.putData("plz follow path",new PathPlannerAuto("Test Path"));
 
@@ -210,11 +214,14 @@ public class RobotContainer {
     m_auxController.button(7).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)).alongWith(
     new RunCommand(() -> m_hood.setSpeed(0))));
 
+    m_auxController.button(8).whileTrue( new RunCommand(() -> m_hood.setSpeed(0.8)));
+    m_auxController.button(8).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
+
     m_auxController.button(1).onTrue(m_goSource);
     m_auxController.button(2).onTrue(m_zero);
     m_auxController.button(3).onTrue(m_goAmp);
     // m_auxController.button(4).onTrue(m_goSpeaker);
-    m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
+    m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 10).alongWith(new 
       JointGoToSetpoint(29,0, m_joint)));
 
   }
