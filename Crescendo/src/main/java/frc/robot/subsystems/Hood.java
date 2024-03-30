@@ -78,6 +78,7 @@ public class Hood extends SubsystemBase {
   public void configMotors(){
     m_hoodMaster.restoreFactoryDefaults();
     m_hoodMaster.setInverted(false);
-    m_hoodMaster.setIdleMode(IdleMode.kBrake);
+    m_hoodMaster.setIdleMode(IdleMode.kCoast);
+    m_hoodMaster.burnFlash();
   }
 }

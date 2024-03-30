@@ -150,9 +150,9 @@ public class Joint extends SubsystemBase {
       case POSITION:
         goToSetpoint();
         break;
-      case ZERO:
+      /*case ZERO:
         zero();
-        break;
+        break;*/
     }   
     logData();  
     //m_jointRight.follow(m_jointLeft, true);
@@ -202,6 +202,11 @@ public class Joint extends SubsystemBase {
     m_jointRight.setSmartCurrentLimit(40, 40);
     m_jointLeft.setSmartCurrentLimit(40, 40);
 
+    m_jointEncoderRight.setMeasurementPeriod(12);
+    m_jointEncoderRight.setAverageDepth(2);
+    m_jointEncoderLeft.setMeasurementPeriod(12);
+    m_jointEncoderLeft.setAverageDepth(2);
+    
     m_jointRight.burnFlash();
     m_jointLeft.burnFlash();
   }

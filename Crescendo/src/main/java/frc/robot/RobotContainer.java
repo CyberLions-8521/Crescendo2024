@@ -50,6 +50,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_auxController = new CommandXboxController(2);
 
+
   //INTAKING
   private Command intake = Commands.parallel(
     new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)),
@@ -128,13 +129,24 @@ public class RobotContainer {
     new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
   );
 
-  
-
   //TURN OFF TOASTER
   private Command turnOffToaster = Commands.parallel(
     new RunCommand(() -> m_toaster.setState(ToasterState.OFF))
   );
+/* 
+  //SEQUENTIAL COMMANDS
+  private Command m_slowGoSource = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 14), 
+    new JointGoToSetpoint(24.5,0, m_joint), 
+    m_intakeSource
+  );
 
+  private Command m_slowGoAmp = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 23), 
+    new JointGoToSetpoint(22,0, m_joint),
+    m_hoodWristToAmp
+  );
+*/
   public void logData(){
     SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
     SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
@@ -166,17 +178,21 @@ public class RobotContainer {
 
     //m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
 
-    m_drive.setDefaultCommand(
-      // The left stick controls translation of the robot.
-      // Turning is controlled by the X axis of the right stick.
-      new RunCommand(
+    var m_driveCommand = new RunCommand(
           () -> 
           m_drive.drive(
             -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
             -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
               -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
               true, false),
-          m_drive));
+          m_drive);
+    m_driveCommand.setName("DriveCommand");
+
+    m_drive.setDefaultCommand(
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+      m_driveCommand
+      );
 }
 
   private void configureBindings() {
@@ -218,12 +234,16 @@ public class RobotContainer {
     m_auxController.button(8).whileTrue( new RunCommand(() -> m_hood.setSpeed(0.8)));
     m_auxController.button(8).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
 
+    m_goSource.setName("GoToSource");
+    m_zero.setName("Zero");
+    m_goAmp.setName("GoAmp");
     m_auxController.button(1).onTrue(m_goSource);
     m_auxController.button(2).onTrue(m_zero);
     m_auxController.button(3).onTrue(m_goAmp);
     // m_auxController.button(4).onTrue(m_goSpeaker);
     m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
       JointGoToSetpoint(29,0, m_joint)));
+    //m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).andThen(new JointGoToSetpoint(29,0, m_joint)));
 
   }
   

@@ -46,7 +46,7 @@ public class JointGoToSetpoint extends Command {
   @Override
   public void end(boolean interrupted) {
     m_joint.setState(JointState.OFF);
-    m_joint.refreshSetpoint();
+    //_joint.refreshSetpoint();
   }
 
   // Returns true when the command should end.

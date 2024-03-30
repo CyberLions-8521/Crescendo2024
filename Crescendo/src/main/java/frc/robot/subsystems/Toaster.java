@@ -90,7 +90,10 @@ public class Toaster extends SubsystemBase {
   public void periodic() {
     switch(m_state){
       case OFF:
-        setSpeed(0, 0);
+        //setSpeed(0, 0);
+        m_toasterRight.setVoltage(0);
+        m_toasterLeft.setVoltage(0);
+        m_holder.set(0);
         m_timer.stop();
         m_timer.reset();
         break;
@@ -133,9 +136,12 @@ public class Toaster extends SubsystemBase {
     m_holder.setInverted(false);
 
     //SET IDLE MODE
-    m_toasterRight.setIdleMode(IdleMode.kBrake);
+    m_toasterRight.setIdleMode(IdleMode.kCoast);
     m_toasterLeft.setIdleMode(m_toasterRight.getIdleMode());
     m_holder.setIdleMode(IdleMode.kBrake);
+
+    m_toasterRight.setOpenLoopRampRate(0.1);
+    m_toasterLeft.setOpenLoopRampRate(0.1);
 
     //SET SMART CURRENT LIMIT
     m_toasterRight.setSmartCurrentLimit(100, 100);
