@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -13,6 +14,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
@@ -62,6 +64,7 @@ public class Joint extends SubsystemBase {
   
   //JOG VALUE & SETPOINT
   private double jogValue = 0;
+  private double m_output = 0;
 
   //-----------------------
 
@@ -101,8 +104,8 @@ public class Joint extends SubsystemBase {
   //SETPOINT METHODS
   public void goToSetpoint(){
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    double output = MathUtil.clamp(m_setpoint.position, 0, 33);
-    m_jointControllerLeft.setReference(output, ControlType.kPosition);
+    m_output = MathUtil.clamp(m_setpoint.position, 0, 33);
+    m_jointControllerLeft.setReference(m_output, ControlType.kPosition);
   }
 
   public boolean atSetpoint(){
@@ -152,7 +155,7 @@ public class Joint extends SubsystemBase {
         break;
     }   
     logData();  
-    m_jointRight.follow(m_jointLeft, true);
+    //m_jointRight.follow(m_jointLeft, true);
   }
 
   public void logData(){
@@ -177,6 +180,17 @@ public class Joint extends SubsystemBase {
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
+
+    REVLibError checkOk = REVLibError.kError;
+
+    while (true) {
+      checkOk = m_jointRight.follow(m_jointLeft, true);
+
+      if(checkOk == REVLibError.kOk)
+        break;
+      else
+        Timer.delay(0.1);
+    }
 
     m_jointControllerLeft.setP(JointConstants.JOINT_KP);
     m_jointControllerLeft.setD(JointConstants.JOINT_KD);

@@ -30,6 +30,7 @@ import frc.robot.subsystems.PathHandler;
 import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Tracker;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Joint.JointState;
 import frc.robot.subsystems.Toaster.ToasterState;
 
 public class RobotContainer {
@@ -191,16 +192,16 @@ public class RobotContainer {
     // m_driverController.button(4).onFalse(new InstantCommand(() -> m_hoodWrist.setState(HoodWristState.OFF)));
   
     //ELEVATOR
-    m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
-    m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
-    m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
-    m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+    // m_driverController.button(7).whileTrue(new RunCommand(() -> m_elevator.setJog(-0.15)));
+    // m_driverController.button(7).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
+    // m_driverController.button(8).whileTrue(new RunCommand(() -> m_elevator.setJog(0.15)));
+    // m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
 
     //JOINT
-    // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
-    // m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
-    // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
-    // m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
+    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
+    m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
+    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
+    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
       
     ///////////////////
     m_auxController.button(5).whileTrue(m_ampShoot);
@@ -221,7 +222,7 @@ public class RobotContainer {
     m_auxController.button(2).onTrue(m_zero);
     m_auxController.button(3).onTrue(m_goAmp);
     // m_auxController.button(4).onTrue(m_goSpeaker);
-    m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 10).alongWith(new 
+    m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
       JointGoToSetpoint(29,0, m_joint)));
 
   }
