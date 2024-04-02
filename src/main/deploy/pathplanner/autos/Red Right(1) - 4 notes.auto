@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 15.836832243059506,
+      "y": 4.362710314976853
+    },
+    "rotation": 57.39896462132938
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Right(1) - 4 notes - pos(1)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Right(1) - 4 notes - pos(2)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Right(1) - 4 notes - pos(3)"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Red Right",
+  "choreoAuto": false
+}

@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.5836020329448068,
+      "y": 4.3849424735886515
+    },
+    "rotation": 117.60773083269773
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Rezero Turn Motor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot (Side)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Taxi"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

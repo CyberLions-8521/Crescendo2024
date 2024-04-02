@@ -1,0 +1,21 @@
+{
+  "robotWidth": 0.74,
+  "robotLength": 0.74,
+  "holonomicMode": true,
+  "pathFolders": [
+    "Right - 4 notes",
+    "Red Left(1) - 4 notes",
+    "Red Middle(1) - 4 notes",
+    "Red Right(1) - 4 notes"
+  ],
+  "autoFolders": [
+    "Red Middle",
+    "Red Left",
+    "Red Right"
+  ],
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
+  "maxModuleSpeed": 4.5
+}
