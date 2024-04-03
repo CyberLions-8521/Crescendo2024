@@ -76,45 +76,75 @@ public class RobotContainer {
   //   new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)),
   //   new RunCommand(() -> m_hood.setSpeed(HoodConstants.kIntakeSpeed))
   // );
-  private Command intake = Commands.parallel(
-    m_toaster.ToasterIntakeCmd(),
-    m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
-  );
+
+  // Vu implementation
+  // private Command intake = Commands.parallel(
+  //   m_toaster.ToasterIntakeCmd(),
+  //   m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
+  // );
 
   // private Command noIntake = Commands.parallel(
   //   new InstantCommand(() -> m_toaster.setState(ToasterState.OFF)),
   //   new InstantCommand(() -> m_hood.setSpeed(0))
   // );
+
+  // Vu implementation
   private Command noIntake = Commands.parallel(
     m_toaster.ToasterOffCmd(),
     m_hood.HoodSetSpeedCmd(0)
   );
 
   //SOURCE
-  private Command m_intakeSource = Commands.sequence(
-    Commands.waitSeconds(0.5),
-    new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
-    intake
-  );
+  // private Command m_intakeSource = Commands.sequence(
+  //   Commands.waitSeconds(0.5),
+  //   new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
+  //   intake
+  // );
 
+  // Vu implementation
+  // private Command m_goSource = Commands.parallel(
+  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
+  //   new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
+  //   m_intakeSource
+  // );
+
+  // Vu implementation in a single Command to avoid accidental command reuse in command compositions
   private Command m_goSource = Commands.parallel(
     new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
     new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
-    m_intakeSource
+    Commands.sequence(
+      Commands.waitSeconds(0.5),
+      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
+      Commands.parallel(
+        m_toaster.ToasterOffCmd(),
+        m_hood.HoodSetSpeedCmd(0)
+      )
+    )
   );
 
   //AMP SCORING
-  private Command m_hoodWristToAmp = Commands.sequence(
-    Commands.waitSeconds(0.4),
-    new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
-  );
+  // private Command m_hoodWristToAmp = Commands.sequence(
+  //   Commands.waitSeconds(0.4),
+  //   new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
+  // );
 
   // private Command m_ampShoot = new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT));
 
+  // Vu implementation
+  // private Command m_goAmp = Commands.parallel(
+  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
+  //   new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
+  //   m_hoodWristToAmp
+  // );
+
+  // Vu implementation in a single Command to avoid accidental command reuse in command compositions
   private Command m_goAmp = Commands.parallel(
     new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
     new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
-    m_hoodWristToAmp
+    Commands.sequence(
+      Commands.waitSeconds(0.4),
+      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
+    )
   );
 
   //ZERO
