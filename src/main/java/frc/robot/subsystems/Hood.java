@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 // import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.MotorConstants;
@@ -68,6 +68,10 @@ public class Hood extends SubsystemBase {
         break;
     }   
     logData();
+  }
+
+  public Command HoodSetSpeedCmd(final double speed) {
+    return this.run(() -> setSpeed(speed));
   }
 
   public void logData(){

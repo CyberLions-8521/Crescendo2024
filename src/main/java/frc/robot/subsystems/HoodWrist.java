@@ -33,11 +33,11 @@ public class HoodWrist extends SubsystemBase {
 
   //STATES
   public enum HoodWristState{
-        OFF,
-        POSITION,
-        JOG,
-        ZERO
-    }
+    OFF,
+    POSITION,
+    JOG,
+    ZERO
+  }
   
   //INSTANCE
   // private static HoodWrist m_instance = new HoodWrist();
@@ -82,16 +82,17 @@ public class HoodWrist extends SubsystemBase {
     return m_state;
   }
 
-  public double getPosition(){
+  public double getPosition() {
     return m_hoodEncoder.getPosition();
   }
 
-  public void setGoal(double desiredPosition, double desiredVelocity){
+  public void setGoal(double desiredPosition, double desiredVelocity) {
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
-    setState(HoodWristState.POSITION);
+    // setState(HoodWristState.POSITION);
+    goToSetpoint();
   }
 
-  public double getGoal(){
+  public double getGoal() {
     return m_goal.position;
   }
 
@@ -110,17 +111,17 @@ public class HoodWrist extends SubsystemBase {
   }
 
   //SETPOINT METHODS
-  public void goToSetpoint(){
+  public void goToSetpoint() {
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     m_hoodController.setReference(m_setpoint.position, ControlType.kPosition);
   }
 
-  public void setSetpoint(double setpoint){
+  public void setSetpoint(double setpoint) {
     this.setpoint = setpoint;
     setState(HoodWristState.POSITION);
   }
 
-  public double getSetpoint(){
+  public double getSetpoint() {
     return setpoint;
   }
 
@@ -130,15 +131,15 @@ public class HoodWrist extends SubsystemBase {
 
 
   //ZERO METHODS / Encoders
-  public void resetEncoder(){
+  public void resetEncoder() {
     m_hoodEncoder.setPosition(0);
   }
 
-  public double getWristPostion(){
+  public double getWristPostion() {
     return m_hoodEncoder.getPosition();
   }
 
-  public boolean atZero(){
+  public boolean atZero() {
     return m_limitSwitch.get();
   }
 
@@ -148,7 +149,8 @@ public class HoodWrist extends SubsystemBase {
       setSpeed(-0.1);
     }
     else{
-      setState(HoodWristState.OFF);
+      // setState(HoodWristState.OFF);
+      setSpeed(0);
       resetEncoder();
     }
 }
@@ -157,7 +159,7 @@ public class HoodWrist extends SubsystemBase {
     m_hoodEncoder.setPosition(0);
   }
 
-  public void refreshSetpoint(){
+  public void refreshSetpoint() {
     m_setpoint = new TrapezoidProfile.State(getPosition(), m_hoodWristEncoder.getVelocity());
   }
   

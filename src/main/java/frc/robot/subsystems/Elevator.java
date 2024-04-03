@@ -77,7 +77,8 @@ public class Elevator extends SubsystemBase {
 
   public void setGoal(double desiredPosition, double desiredVelocity){
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
-    setState(ElevatorState.SETPOINT);
+    // setState(ElevatorState.SETPOINT);
+    goToSetpoint();
   }
 
   public double getGoal(){
@@ -95,7 +96,8 @@ public class Elevator extends SubsystemBase {
 
   public void setJog(double jogValue){
     this.jogValue = jogValue;
-    setState(ElevatorState.JOG);
+    // setState(ElevatorState.JOG);
+    set(jogValue);
   }
 
   public double getJog(){
@@ -131,7 +133,8 @@ public class Elevator extends SubsystemBase {
       set(-0.2);
     }
     else {
-      setState(ElevatorState.OFF);
+      // setState(ElevatorState.OFF);
+      set(0.00348837 * getElevatorHeight() * 0.3);
       resetEncoder();
     }
   }

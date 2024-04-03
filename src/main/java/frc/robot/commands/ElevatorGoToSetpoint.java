@@ -7,7 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.Elevator;
 // import frc.robot.subsystems.Joint;
 // import frc.robot.subsystems.SuperStructure;
-import frc.robot.subsystems.Elevator.ElevatorState;
+// import frc.robot.subsystems.Elevator.ElevatorState;
 // import frc.robot.subsystems.Joint.JointState;
 // import frc.robot.subsystems.SuperStructure.SuperStructureState;
 // import edu.wpi.first.math.MathUtil;
@@ -48,7 +48,8 @@ public class ElevatorGoToSetpoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_elevator.setState(ElevatorState.OFF);
+    // m_elevator.setState(ElevatorState.OFF);
+    m_elevator.set(0.00348837 * m_elevator.getElevatorHeight() * 0.3);
   }
 
   // Returns true when the command should end.

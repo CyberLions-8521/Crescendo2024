@@ -16,6 +16,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -31,11 +32,11 @@ public class Joint extends SubsystemBase {
 
   //STATES
   public enum JointState{
-        OFF,
-        POSITION,
-        JOG,
-        ZERO
-    }
+    OFF,
+    POSITION,
+    JOG,
+    ZERO
+  }
 
   //INSTANCE
   // private static Joint m_instance = new Joint();
@@ -49,8 +50,8 @@ public class Joint extends SubsystemBase {
 
   //ENCODER OBJECT
   //public final AbsoluteEncoder m_jointEncoder = m_jointRight.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-  public RelativeEncoder m_jointEncoderRight = m_jointRight.getEncoder();
-  public RelativeEncoder m_jointEncoderLeft = m_jointLeft.getEncoder();
+  private RelativeEncoder m_jointEncoderRight = m_jointRight.getEncoder();
+  private RelativeEncoder m_jointEncoderLeft = m_jointLeft.getEncoder();
 
   //MOTOR CONTROLLER OBJECT
   private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
@@ -84,25 +85,27 @@ public class Joint extends SubsystemBase {
 
   public void setGoal(double desiredPosition, double desiredVelocity){
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
-    setState(JointState.POSITION);
+    // setState(JointState.POSITION);
+    goToSetpoint();
   }
 
-  public double getGoal(){
+  public double getGoal() {
     return m_goal.position;
   }
 
   //SET MOTOR OUTPUT METHODS
-  public void set(double value){
+  public void set(double value) {
     m_jointLeft.set(value);
   }
 
-  public void setJog(double jog){
+  public void setJog(double jog) {
     jogValue = jog;
-    setState(JointState.JOG);
+    // setState(JointState.JOG);
+    set(jogValue);
   }
 
   //SETPOINT METHODS
-  public void goToSetpoint(){
+  public void goToSetpoint() {
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     m_output = MathUtil.clamp(m_setpoint.position, 0, 33);
     m_jointControllerLeft.setReference(m_output, ControlType.kPosition);
@@ -112,28 +115,29 @@ public class Joint extends SubsystemBase {
     return MathUtil.isNear(m_goal.position, getPosition(), 0.5);
   }
 
-  public void refreshSetpoint(){
+  public void refreshSetpoint() {
     m_setpoint = new TrapezoidProfile.State(getPosition(), m_jointEncoderLeft.getVelocity());
   }
 
-  public double getPosition(){
+  public double getPosition() {
     return (m_jointEncoderLeft.getPosition());
   }
 
-  public boolean getFollower(){
+  public boolean getFollower() {
     return (m_jointRight.isFollower());
   }
 
-  public void zero(){
+  public void zero() {
     if(getPosition() > 0){
       set(-0.15);
     }
     else{
-     setState(JointState.OFF);
+      // setState(JointState.OFF);
+      set(0.000806452 * getPosition());
     }
   }
 
-  public void rezero(){
+  public void rezero() {
     m_jointEncoderRight.setPosition(0);
     m_jointEncoderLeft.setPosition(0);
   }
@@ -156,6 +160,10 @@ public class Joint extends SubsystemBase {
     }   
     logData();  
     //m_jointRight.follow(m_jointLeft, true);
+  }
+
+  public Command JointSetJogCmd(final double jogValue) {
+    return this.runOnce(() -> set(jogValue));
   }
 
   public void logData(){

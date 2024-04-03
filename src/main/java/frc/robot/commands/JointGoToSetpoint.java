@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Joint;
 // import frc.robot.subsystems.SuperStructure;
-import frc.robot.subsystems.Joint.JointState;
+// import frc.robot.subsystems.Joint.JointState;
 // import frc.robot.subsystems.SuperStructure.SuperStructureState;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -45,7 +45,8 @@ public class JointGoToSetpoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_joint.setState(JointState.OFF);
+    // m_joint.setState(JointState.OFF);
+    m_joint.set(0.000806452 * m_joint.getPosition());
     //_joint.refreshSetpoint();
   }
 
