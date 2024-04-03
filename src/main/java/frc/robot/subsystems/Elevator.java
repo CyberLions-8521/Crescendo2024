@@ -10,21 +10,21 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.SparkPIDController.AccelStrategy;
+// import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.MotorConstants;
-import frc.robot.subsystems.Joint.JointState;
+// import frc.robot.subsystems.Joint.JointState;
 public class Elevator extends SubsystemBase {
 
   //CONSTRUCTOR
-  private Elevator() {
+  public Elevator() {
     configMotors();
     resetEncoder();
     
@@ -41,7 +41,7 @@ public class Elevator extends SubsystemBase {
   }
 
   //INSTANCE
-  private static Elevator instance = new Elevator();
+  // private static Elevator instance = new Elevator();
 
   //SETTING STATE TO DEFAULT
   private ElevatorState m_state = ElevatorState.OFF;
@@ -62,9 +62,9 @@ public class Elevator extends SubsystemBase {
   private SparkPIDController m_elevatorController = m_elevatorMaster.getPIDController();
 
   //INSTANCE
-  public static Elevator getInstance(){
-    return instance;
-  }  
+  // public static Elevator getInstance(){
+  //   return instance;
+  // }  
 
   //STATE METHODS
   public void setState(ElevatorState m_state){

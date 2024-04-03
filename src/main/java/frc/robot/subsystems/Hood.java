@@ -5,22 +5,22 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.MotorConstants;
-import frc.robot.subsystems.Elevator.ElevatorState;
+// import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Hood extends SubsystemBase {
 
   //CONSTRUCTOR
-  private Hood() {
+  public Hood() {
     configMotors();
   }
  
@@ -31,7 +31,7 @@ public class Hood extends SubsystemBase {
   }
 
   //INSTANCE
-  private static Hood m_instance = new Hood();
+  // private static Hood m_instance = new Hood();
 
   //SET STATE TO OFF
   private HoodState m_state = HoodState.OFF;
@@ -40,9 +40,9 @@ public class Hood extends SubsystemBase {
   private CANSparkMax m_hoodMaster = new CANSparkMax(MotorConstants.HOOD_MOTOR, MotorType.kBrushless);
 
   //GET INSTANCE
-  public static Hood getInstance(){
-    return m_instance;
-  }  
+  // public static Hood getInstance(){
+  //   return m_instance;
+  // }  
 
   //STATE METHODS
   public void setState(HoodState m_state){

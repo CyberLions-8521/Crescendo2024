@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +22,7 @@ import frc.robot.Constants.*;
 public class Joint extends SubsystemBase {
   
   //CONSTRUCTOR
-  private Joint() {
+  public Joint() {
     configMotors();
     rezero();
     SmartDashboard.putNumber("Joint kP", m_jointControllerLeft.getP());
@@ -38,7 +38,7 @@ public class Joint extends SubsystemBase {
     }
 
   //INSTANCE
-  private static Joint m_instance = new Joint();
+  // private static Joint m_instance = new Joint();
   
   //SET STATE
   private JointState m_state = JointState.OFF;
@@ -69,9 +69,9 @@ public class Joint extends SubsystemBase {
   //-----------------------
 
   //GET INSTANCE
-  public static Joint getInstance(){
-    return m_instance;
-  }
+  // public static Joint getInstance(){
+  //   return m_instance;
+  // }
 
   //STATE OBJECTS
   public void setState(JointState m_state){
@@ -150,9 +150,9 @@ public class Joint extends SubsystemBase {
       case POSITION:
         goToSetpoint();
         break;
-      /*case ZERO:
-        zero();
-        break;*/
+      case ZERO:
+        // zero();
+        break;
     }   
     logData();  
     //m_jointRight.follow(m_jointLeft, true);

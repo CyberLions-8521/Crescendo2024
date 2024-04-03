@@ -10,23 +10,23 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkPIDController.AccelStrategy;
+// import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.Joint.JointState;
+// import frc.robot.subsystems.Joint.JointState;
 
 public class HoodWrist extends SubsystemBase {
   
   //CONSTRUCTOR
-  private HoodWrist() {
+  public HoodWrist() {
     configMotors();
     resetEncoder();
   }
@@ -40,7 +40,7 @@ public class HoodWrist extends SubsystemBase {
     }
   
   //INSTANCE
-  private static HoodWrist m_instance = new HoodWrist();
+  // private static HoodWrist m_instance = new HoodWrist();
 
   //STATE
   private HoodWristState m_state = HoodWristState.OFF;
@@ -69,9 +69,9 @@ public class HoodWrist extends SubsystemBase {
   private RelativeEncoder m_hoodWristEncoder = m_hoodWristMaster.getEncoder();
 
   //GET INSTANCE
-  public static HoodWrist getInstance(){
-    return m_instance;
-  }
+  // public static HoodWrist getInstance(){
+  //   return m_instance;
+  // }
 
   //STATE METHODS
   public void setState(HoodWristState m_state){

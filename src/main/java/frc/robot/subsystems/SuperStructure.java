@@ -1,13 +1,13 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.wpilibj.XboxController;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ElevatorConstants;
+// import edu.wpi.first.wpilibj2.command.WaitCommand;
+// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+// import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorState;
 //import frc.robot.subsystems.Hood.HoodState;
 import frc.robot.subsystems.HoodWrist.HoodWristState;
@@ -17,28 +17,37 @@ import frc.robot.subsystems.Toaster.ToasterState;
 //import frc.robot.subsystems.IndexerWrist.IndexerWristState;
 
 public class SuperStructure extends SubsystemBase {
-  public final Elevator m_elevator = Elevator.getInstance();
-  //public final Hood m_hood = Hood.getInstance();
-  //public final Indexer m_indexer = Indexer.getInstance();
-  public final Toaster m_toaster = Toaster.getInstance();
+  // public final Elevator m_elevator = Elevator.getInstance();
+  // public final Hood m_hood = Hood.getInstance();
+  // public final Indexer m_indexer = Indexer.getInstance();
+  // public final Toaster m_toaster = Toaster.getInstance();
 
   //WRISTS
   //public final IndexerWrist m_indexerWrist = IndexerWrist.getInstance();
-  public final HoodWrist m_hoodWrist = HoodWrist.getInstance();
-  public final Joint m_joint = Joint.getInstance();
+  // public final HoodWrist m_hoodWrist = HoodWrist.getInstance();
+  // public final Joint m_joint = Joint.getInstance();
+
+  public final Elevator m_elevator;
+  public final Toaster m_toaster;
+  public final HoodWrist m_hoodWrist;
+  public final Joint m_joint;
 
   //Controller
   // public final CommandXboxController m_driverController;
 
 
-  private SuperStructure() {
+  public SuperStructure(Elevator elevator, Toaster toaster, HoodWrist hoodWrist, Joint joint) {
+    m_elevator = elevator;
+    m_toaster = toaster;
+    m_hoodWrist = hoodWrist;
+    m_joint = joint;
   }
 
-  private static SuperStructure m_instance = new SuperStructure();
+  // private static SuperStructure m_instance = new SuperStructure();
 
-  public static SuperStructure getInstance(){
-    return m_instance;
-  }
+  // public static SuperStructure getInstance(){
+  //   return m_instance;
+  // }
 
   public enum SuperStructureState{
     ZERO,

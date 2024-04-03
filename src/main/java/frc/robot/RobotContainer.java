@@ -15,46 +15,63 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.HoodWristConstants;
+import frc.robot.Constants.JointConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Util.mathProfiles;
 import frc.robot.commands.ElevatorGoToSetpoint;
 import frc.robot.commands.HoodWristGoToSetpoint;
 import frc.robot.commands.JointGoToSetpoint;
+
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
-import frc.robot.subsystems.PathHandler;
-import frc.robot.subsystems.Toaster;
-import frc.robot.subsystems.Tracker;
-import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Joint.JointState;
+// import frc.robot.subsystems.PathHandler;
+// import frc.robot.subsystems.SuperStructure;
+import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Toaster.ToasterState;
+// import frc.robot.subsystems.Tracker;
+import frc.robot.Util.mathProfiles;
 
 public class RobotContainer {
   //SUBSYSTEMS
 
-  private final Drive m_drive = Drive.getInstance();
-  //private final Tracker m_tracker = Tracker.getInstance();
-  private final Elevator m_elevator = Elevator.getInstance();
-  private final Hood m_hood = Hood.getInstance();
-  private final Toaster m_toaster = Toaster.getInstance(); 
-  private final Joint m_joint = Joint.getInstance();
-  private final HoodWrist m_hoodWrist = HoodWrist.getInstance();
-  private final PathHandler m_PathHandler = PathHandler.getInstance();
+  // private final Drive m_drive = Drive.getInstance();
+  // private final Tracker m_tracker = Tracker.getInstance();
+  // private final Elevator m_elevator = Elevator.getInstance();
+  // private final Hood m_hood = Hood.getInstance();
+  // private final Toaster m_toaster = Toaster.getInstance(); 
+  // private final Joint m_joint = Joint.getInstance();
+  // private final HoodWrist m_hoodWrist = HoodWrist.getInstance();
+  // private final PathHandler m_PathHandler = PathHandler.getInstance();
+
+  private final Drive m_drive = new Drive();
+  // private final Tracker m_tracker = new Tracker(m_drive);
+  private final Elevator m_elevator = new Elevator();
+  private final Hood m_hood = new Hood();
+  private final Toaster m_toaster = new Toaster();
+  private final Joint m_joint = new Joint();
+  private final HoodWrist m_hoodWrist = new HoodWrist();
+  // private final SuperStructure m_superStructure = new SuperStructure(m_elevator, m_toaster, m_hoodWrist, m_joint);
+  // private final PathHandler m_PathHandler = new PathHandler(m_drive, m_tracker, m_superStructure);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>(); 
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController m_auxController = new CommandXboxController(2);
+  private final CommandXboxController m_auxController = new CommandXboxController(OperatorConstants.kPartnerControllerPort);
 
 
   //INTAKING
   private Command intake = Commands.parallel(
     new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)),
-    new RunCommand(() -> m_hood.setSpeed(-0.8))
+    new RunCommand(() -> m_hood.setSpeed(HoodConstants.kIntakeSpeed))
   );
 
   private Command noIntake = Commands.parallel(
@@ -64,30 +81,28 @@ public class RobotContainer {
 
   //SOURCE
   private Command m_intakeSource = Commands.sequence(
-    new WaitCommand(0.5),
-    new HoodWristGoToSetpoint(m_hoodWrist, 10),
+    Commands.waitSeconds(0.5),
+    new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
     intake
   );
 
   private Command m_goSource = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, 14), 
-    new JointGoToSetpoint(24.5,0, m_joint), 
+    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
+    new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
     m_intakeSource
   );
 
   //AMP SCORING
   private Command m_hoodWristToAmp = Commands.sequence(
-    new WaitCommand(.4),
-    new HoodWristGoToSetpoint(m_hoodWrist, 6)
+    Commands.waitSeconds(0.4),
+    new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
   );
 
-    private Command m_ampShoot = Commands.parallel(
-    new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT))
-  );
+  private Command m_ampShoot = new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT));
 
   private Command m_goAmp = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, 23), 
-    new JointGoToSetpoint(22,0, m_joint),
+    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
+    new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
     m_hoodWristToAmp
   );
 
@@ -178,13 +193,17 @@ public class RobotContainer {
 
     //m_drive.setDefaultCommand(new DriveTele(m_driverController::getLeftY, m_driverController::getLeftX, m_driverController::getRightX, m_drive));
 
+    // Note that MathUtil.applyDeadband() will automatically scale its return value between -1 and 1
+    // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
+    // Similarly, the +y direction relative to the field is the -x direction relative to the driver
     var m_driveCommand = new RunCommand(
           () -> 
           m_drive.drive(
             -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
             -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
-              -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
-              true, false),
+            -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+            true,
+            false),
           m_drive);
     m_driveCommand.setName("DriveCommand");
 
