@@ -1,5 +1,5 @@
 package frc.robot.Util;
-import static frc.robot.Constants.SwerveModuleConstants.CIRCUMFERENCE;
+// import static frc.robot.Constants.SwerveModuleConstants.CIRCUMFERENCE;
 import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
 import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
 
@@ -7,8 +7,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
+// import com.ctre.phoenix6.controls.VelocityVoltage;
+// import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -28,7 +28,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
+// import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
 public class SwerveModule {
