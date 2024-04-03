@@ -11,25 +11,31 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SuperStructure.SuperStructureState;
 
 public class PathHandler {
     // private static PathHandler instance = new PathHandler();
-    private Tracker tracker = Tracker.getInstance();
-    private Drive drive = Drive.getInstance();
-    private SuperStructure m_superStructure = SuperStructure.getInstance();
+    // private Tracker tracker = Tracker.getInstance();
+    // private Drive drive = Drive.getInstance();
+    // private SuperStructure m_superStructure = SuperStructure.getInstance();
+    private final Drive m_drive;
+    private final Tracker m_tracker;
+    private final SuperStructure m_superStructure;
 
-    private PathHandler(){
+    public PathHandler(Drive drive, Tracker tracker, SuperStructure superStructure) {
+        m_drive = drive;
+        m_tracker = tracker;
+        m_superStructure = superStructure;
         configEvents();
         configAutoBuilder();
     }
 
-    private static PathHandler m_instance = new PathHandler();
+    // private static PathHandler m_instance = new PathHandler();
 
-    public static PathHandler getInstance(){
-        return m_instance;
-    }
+    // public static PathHandler getInstance(){
+    //     return m_instance;
+    // }
 
     public Command getAuto(String fileName){
         return AutoBuilder.buildAuto(fileName);
@@ -48,10 +54,10 @@ public class PathHandler {
 
     public void configAutoBuilder(){
         AutoBuilder.configureHolonomic(
-                tracker::getPose, // Robot pose supplier
-                tracker::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
-                drive::getRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                drive::driveFromChassis, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                m_tracker::getPose, // Robot pose supplier
+                m_tracker::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                m_drive::getRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                m_drive::driveFromChassis, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                         new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
@@ -70,7 +76,7 @@ public class PathHandler {
                     }
                     return false;
                 },
-                drive // Reference to this subsystem to set requirements
+                m_drive // Reference to this subsystem to set requirements
         );
     }
 }

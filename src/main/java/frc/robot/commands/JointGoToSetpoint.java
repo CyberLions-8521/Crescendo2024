@@ -5,9 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Joint;
-import frc.robot.subsystems.SuperStructure;
+// import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Joint.JointState;
-import frc.robot.subsystems.SuperStructure.SuperStructureState;
+// import frc.robot.subsystems.SuperStructure.SuperStructureState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
