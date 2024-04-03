@@ -33,11 +33,11 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
 // import frc.robot.subsystems.Joint.JointState;
-// import frc.robot.subsystems.PathHandler;
-// import frc.robot.subsystems.SuperStructure;
+import frc.robot.subsystems.PathHandler;
+import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Toaster;
 // import frc.robot.subsystems.Toaster.ToasterState;
-// import frc.robot.subsystems.Tracker;
+import frc.robot.subsystems.Tracker;
 import frc.robot.Util.mathProfiles;
 
 public class RobotContainer {
@@ -53,14 +53,18 @@ public class RobotContainer {
   // private final PathHandler m_PathHandler = PathHandler.getInstance();
 
   private final Drive m_drive = new Drive();
-  // private final Tracker m_tracker = new Tracker(m_drive);
   private final Elevator m_elevator = new Elevator();
   private final Hood m_hood = new Hood();
-  private final Toaster m_toaster = new Toaster();
-  private final Joint m_joint = new Joint();
   private final HoodWrist m_hoodWrist = new HoodWrist();
-  // private final SuperStructure m_superStructure = new SuperStructure(m_elevator, m_toaster, m_hoodWrist, m_joint);
-  // private final PathHandler m_PathHandler = new PathHandler(m_drive, m_tracker, m_superStructure);
+  private final Joint m_joint = new Joint();
+  private final Toaster m_toaster = new Toaster();
+
+  // Instantiated because they are configured in their constructor.
+  // Actual implementation given by PathPlanner calls for configuration within Drive subsystem.
+  // This will be done in future codebases.
+  private final Tracker m_tracker = new Tracker(m_drive);
+  private final SuperStructure m_superStructure = new SuperStructure(m_elevator, m_toaster, m_hoodWrist, m_joint);
+  private final PathHandler m_PathHandler = new PathHandler(m_drive, m_tracker, m_superStructure);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>(); 
 
