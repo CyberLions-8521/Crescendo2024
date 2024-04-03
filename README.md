@@ -9,7 +9,7 @@ Much of the original code base borrows code from three different sources
 * Team 7157 Mubotic's 2023-2024 code (courtesy of [Aaron Yoon](https://github.com/awesomeyooner))
 * Team 2710 Jetstream's 2023-2024 code (courtesy of [Kevin Vo](https://github.com/EV3KevinDEV))
 
-If you are studying the Command Based Programming framework for teleop, then the focus of your study should be on the following files in `src/main/java/frc/robot`:
+If you are studying the Command Based Programming framework for teleop, then the focus of your study should be on the following files in `src/main/java/frc/robot`.  Note that in any of the subsystem files, the `switch` statements involving subsystem state can be ignored.  The code has been refactored so that it no longer depends on subsystem states.  As of April 2, 2024, the code has yet to be tested on a physical robot.  The code otherwise compiles and builds without error.
 * `commands/ElevatorGoToSetpoint.java`
 * `commands/HoodWristGoToSetpoint.java`
 * `commands/JointGoToSetpoint.java`
