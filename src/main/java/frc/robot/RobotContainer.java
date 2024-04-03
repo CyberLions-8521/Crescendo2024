@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+// import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants.DriveConstants;
@@ -32,11 +32,11 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
-import frc.robot.subsystems.Joint.JointState;
+// import frc.robot.subsystems.Joint.JointState;
 // import frc.robot.subsystems.PathHandler;
 // import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.Toaster;
-import frc.robot.subsystems.Toaster.ToasterState;
+// import frc.robot.subsystems.Toaster.ToasterState;
 // import frc.robot.subsystems.Tracker;
 import frc.robot.Util.mathProfiles;
 
@@ -66,17 +66,24 @@ public class RobotContainer {
 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_auxController = new CommandXboxController(OperatorConstants.kPartnerControllerPort);
-
-
+  
   //INTAKING
+  // private Command intake = Commands.parallel(
+  //   new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)),
+  //   new RunCommand(() -> m_hood.setSpeed(HoodConstants.kIntakeSpeed))
+  // );
   private Command intake = Commands.parallel(
-    new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)),
-    new RunCommand(() -> m_hood.setSpeed(HoodConstants.kIntakeSpeed))
+    m_toaster.ToasterIntakeCmd(),
+    m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
   );
 
+  // private Command noIntake = Commands.parallel(
+  //   new InstantCommand(() -> m_toaster.setState(ToasterState.OFF)),
+  //   new InstantCommand(() -> m_hood.setSpeed(0))
+  // );
   private Command noIntake = Commands.parallel(
-    new InstantCommand(() -> m_toaster.setState(ToasterState.OFF)),
-    new InstantCommand(() -> m_hood.setSpeed(0))
+    m_toaster.ToasterOffCmd(),
+    m_hood.HoodSetSpeedCmd(0)
   );
 
   //SOURCE
@@ -98,7 +105,7 @@ public class RobotContainer {
     new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
   );
 
-  private Command m_ampShoot = new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT));
+  // private Command m_ampShoot = new RunCommand(() -> m_toaster.setState(ToasterState.AMP_SHOOT));
 
   private Command m_goAmp = Commands.parallel(
     new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
@@ -115,9 +122,9 @@ public class RobotContainer {
   );
 
   //SPEAKER
-  private Command m_speakerShoot = Commands.parallel(
-    new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT))
-  );
+  // private Command m_speakerShoot = Commands.parallel(
+  //   new RunCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT))
+  // );
 
   private Command m_goSideSpeaker = Commands.parallel(
     new JointGoToSetpoint(32, 0, m_joint),
@@ -130,24 +137,28 @@ public class RobotContainer {
   );
 
   // AUTO SPEAKER SHOOTING
-  private Command autoMiddleSpeakerShootCommand = Commands.sequence(
-    m_goMiddleSpeaker,
-    new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
-    new WaitCommand(3),
-    new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
-  );
+  // private Command autoMiddleSpeakerShootCommand = Commands.sequence(
+  //   m_goMiddleSpeaker,
+  //   new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
+  //   new WaitCommand(3),
+  //   new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
+  // );
 
-  private Command autoSideSpeakerShootCommand = Commands.sequence(
-    m_goSideSpeaker,
-    new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
-    new WaitCommand(3),
-    new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
-  );
+  private Command autoMiddleSpeakerShootCommand = m_goMiddleSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
+
+  // private Command autoSideSpeakerShootCommand = Commands.sequence(
+  //   m_goSideSpeaker,
+  //   new InstantCommand(() -> m_toaster.setState(ToasterState.SPEAKER_SHOOT)),
+  //   new WaitCommand(3),
+  //   new InstantCommand(() -> m_toaster.setState(ToasterState.OFF))
+  // );
+
+  private Command autoSideSpeakerShootCommand = m_goSideSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
 
   //TURN OFF TOASTER
-  private Command turnOffToaster = Commands.parallel(
-    new RunCommand(() -> m_toaster.setState(ToasterState.OFF))
-  );
+  // private Command turnOffToaster = Commands.parallel(
+  //   new RunCommand(() -> m_toaster.setState(ToasterState.OFF))
+  // );
 /* 
   //SEQUENTIAL COMMANDS
   private Command m_slowGoSource = Commands.parallel(
@@ -163,9 +174,12 @@ public class RobotContainer {
   );
 */
   public void logData(){
-    SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
-    SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
-    SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(() -> m_hoodWrist.reZero()));
+    // SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
+    // SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
+    // SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(() -> m_hoodWrist.reZero()));
+    SmartDashboard.putData("Reset Elevator", new InstantCommand(m_elevator::resetEncoder));
+    SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero));
+    SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(m_hoodWrist::reZero));
   }
  
   //////////
@@ -173,8 +187,10 @@ public class RobotContainer {
     configureBindings();
     NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
     NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
-    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(() -> m_drive.resetHeading()));
-    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(() -> m_drive.rezeroTurnMotors()));
+    // NamedCommands.registerCommand("Reset Gyro", new InstantCommand(() -> m_drive.resetHeading()));
+    // NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(() -> m_drive.rezeroTurnMotors()));
+    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading));
+    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors));
     NamedCommands.registerCommand("down", m_zero);
 
     m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
@@ -211,14 +227,21 @@ public class RobotContainer {
       // The left stick controls translation of the robot.
       // Turning is controlled by the X axis of the right stick.
       m_driveCommand
-      );
+    );
+
+    m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
+    m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
+    m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0)));
+    m_joint.setDefaultCommand(m_joint.JointSetJogCmd(0.000806452 * m_joint.getPosition()));
 }
 
   private void configureBindings() {
     logData();
     //DRIVEBASE
-    m_driverController.button(1).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
-    m_driverController.button(2).onTrue(new InstantCommand(m_drive::resetHeading));
+    // m_driverController.button(1).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
+    // m_driverController.button(2).onTrue(new InstantCommand(m_drive::resetHeading));
+    m_driverController.a().onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
+    m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading));
 
     //HOOD WRIST
     // m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));
@@ -233,34 +256,45 @@ public class RobotContainer {
     // m_driverController.button(8).onFalse(new RunCommand(() -> m_elevator.setState(ElevatorState.OFF)));
 
     //JOINT
-    m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
-    m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
-    m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
-    m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
+    // m_driverController.button(7).whileTrue(new RunCommand(() -> m_joint.setJog(0.15)));
+    m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
+    // m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
+    // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
+    m_driverController.start().whileTrue(m_joint.JointSetJogCmd(0.15));
+    // m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
       
     ///////////////////
-    m_auxController.button(5).whileTrue(m_ampShoot);
-    m_auxController.button(5).onFalse(turnOffToaster);
+    // m_auxController.button(5).whileTrue(m_ampShoot);
+    m_auxController.leftBumper().whileTrue(m_toaster.ToasterAmpShootCmd());
+    // m_auxController.button(5).onFalse(turnOffToaster);
 
-    m_auxController.button(6).whileTrue(m_speakerShoot);
-    m_auxController.button(6).onFalse(turnOffToaster);
+    // m_auxController.button(6).whileTrue(m_speakerShoot);
+    m_auxController.rightBumper().whileTrue(m_toaster.ToasterSpeakerShootCmd());
+    // m_auxController.button(6).onFalse(turnOffToaster);
 
-    m_auxController.button(7).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)).alongWith(
-    new RunCommand(() -> m_hood.setSpeed(-0.8))));
-    m_auxController.button(7).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)).alongWith(
-    new RunCommand(() -> m_hood.setSpeed(0))));
+    // m_auxController.button(7).whileTrue(new RunCommand(() -> m_toaster.setState(ToasterState.INTAKE)).alongWith(
+    // new RunCommand(() -> m_hood.setSpeed(-0.8))));
+    m_auxController.back().whileTrue(
+      m_toaster.ToasterIntakeCmd()
+      .alongWith(m_hood.HoodSetSpeedCmd(-0.8)));
+    // m_auxController.button(7).onFalse(new RunCommand(() -> m_toaster.setState(ToasterState.OFF)).alongWith(
+    // new RunCommand(() -> m_hood.setSpeed(0))));
 
-    m_auxController.button(8).whileTrue( new RunCommand(() -> m_hood.setSpeed(0.8)));
-    m_auxController.button(8).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
+    // m_auxController.button(8).whileTrue( new RunCommand(() -> m_hood.setSpeed(0.8)));
+    m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8));
+    // m_auxController.button(8).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
 
     m_goSource.setName("GoToSource");
     m_zero.setName("Zero");
     m_goAmp.setName("GoAmp");
-    m_auxController.button(1).onTrue(m_goSource);
-    m_auxController.button(2).onTrue(m_zero);
-    m_auxController.button(3).onTrue(m_goAmp);
-    // m_auxController.button(4).onTrue(m_goSpeaker);
-    m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
+    // m_auxController.button(1).onTrue(m_goSource);
+    // m_auxController.button(2).onTrue(m_zero);
+    // m_auxController.button(3).onTrue(m_goAmp);
+    m_auxController.a().onTrue(m_goSource);
+    m_auxController.b().onTrue(m_zero);
+    m_auxController.x().onTrue(m_goAmp);
+    // m_auxController.button(4).onTrue(m_goSpeaker); // originally commented out
+    m_auxController.y().onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
       JointGoToSetpoint(29,0, m_joint)));
     //m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).andThen(new JointGoToSetpoint(29,0, m_joint)));
 
