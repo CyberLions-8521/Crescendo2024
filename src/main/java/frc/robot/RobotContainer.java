@@ -212,6 +212,7 @@ public class RobotContainer {
     // Note that MathUtil.applyDeadband() will automatically scale its return value between -1 and 1
     // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
     // Similarly, the +y direction relative to the field is the -x direction relative to the driver
+    // Hence, we pass leftY, leftX in that order to drive, when drive asks for xSpeed, ySpeed (in that order)
     var m_driveCommand = new RunCommand(
           () -> 
           m_drive.drive(
