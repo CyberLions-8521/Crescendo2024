@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kPartnerControllerPort = 2;
   }
   public static class MotorConstants {  
     //INDEXER
@@ -43,6 +44,7 @@ public final class Constants {
   }
   public static class HoodConstants{
     public static final double HOOD_SPEED = 0.7;
+    public static final double kIntakeSpeed = -0.8;
   }
 
   public static class ElevatorConstants{
@@ -62,6 +64,9 @@ public final class Constants {
     public static final double SOURCE_POSITION = 0;
     public static final double TRAP_POSITION = 0;
     public static final double GROUND_INTAKE_POSITION = 0;
+
+    public static final int kAmpSetpoint = 23;
+    public static final int kSourceSetpoint = 14;
     
   }
   public static class ToasterConstants{
@@ -93,12 +98,18 @@ public final class Constants {
     public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
     public static final double GEAR_RATIO = 179.5;
+
+    public static final int kAmpSetpoint = 22;
+    public static final double kSourceSetpoint = 24.5;
   }
 
   public static class HoodWristConstants{
     public static final double HOOD_WRIST_KP = 0.6;
     public static final double HOOD_WRIST_KD = 0.05;
     public static final double HOOD_WRIST_TOLERANCE = 0.05;
+    
+    public static final int kAmpSetpoint = 6;
+    public static final int kSourceSetpoint = 10;
   }
 
   public static class DriveConstants {
