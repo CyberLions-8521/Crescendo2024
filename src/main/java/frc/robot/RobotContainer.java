@@ -265,7 +265,7 @@ public class RobotContainer {
     m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
     // m_driverController.button(7).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
     // m_driverController.button(8).whileTrue(new RunCommand(() -> m_joint.setJog(-0.15)));
-    m_driverController.start().whileTrue(m_joint.JointSetJogCmd(0.15));
+    m_driverController.start().whileTrue(m_joint.JointSetJogCmd(-0.15));
     // m_driverController.button(8).onFalse(new RunCommand(() -> m_joint.setState(JointState.OFF)));
       
     ///////////////////
