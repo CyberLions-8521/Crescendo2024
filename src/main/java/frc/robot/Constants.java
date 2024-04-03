@@ -71,7 +71,7 @@ public final class Constants {
   }
   public static class ToasterConstants{
     //WAIT TIME
-    public static final double waitTime = 0.75;
+    public static final double waitTime = 0.75; // in seconds
 
     //INTAKE
     public static final double intakeSpeed = -0.25;
@@ -84,6 +84,8 @@ public final class Constants {
     //AMP
     public static final double AmpShooterSpeed = 0.7;
     public static final double AmpHolderSpeed = 0.5;
+
+    public static final int kShootingSpeed = 5000;  // in rpm?
   }
   
   public static class JointConstants{
