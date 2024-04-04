@@ -33,7 +33,7 @@ The partner controller had the following actions
 * Button Right Bumper - turn on motors of shooter to shoot into the SPEAKER
 * Button Back - intake
 * Button Start - outtake on the rollers
-* Button A - raise, extend, and flip robot subsystems into position for the SOURCE
+* Button A - raise, extend, and flip robot subsystems into position for the SOURCE and turn on necessary motors to intake NOTES
 * Button B - lower, retract, and flip robot subsystems back down to default positions
 * Button X - raise, extend, and flip robot subsystems into position for the AMP
 * Button Y - raise, extend, and flip robot subsystems for something
