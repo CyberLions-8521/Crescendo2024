@@ -150,6 +150,7 @@ public final class Constants {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
+    // In meters
     private static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
     private static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
 
