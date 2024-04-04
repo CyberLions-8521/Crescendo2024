@@ -36,12 +36,12 @@ public final class Constants {
   }
 
   //WRIST CONSTANTS
-  public static class WristConstants{
-    public static final double WRIST_KP = 0;
-    public static final double WRIST_KD = 0;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-  }
+  // public static class WristConstants{
+  //   public static final double WRIST_KP = 0;
+  //   public static final double WRIST_KD = 0;
+  //   public static final double MAX_ACCELERATION = 0;
+  //   public static final double MAX_VELOCITY = 0;
+  // }
   public static class HoodConstants{
     public static final double HOOD_SPEED = 0.7;
     public static final double kIntakeSpeed = -0.8;
@@ -59,11 +59,11 @@ public final class Constants {
     public static final double GEAR_RATIO = 13;
 
     public static final double MAX_POSITION = 26;
-    public static final double AMP_POSITION = 0;
-    public static final double SPEAKER_POSITION = 0;
-    public static final double SOURCE_POSITION = 0;
-    public static final double TRAP_POSITION = 0;
-    public static final double GROUND_INTAKE_POSITION = 0;
+    // public static final double AMP_POSITION = 0;
+    // public static final double SPEAKER_POSITION = 0;
+    // public static final double SOURCE_POSITION = 0;
+    // public static final double TRAP_POSITION = 0;
+    // public static final double GROUND_INTAKE_POSITION = 0;
 
     public static final int kAmpSetpoint = 23;
     public static final int kSourceSetpoint = 14;
@@ -96,13 +96,13 @@ public final class Constants {
   public static class JointConstants{
     public static final double JOINT_KP = 0.12;
     public static final double JOINT_KD = 0.025;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_VELOCITY = 0;
-    public static final Rotation2d AMP_POSITION = Rotation2d.fromRotations(0);
-    public static final Rotation2d SPEAKER_POSITION = Rotation2d.fromRotations(0);
-    public static final Rotation2d SOURCE_POSITION = Rotation2d.fromRotations(0);
-    public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
-    public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
+    // public static final double MAX_ACCELERATION = 0;
+    // public static final double MAX_VELOCITY = 0;
+    // public static final Rotation2d AMP_POSITION = Rotation2d.fromRotations(0);
+    // public static final Rotation2d SPEAKER_POSITION = Rotation2d.fromRotations(0);
+    // public static final Rotation2d SOURCE_POSITION = Rotation2d.fromRotations(0);
+    // public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
+    // public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
     public static final double GEAR_RATIO = 179.5;
 
@@ -147,23 +147,35 @@ public final class Constants {
     public static final int TOP_RIGHT_TURN_PORT = 6;
     public static final int TOP_LEFT_TURN_PORT = 11;
 
-    public static final double WHEEL_DIAMETER_METERS = 0.1016;
+    private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    public static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
-    public static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
+    private static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
+    private static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
 
-    public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
-    public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
+    // public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
+    // public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
+    // public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
+    // public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
+
+    // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+    //   new Translation2d(WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
+    //   new Translation2d(WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2),
+    //   new Translation2d(-WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
+    //   new Translation2d(-WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2));
+    
+    private static final double kWheelbaseWidthHalf = WHEELBASE_WIDTH / 2.0;
+    private static final double kWheelbaseLengthHalf = WHEELBASE_LENGTH / 2.0;
+    private static final Translation2d kBotRightModule = new Translation2d(-kWheelbaseWidthHalf,-kWheelbaseLengthHalf);
+    private static final Translation2d kBotLeftModule  = new Translation2d(-kWheelbaseWidthHalf, kWheelbaseLengthHalf);
+    private static final Translation2d kTopRightModule = new Translation2d(kWheelbaseWidthHalf, -kWheelbaseLengthHalf);
+    private static final Translation2d kTopLeftModule  = new Translation2d(kWheelbaseWidthHalf,  kWheelbaseLengthHalf);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-      new Translation2d(WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
-      new Translation2d(WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2),
-      new Translation2d(-WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
-      new Translation2d(-WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2));
-
+      kTopLeftModule,
+      kTopRightModule,
+      kBotLeftModule,
+      kBotRightModule);
 
     public static final double TURN_GEAR_RATIO = 150.0/7;//12.8;
     public static final double DRIVE_GEAR_RATIO = 5.9028;//8.14;//6.12;//6.75;
@@ -183,8 +195,8 @@ public final class Constants {
     public static final double DRIVE_KD = 0.001;
     public static final double TURN_KP = 0.5;
 
-    public static final double LOWER_BOUND = 0.0;
-    public static final double UPPER_BOUND = 360.0;
+    // public static final double LOWER_BOUND = 0.0;
+    // public static final double UPPER_BOUND = 360.0;
   }
 
 }
