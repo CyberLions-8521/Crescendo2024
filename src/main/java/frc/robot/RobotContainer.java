@@ -216,9 +216,9 @@ public class RobotContainer {
     // SmartDashboard.putData("Reset Elevator", new InstantCommand(() -> m_elevator.resetEncoder()));
     // SmartDashboard.putData("Reset Joint", new InstantCommand(() -> m_joint.rezero()));
     // SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(() -> m_hoodWrist.reZero()));
-    SmartDashboard.putData("Reset Elevator", new InstantCommand(m_elevator::resetEncoder));
-    SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero));
-    SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(m_hoodWrist::reZero));
+    SmartDashboard.putData("Reset Elevator", new InstantCommand(m_elevator::resetEncoder, m_elevator));
+    SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero, m_joint));
+    SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(m_hoodWrist::reZero, m_hoodWrist));
   }
  
   //////////
@@ -228,8 +228,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
     // NamedCommands.registerCommand("Reset Gyro", new InstantCommand(() -> m_drive.resetHeading()));
     // NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(() -> m_drive.rezeroTurnMotors()));
-    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading));
-    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors));
+    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading, m_drive));
+    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
     NamedCommands.registerCommand("down", m_zero);
 
     m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
@@ -271,8 +271,9 @@ public class RobotContainer {
 
     m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
     m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
-    m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0)));
-    m_joint.setDefaultCommand(m_joint.JointSetJogCmd(0.000806452 * m_joint.getPosition()));
+    m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0), m_hoodWrist));
+    m_joint.setDefaultCommand(new RunCommand(() -> m_joint.setOff(), m_joint));
+    // m_joint.setDefaultCommand(m_joint.JointSetJogCmd(0.000806452 * m_joint.getPosition()));
 }
 
   private void configureBindings() {
@@ -280,8 +281,8 @@ public class RobotContainer {
     //DRIVEBASE
     // m_driverController.button(1).onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
     // m_driverController.button(2).onTrue(new InstantCommand(m_drive::resetHeading));
-    m_driverController.a().onTrue(new InstantCommand(m_drive::rezeroTurnMotors));
-    m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading));
+    m_driverController.a().onTrue(new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
+    m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading, m_drive));
 
     //HOOD WRIST
     // m_driverController.button(3).whileTrue(new RunCommand(() -> m_hoodWrist.setJogValue(0.2)));
