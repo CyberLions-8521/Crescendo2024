@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import static edu.wpi.first.units.Units.*;
 
 public final class Constants {
   public static class OperatorConstants {
@@ -150,9 +151,9 @@ public final class Constants {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
 
-    // In meters
-    private static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
-    private static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
+    // In meters - this is 24 inches
+    // private static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
+    // private static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
 
     // public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
     // public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
@@ -165,12 +166,14 @@ public final class Constants {
     //   new Translation2d(-WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
     //   new Translation2d(-WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2));
     
-    private static final double kWheelbaseWidthHalf = WHEELBASE_WIDTH / 2.0;
-    private static final double kWheelbaseLengthHalf = WHEELBASE_LENGTH / 2.0;
-    private static final Translation2d kBotRightModule = new Translation2d(-kWheelbaseWidthHalf,-kWheelbaseLengthHalf);
-    private static final Translation2d kBotLeftModule  = new Translation2d(-kWheelbaseWidthHalf, kWheelbaseLengthHalf);
-    private static final Translation2d kTopRightModule = new Translation2d(kWheelbaseWidthHalf, -kWheelbaseLengthHalf);
-    private static final Translation2d kTopLeftModule  = new Translation2d(kWheelbaseWidthHalf,  kWheelbaseLengthHalf);
+    // Drivebase measures 29x29 inches, but the swerve modules sit 12 inches in either direction from the center of the robot frame
+    private static final double kWheelbaseSizeHalf = Inches.of(12).in(Meters);
+    // private static final double kWheelbaseWidthHalf = WHEELBASE_WIDTH / 2.0;
+    // private static final double kWheelbaseLengthHalf = WHEELBASE_LENGTH / 2.0;
+    private static final Translation2d kBotRightModule = new Translation2d(-kWheelbaseSizeHalf,-kWheelbaseSizeHalf);
+    private static final Translation2d kBotLeftModule  = new Translation2d(-kWheelbaseSizeHalf, kWheelbaseSizeHalf);
+    private static final Translation2d kTopRightModule = new Translation2d(kWheelbaseSizeHalf, -kWheelbaseSizeHalf);
+    private static final Translation2d kTopLeftModule  = new Translation2d(kWheelbaseSizeHalf,  kWheelbaseSizeHalf);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       kTopLeftModule,
