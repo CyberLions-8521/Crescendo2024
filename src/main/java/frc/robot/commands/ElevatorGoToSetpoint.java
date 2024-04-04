@@ -49,7 +49,8 @@ public class ElevatorGoToSetpoint extends Command {
   @Override
   public void end(boolean interrupted) {
     // m_elevator.setState(ElevatorState.OFF);
-    m_elevator.set(0.00348837 * m_elevator.getElevatorHeight() * 0.3);
+    // m_elevator.set(0.00348837 * m_elevator.getElevatorHeight() * 0.3);
+    m_elevator.setWithTuneValue();
   }
 
   // Returns true when the command should end.

@@ -46,7 +46,7 @@ public class JointGoToSetpoint extends Command {
   @Override
   public void end(boolean interrupted) {
     // m_joint.setState(JointState.OFF);
-    m_joint.set(0.000806452 * m_joint.getPosition());
+    m_joint.setOff();
     //_joint.refreshSetpoint();
   }
 
