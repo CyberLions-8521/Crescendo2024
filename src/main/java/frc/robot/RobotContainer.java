@@ -116,8 +116,8 @@ public class RobotContainer {
       Commands.waitSeconds(0.5),
       new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
       Commands.parallel(
-        m_toaster.ToasterOffCmd(),
-        m_hood.HoodSetSpeedCmd(0)
+        m_toaster.ToasterIntakeCmd(),
+        m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
       )
     )
   );
@@ -138,6 +138,11 @@ public class RobotContainer {
   // );
 
   // Vu implementation in a single Command to avoid accidental command reuse in command compositions
+  /**
+   * In order to score into the amp, we perform the following commands
+   * (1) Lift the arm into position, and extend the elevator to the proper length
+   * (2) Wait 0.4 seconds before flipping the rollers into position
+   */
   private Command m_goAmp = Commands.parallel(
     new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
     new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
