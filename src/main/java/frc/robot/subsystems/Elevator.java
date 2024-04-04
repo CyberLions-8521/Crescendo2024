@@ -52,7 +52,7 @@ public class Elevator extends SubsystemBase {
   //ENCODER OBJECT
   private RelativeEncoder m_elevatorEncoder = m_elevatorMaster.getEncoder();
 
-  private double jogValue;
+  // private double jogValue;
 
   private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(200, 100));
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
@@ -81,31 +81,36 @@ public class Elevator extends SubsystemBase {
     goToSetpoint();
   }
 
-  public double getGoal(){
-    return m_goal.position;
-  }
+  // public double getGoal(){
+  //   return m_goal.position;
+  // }
 
-  public double getPosition(){
+  private double getPosition() {
     return m_elevatorEncoder.getPosition();
   }
 
   //SET MOTOR OUTPUT METHODS
-  public void set(double value){
+  private void set(double value){
     m_elevatorMaster.set(value);
   }
 
-  public void setJog(double jogValue){
-    this.jogValue = jogValue;
-    // setState(ElevatorState.JOG);
-    set(jogValue);
+  // Added by Vu for encapsulation in ElevatorGoToSetpointCommand
+  public void setWithTuneValue() {
+    set(getPosition() * ElevatorConstants.kZeroSetpointMultiplier);
   }
 
-  public double getJog(){
-    return jogValue;
-  }
+  // public void setJog(double jogValue){
+  //   this.jogValue = jogValue;
+  //   // setState(ElevatorState.JOG);
+  //   set(jogValue);
+  // }
+
+  // public double getJog(){
+  //   return jogValue;
+  // }
 
   //SETPOINT METHODS
-  public void goToSetpoint(){
+  private void goToSetpoint(){
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     double m_output = MathUtil.clamp(m_setpoint.position, 0, 26);
     m_elevatorController.setReference(m_output, ControlType.kPosition);
@@ -120,24 +125,25 @@ public class Elevator extends SubsystemBase {
   }
 
   //GETTER METHODS
-  public double getElevatorHeight(){
-    return m_elevatorEncoder.getPosition();
-  }
+  // public double getElevatorHeight(){
+  //   return m_elevatorEncoder.getPosition();
+  // }
   //RESET/ZERO METHODS
-  public void resetEncoder(){
+  public void resetEncoder() {
     m_elevatorEncoder.setPosition(0);
   }
 
-  public void zero(){
-    if(m_elevatorEncoder.getPosition() > 0) {
-      set(-0.2);
-    }
-    else {
-      // setState(ElevatorState.OFF);
-      set(0.00348837 * getElevatorHeight() * 0.3);
-      resetEncoder();
-    }
-  }
+  // public void zero() {
+  //   if(getPosition() > 0) {
+  //     set(-0.2);
+  //   }
+  //   else {
+  //     // setState(ElevatorState.OFF);
+  //     // set(0.00348837 * getPosition() * 0.3);
+  //     set(getPosition() * ElevatorConstants.kZeroSetpointMultiplier);
+  //     resetEncoder();
+  //   }
+  // }
 
   @Override
   public void periodic() {
@@ -160,7 +166,7 @@ public class Elevator extends SubsystemBase {
 
   public void logData(){
     // SmartDashboard.putString("Elevator State", m_state.toString());
-    SmartDashboard.putNumber("Elevator Position", getElevatorHeight());
+    SmartDashboard.putNumber("Elevator Position", getPosition());
     SmartDashboard.putNumber("Elevator output", m_elevatorMaster.getAppliedOutput());
     SmartDashboard.putNumber("Elevator goal position", m_goal.position);
     SmartDashboard.putNumber("Elevator setpoint position", m_setpoint.position);   

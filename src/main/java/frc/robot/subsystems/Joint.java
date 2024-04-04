@@ -64,7 +64,7 @@ public class Joint extends SubsystemBase {
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
   
   //JOG VALUE & SETPOINT
-  private double jogValue = 0;
+  // private double jogValue = 0;
   private double m_output = 0;
 
   //-----------------------
@@ -89,23 +89,28 @@ public class Joint extends SubsystemBase {
     goToSetpoint();
   }
 
-  public double getGoal() {
-    return m_goal.position;
-  }
+  // public double getGoal() {
+  //   return m_goal.position;
+  // }
 
   //SET MOTOR OUTPUT METHODS
-  public void set(double value) {
+  private void set(double value) {
     m_jointLeft.set(value);
   }
 
-  public void setJog(double jog) {
-    jogValue = jog;
-    // setState(JointState.JOG);
-    set(jogValue);
+  // Vu: added for encapsulation purposes for use in JointGoToSetpoint on end()
+  public void setOff() {
+    set(getPosition() * JointConstants.kOffTuneValue);
   }
 
+  // public void setJog(double jog) {
+  //   jogValue = jog;
+  //   // setState(JointState.JOG);
+  //   set(jogValue);
+  // }
+
   //SETPOINT METHODS
-  public void goToSetpoint() {
+  private void goToSetpoint() {
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     m_output = MathUtil.clamp(m_setpoint.position, 0, 33);
     m_jointControllerLeft.setReference(m_output, ControlType.kPosition);
@@ -119,13 +124,13 @@ public class Joint extends SubsystemBase {
     m_setpoint = new TrapezoidProfile.State(getPosition(), m_jointEncoderLeft.getVelocity());
   }
 
-  public double getPosition() {
-    return (m_jointEncoderLeft.getPosition());
+  private double getPosition() {
+    return m_jointEncoderLeft.getPosition();
   }
 
-  public boolean getFollower() {
-    return (m_jointRight.isFollower());
-  }
+  // private boolean getFollower() {
+  //   return (m_jointRight.isFollower());
+  // }
 
   public void zero() {
     if(getPosition() > 0){
@@ -166,7 +171,7 @@ public class Joint extends SubsystemBase {
     return this.runOnce(() -> set(jogValue));
   }
 
-  public void logData(){
+  private void logData(){
     // SmartDashboard.putString("Joint State", getState().toString());
 
     SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
@@ -183,7 +188,7 @@ public class Joint extends SubsystemBase {
   }
 
 
-  public void configMotors(){
+  private void configMotors(){
 
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();

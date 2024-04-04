@@ -60,7 +60,7 @@ public class Toaster extends SubsystemBase {
   // }
 
   //SET MOTOR OUTPUT METHODS
-  public void setSpeed(double intakeValue, double holderValue){
+  private void setSpeed(double intakeValue, double holderValue){
     // m_toasterRight.set(intakeValue);
     // m_toasterLeft.set(intakeValue);
     m_holder.set(holderValue);
@@ -68,7 +68,7 @@ public class Toaster extends SubsystemBase {
     // setHolderSpeed(holderValue);
   }
 
-  public void setShooterSpeed(double intakeValue){
+  private void setShooterSpeed(double intakeValue){
     m_toasterRight.set(intakeValue);
     m_toasterLeft.set(intakeValue);
   }
@@ -77,12 +77,12 @@ public class Toaster extends SubsystemBase {
   //   m_holder.set(holderValue);
   // }
 
-  public double getRPM(){
+  private double getRPM(){
     return m_toasterEncoder.getVelocity();
   }
 
-  public boolean atShootingSpeed(){
-    return (getRPM() >= 5000);
+  private boolean atShootingSpeed(){
+    return (getRPM() >= ToasterConstants.kShootingSpeed);
   }
 
   @Override
@@ -142,7 +142,7 @@ public class Toaster extends SubsystemBase {
 
 
 
-  public void logData(){
+  private void logData(){
     // SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
     SmartDashboard.putNumber("Timer", m_timer.get());
@@ -151,7 +151,7 @@ public class Toaster extends SubsystemBase {
     SmartDashboard.putBoolean("Shooting Correct Speed", atShootingSpeed());
   }
 
-  public void configMotors(){
+  private void configMotors(){
     
     //RESTORE FACTORY DEFAULT
     m_toasterRight.restoreFactoryDefaults();

@@ -54,7 +54,7 @@ public class Hood extends SubsystemBase {
   // }
 
   //SET MOTOR OUTPUT
-  public void setSpeed(double value){
+  private void setSpeed(double value){
     m_hoodMaster.set(value);
   }
 
@@ -74,12 +74,12 @@ public class Hood extends SubsystemBase {
     return this.run(() -> setSpeed(speed));
   }
 
-  public void logData(){
+  private void logData(){
     // SmartDashboard.putString("hood State", getState().toString());
     SmartDashboard.putNumber("hood motor output", m_hoodMaster.get());
   }
 
-  public void configMotors(){
+  private void configMotors(){
     m_hoodMaster.restoreFactoryDefaults();
     m_hoodMaster.setInverted(false);
     m_hoodMaster.setIdleMode(IdleMode.kCoast);
