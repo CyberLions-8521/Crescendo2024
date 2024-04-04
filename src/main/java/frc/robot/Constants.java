@@ -67,6 +67,11 @@ public final class Constants {
 
     public static final int kAmpSetpoint = 23;
     public static final int kSourceSetpoint = 14;
+
+    // TODO: Find out what these numbers are and update names accordingly
+    private static final double kZeroTuneValue = 0.00348837;
+    private static final double kZeroTuneMultiplier = 0.3;
+    public static final double kZeroSetpointMultiplier = kZeroTuneValue * kZeroTuneMultiplier;
     
   }
   public static class ToasterConstants{
@@ -103,6 +108,9 @@ public final class Constants {
 
     public static final int kAmpSetpoint = 22;
     public static final double kSourceSetpoint = 24.5;
+
+    // TODO: Find out what this value is in Joint.java and rename it properly
+    public static final double kOffTuneValue = 0.000806452;
   }
 
   public static class HoodWristConstants{
