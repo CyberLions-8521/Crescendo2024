@@ -26,10 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.SwerveModuleConstants.*;
 // import com.pathplanner.lib.auto.AutoBuilder;
-
-import frc.robot.Constants;
-
-//import frc.robot.Util.PPSwerveControllerCommand;
+// import frc.robot.Util.PPSwerveControllerCommand;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Util.SwerveModule;
@@ -145,7 +142,7 @@ public class Drive extends SubsystemBase {
     double rotDelivered = m_currentRotation * DriveConstants.MAX_ANGULAR_VELOCITY;
     
     var swerveModuleStates =
-    Constants.SwerveModuleConstants.kDriveKinematics.toSwerveModuleStates(
+    kDriveKinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))

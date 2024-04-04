@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.*;
+import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.HoodWristConstants;
 // import frc.robot.subsystems.Joint.JointState;
 
 public class HoodWrist extends SubsystemBase {
@@ -203,8 +203,8 @@ public class HoodWrist extends SubsystemBase {
     m_hoodWristMaster.setInverted(false);
     m_hoodWristMaster.setIdleMode(IdleMode.kBrake);
 
-    m_hoodController.setP(Constants.HoodWristConstants.HOOD_WRIST_KP);
-    m_hoodController.setD(Constants.HoodWristConstants.HOOD_WRIST_KD);
+    m_hoodController.setP(HoodWristConstants.HOOD_WRIST_KP);
+    m_hoodController.setD(HoodWristConstants.HOOD_WRIST_KD);
     
 
     m_hoodWristMaster.burnFlash();

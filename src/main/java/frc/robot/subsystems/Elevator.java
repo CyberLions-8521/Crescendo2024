@@ -17,7 +17,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.MotorConstants;
 // import frc.robot.subsystems.Joint.JointState;
@@ -193,8 +192,8 @@ public class Elevator extends SubsystemBase {
     //SET IDLE MODE
     m_elevatorMaster.setIdleMode(IdleMode.kBrake);
 
-    m_elevatorController.setP(Constants.ElevatorConstants.ELEVATOR_KP);
-    m_elevatorController.setD(Constants.ElevatorConstants.ELEVATOR_KD);
+    m_elevatorController.setP(ElevatorConstants.ELEVATOR_KP);
+    m_elevatorController.setD(ElevatorConstants.ELEVATOR_KD);
 
     m_elevatorMaster.burnFlash();
   }

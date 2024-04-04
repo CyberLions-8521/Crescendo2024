@@ -1,7 +1,7 @@
 package frc.robot.Util;
 // import static frc.robot.Constants.SwerveModuleConstants.CIRCUMFERENCE;
-import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
-import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
+// import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
+// import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -27,9 +27,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
-// import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SwerveModuleConstants;
+
+import static frc.robot.Constants.SwerveModuleConstants.*;
 
 public class SwerveModule {
      //MOTOR OBJECTS
@@ -103,7 +102,7 @@ public class SwerveModule {
      public void rezeroTurnMotors(){
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * SwerveModuleConstants.TURN_GEAR_RATIO);
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * TURN_GEAR_RATIO);
      }
 
      public void setTurnDegrees(SwerveModuleState desiredTurn){
@@ -137,7 +136,7 @@ public class SwerveModule {
      }
 
      public Rotation2d getTurnAngle(){
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / Constants.SwerveModuleConstants.TURN_GEAR_RATIO);
+          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / TURN_GEAR_RATIO);
      }
      public double getDrivePosition(){
          //return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
@@ -179,9 +178,9 @@ public class SwerveModule {
           TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
           
           //CONFIGURE PID VALUES
-          m_driveControllerConfig.Slot0.kP = SwerveModuleConstants.DRIVE_KP;
-          m_driveControllerConfig.Slot0.kD = SwerveModuleConstants.DRIVE_KD;
-          m_driveControllerConfig.Slot0.kV = SwerveModuleConstants.DRIVE_KFF;
+          m_driveControllerConfig.Slot0.kP = DRIVE_KP;
+          m_driveControllerConfig.Slot0.kD = DRIVE_KD;
+          m_driveControllerConfig.Slot0.kV = DRIVE_KFF;
 
           //NEW LINE
           m_driveControllerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -190,7 +189,7 @@ public class SwerveModule {
           //INVERSION
           m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
-          m_driveControllerConfig.Feedback.SensorToMechanismRatio = Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO / Constants.SwerveModuleConstants.CIRCUMFERENCE;
+          m_driveControllerConfig.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO / CIRCUMFERENCE;
 
           //NEUTRAL MODE
           m_driveControllerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

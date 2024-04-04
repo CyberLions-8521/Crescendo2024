@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.*;
+import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.ToasterConstants;
 
 public class Toaster extends SubsystemBase {
   
