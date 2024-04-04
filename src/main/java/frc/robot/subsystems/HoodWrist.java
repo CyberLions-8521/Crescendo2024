@@ -32,18 +32,18 @@ public class HoodWrist extends SubsystemBase {
   }
 
   //STATES
-  public enum HoodWristState{
-    OFF,
-    POSITION,
-    JOG,
-    ZERO
-  }
+  // public enum HoodWristState{
+  //   OFF,
+  //   POSITION,
+  //   JOG,
+  //   ZERO
+  // }
   
   //INSTANCE
   // private static HoodWrist m_instance = new HoodWrist();
 
   //STATE
-  private HoodWristState m_state = HoodWristState.OFF;
+  // private HoodWristState m_state = HoodWristState.OFF;
 
   //SETPOINT
   private double setpoint;
@@ -74,13 +74,13 @@ public class HoodWrist extends SubsystemBase {
   // }
 
   //STATE METHODS
-  public void setState(HoodWristState m_state){
-    this.m_state = m_state;
-  }
+  // public void setState(HoodWristState m_state){
+  //   this.m_state = m_state;
+  // }
 
-  public HoodWristState getState(){
-    return m_state;
-  }
+  // public HoodWristState getState(){
+  //   return m_state;
+  // }
 
   public double getPosition() {
     return m_hoodEncoder.getPosition();
@@ -105,10 +105,10 @@ public class HoodWrist extends SubsystemBase {
     return jogValue;
   }
 
-  public void setJogValue(double jogValue){
-    this.jogValue = jogValue;
-    setState(HoodWristState.JOG);
-  }
+  // public void setJogValue(double jogValue){
+  //   this.jogValue = jogValue;
+  //   setState(HoodWristState.JOG);
+  // }
 
   //SETPOINT METHODS
   public void goToSetpoint() {
@@ -116,10 +116,10 @@ public class HoodWrist extends SubsystemBase {
     m_hoodController.setReference(m_setpoint.position, ControlType.kPosition);
   }
 
-  public void setSetpoint(double setpoint) {
-    this.setpoint = setpoint;
-    setState(HoodWristState.POSITION);
-  }
+  // public void setSetpoint(double setpoint) {
+  //   this.setpoint = setpoint;
+  //   setState(HoodWristState.POSITION);
+  // }
 
   public double getSetpoint() {
     return setpoint;
@@ -165,25 +165,25 @@ public class HoodWrist extends SubsystemBase {
   
   @Override
   public void periodic() {
-    switch(m_state){
-      case OFF:
-        setSpeed(0);
-        break;
-      case JOG:
-        setSpeed(jogValue);
-        break;
-      case POSITION:
-        goToSetpoint();
-        break;
-      case ZERO:
-        zero();
-        break;
-    }     
+    // switch(m_state){
+    //   case OFF:
+    //     setSpeed(0);
+    //     break;
+    //   case JOG:
+    //     setSpeed(jogValue);
+    //     break;
+    //   case POSITION:
+    //     goToSetpoint();
+    //     break;
+    //   case ZERO:
+    //     zero();
+    //     break;
+    // }     
     logData();
   }
 
   public void logData(){
-    SmartDashboard.putString("hood wrist State", getState().toString());
+    // SmartDashboard.putString("hood wrist State", getState().toString());
     SmartDashboard.putNumber("hood wrist Encoder Position", m_hoodEncoder.getPosition());
     SmartDashboard.putNumber("hood wrist at Position", m_setpoint.position);
     SmartDashboard.putNumber("Hood Wrist Setpoint Position", m_setpoint.position);

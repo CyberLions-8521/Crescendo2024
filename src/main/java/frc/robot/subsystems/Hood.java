@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.HoodConstants;
+// import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.MotorConstants;
 // import frc.robot.subsystems.Elevator.ElevatorState;
 
@@ -25,16 +25,16 @@ public class Hood extends SubsystemBase {
   }
  
   //STATES
-  public enum HoodState{
-    OFF,
-    ON
-  }
+  // public enum HoodState{
+  //   OFF,
+  //   ON
+  // }
 
   //INSTANCE
   // private static Hood m_instance = new Hood();
 
   //SET STATE TO OFF
-  private HoodState m_state = HoodState.OFF;
+  // private HoodState m_state = HoodState.OFF;
 
   //MOTOR OBJECT
   private CANSparkMax m_hoodMaster = new CANSparkMax(MotorConstants.HOOD_MOTOR, MotorType.kBrushless);
@@ -45,13 +45,13 @@ public class Hood extends SubsystemBase {
   // }  
 
   //STATE METHODS
-  public void setState(HoodState m_state){
-    this.m_state = m_state;
-  }
+  // public void setState(HoodState m_state){
+  //   this.m_state = m_state;
+  // }
   
-  public HoodState getState(){
-    return m_state;
-  }
+  // public HoodState getState(){
+  //   return m_state;
+  // }
 
   //SET MOTOR OUTPUT
   public void setSpeed(double value){
@@ -60,13 +60,13 @@ public class Hood extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch(m_state){
-      case OFF:
-        break;
-      case ON:
-        setSpeed(HoodConstants.HOOD_SPEED);
-        break;
-    }   
+    // switch(m_state){
+    //   case OFF:
+    //     break;
+    //   case ON:
+    //     setSpeed(HoodConstants.HOOD_SPEED);
+    //     break;
+    // }   
     logData();
   }
 
@@ -75,7 +75,7 @@ public class Hood extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putString("hood State", getState().toString());
+    // SmartDashboard.putString("hood State", getState().toString());
     SmartDashboard.putNumber("hood motor output", m_hoodMaster.get());
   }
 

@@ -25,18 +25,18 @@ public class Toaster extends SubsystemBase {
   }
 
   //STATES
-  public enum ToasterState{
-    OFF,
-    INTAKE,
-    SPEAKER_SHOOT,
-    AMP_SHOOT;
-  }
+  // public enum ToasterState{
+  //   OFF,
+  //   INTAKE,
+  //   SPEAKER_SHOOT,
+  //   AMP_SHOOT;
+  // }
 
   //INSTANCE
   // private static Toaster m_instance = new Toaster();
   
   //SET STATE TO OFF
-  private ToasterState m_state = ToasterState.OFF;
+  // private ToasterState m_state = ToasterState.OFF;
   
   //MOTOR OBJECTS
   private final CANSparkMax m_toasterRight = new CANSparkMax(MotorConstants.TOASTER_RIGHT_MOTOR, MotorType.kBrushless);
@@ -51,13 +51,13 @@ public class Toaster extends SubsystemBase {
   // }
 
   //STATE METHODS
-  public void setState(ToasterState m_state){
-    this.m_state = m_state;
-  }
+  // public void setState(ToasterState m_state){
+  //   this.m_state = m_state;
+  // }
 
-  public ToasterState getState(){
-    return m_state;
-  }
+  // public ToasterState getState(){
+  //   return m_state;
+  // }
 
   //SET MOTOR OUTPUT METHODS
   public void setSpeed(double intakeValue, double holderValue){
@@ -87,32 +87,32 @@ public class Toaster extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch(m_state){
-      case OFF:
-        //setSpeed(0, 0);
-        m_toasterRight.setVoltage(0);
-        m_toasterLeft.setVoltage(0);
-        m_holder.set(0);
-        m_timer.stop();
-        m_timer.reset();
-        break;
-      case INTAKE:
-        // setShooterSpeed(ToasterConstants.intakeSpeed);
-        // m_holder.set(ToasterConstants.intakeSpeed);
+    // switch(m_state){
+    //   case OFF:
+    //     //setSpeed(0, 0);
+    //     m_toasterRight.setVoltage(0);
+    //     m_toasterLeft.setVoltage(0);
+    //     m_holder.set(0);
+    //     m_timer.stop();
+    //     m_timer.reset();
+    //     break;
+    //   case INTAKE:
+    //     // setShooterSpeed(ToasterConstants.intakeSpeed);
+    //     // m_holder.set(ToasterConstants.intakeSpeed);
 
-        // equivalent call to
-        setSpeed(ToasterConstants.intakeSpeed, ToasterConstants.intakeSpeed);
-        break;
-      case SPEAKER_SHOOT:
-        m_timer.start();
-        setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
-        if (m_timer.get() > ToasterConstants.waitTime){
-          m_holder.set(ToasterConstants.SpeakerHolderSpeed);
-        }
-        break;
-      case AMP_SHOOT:
-        setSpeed(ToasterConstants.AmpShooterSpeed,ToasterConstants.AmpHolderSpeed);
-    }     
+    //     // equivalent call to
+    //     setSpeed(ToasterConstants.intakeSpeed, ToasterConstants.intakeSpeed);
+    //     break;
+    //   case SPEAKER_SHOOT:
+    //     m_timer.start();
+    //     setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+    //     if (m_timer.get() > ToasterConstants.waitTime){
+    //       m_holder.set(ToasterConstants.SpeakerHolderSpeed);
+    //     }
+    //     break;
+    //   case AMP_SHOOT:
+    //     setSpeed(ToasterConstants.AmpShooterSpeed,ToasterConstants.AmpHolderSpeed);
+    // }     
     logData();
   }
 
@@ -143,7 +143,7 @@ public class Toaster extends SubsystemBase {
 
 
   public void logData(){
-    SmartDashboard.putString("toaster State", getState().toString());
+    // SmartDashboard.putString("toaster State", getState().toString());
     SmartDashboard.putNumber("Current Draw", m_toasterLeft.getOutputCurrent());
     SmartDashboard.putNumber("Timer", m_timer.get());
 

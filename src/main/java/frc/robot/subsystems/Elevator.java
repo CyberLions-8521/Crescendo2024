@@ -33,18 +33,18 @@ public class Elevator extends SubsystemBase {
   }
  
   //STATES ENUM
-  public enum ElevatorState{
-    OFF,
-    SETPOINT,
-    JOG,
-    ZERO
-  }
+  // public enum ElevatorState{
+  //   OFF,
+  //   SETPOINT,
+  //   JOG,
+  //   ZERO
+  // }
 
   //INSTANCE
   // private static Elevator instance = new Elevator();
 
   //SETTING STATE TO DEFAULT
-  private ElevatorState m_state = ElevatorState.OFF;
+  // private ElevatorState m_state = ElevatorState.OFF;
 
   //MOTOR OBJECTS
   private CANSparkMax m_elevatorMaster = new CANSparkMax(MotorConstants.ELEVATOR_MASTER_MOTOR, MotorType.kBrushless);
@@ -67,13 +67,13 @@ public class Elevator extends SubsystemBase {
   // }  
 
   //STATE METHODS
-  public void setState(ElevatorState m_state){
-    this.m_state = m_state;
-  }
+  // public void setState(ElevatorState m_state){
+  //   this.m_state = m_state;
+  // }
   
-  public ElevatorState getState(){
-    return m_state;
-  }
+  // public ElevatorState getState(){
+  //   return m_state;
+  // }
 
   public void setGoal(double desiredPosition, double desiredVelocity){
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
@@ -141,25 +141,25 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch(m_state){
-      case OFF:
-        set(0.00348837 * getElevatorHeight() * 0.3);
-        break;
-      case JOG:
-        set(jogValue);
-        break;
-      case SETPOINT:
-        goToSetpoint();
-        break;
-      case ZERO:
-        zero();
-        break;
-    }   
+    // switch(m_state){
+    //   case OFF:
+    //     set(0.00348837 * getElevatorHeight() * 0.3);
+    //     break;
+    //   case JOG:
+    //     set(jogValue);
+    //     break;
+    //   case SETPOINT:
+    //     goToSetpoint();
+    //     break;
+    //   case ZERO:
+    //     zero();
+    //     break;
+    // }   
     logData();
   }
 
   public void logData(){
-    SmartDashboard.putString("Elevator State", m_state.toString());
+    // SmartDashboard.putString("Elevator State", m_state.toString());
     SmartDashboard.putNumber("Elevator Position", getElevatorHeight());
     SmartDashboard.putNumber("Elevator output", m_elevatorMaster.getAppliedOutput());
     SmartDashboard.putNumber("Elevator goal position", m_goal.position);

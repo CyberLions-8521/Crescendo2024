@@ -31,18 +31,18 @@ public class Joint extends SubsystemBase {
   }
 
   //STATES
-  public enum JointState{
-    OFF,
-    POSITION,
-    JOG,
-    ZERO
-  }
+  // public enum JointState{
+  //   OFF,
+  //   POSITION,
+  //   JOG,
+  //   ZERO
+  // }
 
   //INSTANCE
   // private static Joint m_instance = new Joint();
   
   //SET STATE
-  private JointState m_state = JointState.OFF;
+  // private JointState m_state = JointState.OFF;
   
   //MOTOR OBJECTS
   private CANSparkMax m_jointRight = new CANSparkMax(MotorConstants.JOINT_RIGHT_MOTOR, MotorType.kBrushless);
@@ -75,13 +75,13 @@ public class Joint extends SubsystemBase {
   // }
 
   //STATE OBJECTS
-  public void setState(JointState m_state){
-    this.m_state = m_state;
-  }
+  // public void setState(JointState m_state){
+  //   this.m_state = m_state;
+  // }
 
-  public JointState getState(){
-    return m_state;
-  }
+  // public JointState getState(){
+  //   return m_state;
+  // }
 
   public void setGoal(double desiredPosition, double desiredVelocity){
     m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
@@ -144,20 +144,20 @@ public class Joint extends SubsystemBase {
   
   @Override
   public void periodic() {
-    switch(m_state){
-      case OFF:
-        set(0.000806452 * getPosition());
-        break;
-      case JOG:
-        set(jogValue);
-        break;
-      case POSITION:
-        goToSetpoint();
-        break;
-      case ZERO:
-        // zero();
-        break;
-    }   
+    // switch(m_state){
+    //   case OFF:
+    //     set(0.000806452 * getPosition());
+    //     break;
+    //   case JOG:
+    //     set(jogValue);
+    //     break;
+    //   case POSITION:
+    //     goToSetpoint();
+    //     break;
+    //   case ZERO:
+    //     // zero();
+    //     break;
+    // }   
     logData();  
     //m_jointRight.follow(m_jointLeft, true);
   }
@@ -167,7 +167,7 @@ public class Joint extends SubsystemBase {
   }
 
   public void logData(){
-    SmartDashboard.putString("Joint State", getState().toString());
+    // SmartDashboard.putString("Joint State", getState().toString());
 
     SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
     SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
