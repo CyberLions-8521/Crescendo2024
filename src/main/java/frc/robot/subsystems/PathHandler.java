@@ -9,10 +9,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 // import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.SuperStructure.SuperStructureState;
+// import frc.robot.subsystems.SuperStructure.SuperStructureState;
 
 public class PathHandler {
     // private static PathHandler instance = new PathHandler();
@@ -21,12 +21,12 @@ public class PathHandler {
     // private SuperStructure m_superStructure = SuperStructure.getInstance();
     private final Drive m_drive;
     private final Tracker m_tracker;
-    private final SuperStructure m_superStructure;
+    // private final SuperStructure m_superStructure;
 
-    public PathHandler(Drive drive, Tracker tracker, SuperStructure superStructure) {
+    public PathHandler(Drive drive, Tracker tracker/*, SuperStructure superStructure*/) {
         m_drive = drive;
         m_tracker = tracker;
-        m_superStructure = superStructure;
+        // m_superStructure = superStructure;
         configEvents();
         configAutoBuilder();
     }
@@ -49,7 +49,7 @@ public class PathHandler {
 
     public void configEvents(){
         NamedCommands.registerCommand("print", new PrintCommand("Hello World!"));
-        NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SPEAKER_SHOOT), m_superStructure));
+        // NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SPEAKER_SHOOT), m_superStructure));
     }
 
     public void configAutoBuilder(){
