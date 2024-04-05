@@ -104,13 +104,13 @@ public class Toaster extends SubsystemBase {
     //     // equivalent call to
     //     setSpeed(ToasterConstants.intakeSpeed, ToasterConstants.intakeSpeed);
     //     break;
-    //   case SPEAKER_SHOOT:
-    //     m_timer.start();
-    //     setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
-    //     if (m_timer.get() > ToasterConstants.waitTime){
-    //       m_holder.set(ToasterConstants.SpeakerHolderSpeed);
-    //     }
-    //     break;
+      // case SPEAKER_SHOOT:
+      //   m_timer.start();
+      //   setShooterSpeed(ToasterConstants.SpeakerShooterSpeed);
+      //   if (m_timer.get() > ToasterConstants.waitTime){
+      //     m_holder.set(ToasterConstants.SpeakerHolderSpeed);
+      //   }
+      //   break;
     //   case AMP_SHOOT:
     //     setSpeed(ToasterConstants.AmpShooterSpeed,ToasterConstants.AmpHolderSpeed);
     // }     
@@ -131,7 +131,7 @@ public class Toaster extends SubsystemBase {
 
   public Command ToasterSpeakerShootCmd() {
     return this.run(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed))
-      .alongWith(
+      .andThen(
         this.run(() -> m_holder.set(ToasterConstants.SpeakerHolderSpeed))
         .beforeStarting(Commands.waitSeconds(ToasterConstants.waitTime)));
   }
