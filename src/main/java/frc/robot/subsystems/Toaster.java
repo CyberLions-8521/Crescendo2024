@@ -118,7 +118,7 @@ public class Toaster extends SubsystemBase {
   }
 
   public Command ToasterOffCmd() {
-    return this.run(() -> {
+    return this.runOnce(() -> {
       m_toasterRight.setVoltage(0);
       m_toasterLeft.setVoltage(0);
       m_holder.set(0);

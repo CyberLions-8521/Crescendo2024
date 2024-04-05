@@ -173,7 +173,7 @@ public class Joint extends SubsystemBase {
   }
 
   public Command JointSetOffCmd() {
-    return this.run(() -> setOff());
+    return this.runOnce(() -> setOff());
   }
 
   private void logData(){
