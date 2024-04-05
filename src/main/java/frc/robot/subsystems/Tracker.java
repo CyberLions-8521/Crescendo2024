@@ -16,14 +16,15 @@ public class Tracker extends SubsystemBase{
 
     private Field2d field = new Field2d();
     
-    private SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
-        kDriveKinematics, 
-        m_drive.getDriveHeading(),
-        m_drive.getModulePositions(), 
-        new Pose2d());
+    private SwerveDrivePoseEstimator m_poseEstimator;
 
-    public Tracker(Drive drive){
+    public Tracker(Drive drive) {
         m_drive = drive;
+        m_poseEstimator = new SwerveDrivePoseEstimator(
+            kDriveKinematics, 
+            m_drive.getDriveHeading(),
+            m_drive.getModulePositions(), 
+            new Pose2d());
         SmartDashboard.putData(field);
     }
 
