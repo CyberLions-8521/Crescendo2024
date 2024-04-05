@@ -338,7 +338,7 @@ public class RobotContainer {
     // new RunCommand(() -> m_hood.setSpeed(0))));
 
     // m_auxController.button(8).whileTrue( new RunCommand(() -> m_hood.setSpeed(0.8)));
-    m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8));
+    m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8).repeatedly());
     // m_auxController.button(8).onFalse(new RunCommand(() -> m_hood.setSpeed(0)));
 
     m_goSource.setName("GoToSource");
