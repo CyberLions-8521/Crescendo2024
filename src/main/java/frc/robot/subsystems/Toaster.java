@@ -11,10 +11,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.ToasterConstants;
 
@@ -118,7 +118,7 @@ public class Toaster extends SubsystemBase {
   }
 
   public Command ToasterOffCmd() {
-    return this.runOnce(() -> {
+    return this.run(() -> {
       m_toasterRight.setVoltage(0);
       m_toasterLeft.setVoltage(0);
       m_holder.set(0);
@@ -131,9 +131,8 @@ public class Toaster extends SubsystemBase {
 
   public Command ToasterSpeakerShootCmd() {
     return this.run(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed))
-      .andThen(
-        this.run(() -> m_holder.set(ToasterConstants.SpeakerHolderSpeed))
-        .beforeStarting(Commands.waitSeconds(ToasterConstants.waitTime)));
+      .andThen(new WaitCommand(ToasterConstants.waitTime))
+      .andThen(this.run(() -> m_holder.set(ToasterConstants.SpeakerHolderSpeed)));
   }
 
   public Command ToasterAmpShootCmd() {
