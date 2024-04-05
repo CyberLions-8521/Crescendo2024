@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -39,6 +41,9 @@ import frc.robot.subsystems.Toaster;
 // import frc.robot.subsystems.Toaster.ToasterState;
 import frc.robot.subsystems.Tracker;
 import frc.robot.Util.mathProfiles;
+
+// Uncomment to play with mini-superstructure
+// import frc.robot.subsystems.ElevatedHoodedJoint;
 
 public class RobotContainer {
   //SUBSYSTEMS
@@ -174,6 +179,17 @@ public class RobotContainer {
     new JointGoToSetpoint(29, 0, m_joint),
     new HoodWristGoToSetpoint(m_hoodWrist, 0)
   );
+
+  // The command bound to Button Y of partner controller
+  private Command m_goMidSpeakerCommand = Commands.parallel(
+    new JointGoToSetpoint(29, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
+
+  /* Just trying stuff for fun; largely ignore
+  private Command m_goMiddleSpeakerAuto = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
+  private Command m_goMiddleSpeakerTeleop = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
+  */
 
   // AUTO SPEAKER SHOOTING
   // private Command autoMiddleSpeakerShootCommand = Commands.sequence(
@@ -334,11 +350,14 @@ public class RobotContainer {
     m_auxController.a().onTrue(m_goSource);
     m_auxController.b().onTrue(m_zero);
     m_auxController.x().onTrue(m_goAmp);
-    // m_auxController.button(4).onTrue(m_goSpeaker); // originally commented out
-    m_auxController.y().onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
-      JointGoToSetpoint(29,0, m_joint)));
+    // m_auxController.button(4).onTrue(m_goMiddleSpeaker); // originally commented out
+    
     //m_auxController.button(4).onTrue(new ElevatorGoToSetpoint(m_elevator, 2).andThen(new JointGoToSetpoint(29,0, m_joint)));
-
+    
+    // Vu implementation of the original Trigger binding on line 343
+    // m_auxController.y().onTrue(new ElevatorGoToSetpoint(m_elevator, 2).alongWith(new 
+    //   JointGoToSetpoint(29,0, m_joint)));
+    m_auxController.y().onTrue(m_goMidSpeakerCommand);
   }
   
 
