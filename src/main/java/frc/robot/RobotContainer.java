@@ -287,8 +287,8 @@ public class RobotContainer {
 
     m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
     m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
-    m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0), m_hoodWrist));
-    m_joint.setDefaultCommand(new RunCommand(() -> m_joint.setOff(), m_joint));
+    m_hoodWrist.setDefaultCommand(new RunCommand(() -> m_hoodWrist.setSpeed(0), m_hoodWrist));
+    m_joint.setDefaultCommand(m_joint.JointSetOffCmd());
     // m_joint.setDefaultCommand(m_joint.JointSetJogCmd(0.000806452 * m_joint.getPosition()));
 }
 
