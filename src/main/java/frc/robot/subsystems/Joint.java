@@ -169,7 +169,7 @@ public class Joint extends SubsystemBase {
   }
 
   public Command JointSetJogCmd(final double jogValue) {
-    return this.runOnce(() -> set(jogValue));
+    return this.run(() -> set(jogValue));
   }
 
   public Command JointSetOffCmd() {
