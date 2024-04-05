@@ -36,7 +36,7 @@ The partner controller had the following actions
 * Button A - raise, extend, and flip robot subsystems into position for the SOURCE and turn on necessary motors to intake NOTES
 * Button B - lower, retract, and flip robot subsystems back down to default positions
 * Button X - raise, extend, and flip robot subsystems into position for the AMP
-* Button Y - raise, extend, and flip robot subsystems for something
+* Button Y - raise, extend, and flip robot subsystems into position to score in the SPEAKER (testing required to verify that this is the case)
 
 ## Teleop and Command Based Programming Study
 If you are studying the Command Based Programming framework for teleop, then the focus of your study should be on the following files in `src/main/java/frc/robot`.  Note that in any of the subsystem files, the `switch` statements involving subsystem state can be ignored.  The code has been refactored so that it no longer depends on subsystem states.  As of April 2, 2024, the code has yet to be tested on a physical robot.  The code otherwise compiles and builds without error.
