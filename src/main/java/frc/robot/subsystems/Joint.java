@@ -172,6 +172,10 @@ public class Joint extends SubsystemBase {
     return this.runOnce(() -> set(jogValue));
   }
 
+  public Command JointSetOffCmd() {
+    return this.run(() -> setOff());
+  }
+
   private void logData(){
     // SmartDashboard.putString("Joint State", getState().toString());
 
