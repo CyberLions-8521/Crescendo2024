@@ -71,7 +71,7 @@ public class Hood extends SubsystemBase {
   }
 
   public Command HoodSetSpeedCmd(final double speed) {
-    return this.run(() -> setSpeed(speed));
+    return this.runOnce(() -> setSpeed(speed));
   }
 
   private void logData(){
