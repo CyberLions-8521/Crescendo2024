@@ -58,6 +58,8 @@ public class Drive extends SubsystemBase {
     m_topRight.setState(states[1]);
     m_bottomLeft.setState(states[2]);
     m_bottomRight.setState(states[3]);
+
+    playMusic("mario.chrp");
   }
 
   // Taken from https://github.com/REVrobotics/MAXSwerve-Java-Template
@@ -179,6 +181,13 @@ public class Drive extends SubsystemBase {
     SwerveModuleState[] states = kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.MAX_TANGENTIAL_VELOCITY);
     setModuleStates(states);
+  }
+
+  public void playMusic(String song){
+    m_bottomLeft.playMusic(song);
+    m_bottomRight.playMusic(song);
+    m_topLeft.playMusic(song);
+    m_topRight.playMusic(song);
   }
 
   public void resetHeading(){

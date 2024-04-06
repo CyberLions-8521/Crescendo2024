@@ -3,6 +3,7 @@ package frc.robot.Util;
 // import static frc.robot.Constants.SwerveModuleConstants.TURN_GEAR_RATIO;
 // import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -48,6 +49,9 @@ public class SwerveModule {
      //PID CONTROLLER --> DRIVE MOTOR TARGET SPEED OBJECT
      private VelocityDutyCycle targetSpeed = new VelocityDutyCycle(0);
 
+     //MUSIC GANGSTA RAP
+     public Orchestra m_Orchestra = new Orchestra();
+
 
      public SwerveModule(int drivePort, int turnPort, int encoderPort, double angleOffset, boolean isInverted){
           Timer.delay(0.1);
@@ -70,6 +74,8 @@ public class SwerveModule {
           configCANcoder(angleOffset);
           rezeroTurnMotors();
           zeroEncoders();
+
+          m_Orchestra.addInstrument(m_driveMotor);
      }
 
      public void configCANcoder(double angleOffset){
@@ -94,6 +100,14 @@ public class SwerveModule {
           m_slotConfig.kV = SmartDashboard.getNumber("Drive FF", 0);
           m_driveMotor.getConfigurator().apply(m_slotConfig);
      }
+
+     public void playMusic(String pathname){
+          m_Orchestra.loadMusic(pathname);
+          m_Orchestra.play();
+
+     }
+
+
 
      public void zeroEncoders(){
           m_driveMotor.setPosition(0);

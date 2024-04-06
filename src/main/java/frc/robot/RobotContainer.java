@@ -143,6 +143,19 @@ public class RobotContainer {
 
     SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
     SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
+    SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
+    SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
+    SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
+    SmartDashboard.putData("Play Nomad be like", new InstantCommand(() -> m_drive.playMusic("gangsta.chrp") ));
+    SmartDashboard.putData("Play not being in a playoff match for years", new InstantCommand(() -> m_drive.playMusic("seniors.chrp") ));
+    SmartDashboard.putData("Winning in practice matches", new InstantCommand(() -> m_drive.playMusic("prac.chrp") ));
+    SmartDashboard.putData("Play build season", new InstantCommand(() -> m_drive.playMusic("build.chrp") ));
+    SmartDashboard.putData("Play killer queen", new InstantCommand(() -> m_drive.playMusic("queen.chrp") ));
+
+
+
+
+
     SmartDashboard.putData("Chooser", m_chooser);
 
     m_goSource.setName("GoToSource");
