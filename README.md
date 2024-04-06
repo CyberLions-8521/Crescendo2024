@@ -1,5 +1,5 @@
 # README
-The `post-ocr` branch, if it has not yet been merged with branch `main`, is a current work-in-progress branch being done by the CyberLions to increase readability of the code.  The main contributors of the original code base included the following senior programmers from the class of 2024
+The main contributors of the original code base included the following senior programmers from the class of 2024
 * [Jackson Nguyen](https://github.com/jackhnguyen)
 * [Rachel Fernandez](https://github.com/PokaDoka1)
 * [Kevin Vo](https://github.com/EV3KevinDEV)
@@ -21,37 +21,24 @@ The subsystems of the robot include the following
 * Intake Guide Joint - located in `HoodWrist.java`.  This subsystem controls the motors that act as a "joint" for the "Hood" subsystem, so that it can flip into place when intake, and flip away from the opening when shooting into the SPEAKER.
 
 ## Controls
-The robot was controlled using two XBox/Logitech gamepads.  The master controller had the following actions
+The robot was controlled using two XBox/Logitech F310 gamepads.  The master controller had the following actions
 * Analog Joysticks - controlled the swerve drivebase
 * Button A - re-zeroed the turn motors on the swerve drivebase
 * Button B - reset the heading of the robot
-* Button Back - sets the jog value of the arm/joint to 0.15
-* Button Start - sets the jog value of the arm/joint to -0.15
+* Button Back - manually lifts the arm
+* Button Start - manually lowers the arm
 
 The partner controller had the following actions
 * Button Left Bumper - turn on motors of shooter to shoot into the AMP
 * Button Right Bumper - turn on motors of shooter to shoot into the SPEAKER
-* Button Back - intake
-* Button Start - outtake on the rollers
+* Button Back - turns on motors for intaking; mainly meant for testing purposes
+* Button Start - turns on motors for outtaking/shooting; mainly meant for testing purposes
 * Button A - raise, extend, and flip robot subsystems into position for the SOURCE and turn on necessary motors to intake NOTES
 * Button B - lower, retract, and flip robot subsystems back down to default positions
 * Button X - raise, extend, and flip robot subsystems into position for the AMP
-* Button Y - raise, extend, and flip robot subsystems into position to score in the SPEAKER (testing required to verify that this is the case)
+* Button Y - raise, extend, and flip robot subsystems into position to score in the SPEAKER
 
-## Teleop and Command Based Programming Study
-If you are studying the Command Based Programming framework for teleop, then the focus of your study should be on the following files in `src/main/java/frc/robot`.  Note that in any of the subsystem files, the `switch` statements involving subsystem state can be ignored.  The code has been refactored so that it no longer depends on subsystem states.  As of April 2, 2024, the code has yet to be tested on a physical robot.  The code otherwise compiles and builds without error.
-* `commands/ElevatorGoToSetpoint.java`
-* `commands/HoodWristGoToSetpoint.java`
-* `commands/JointGoToSetpoint.java`
-* All subsystems within the `subsystems` directory, with the exception of PathHandler, SuperStructure, Tracker, and Vision Manager
-* `Constants.java`
-* `RobotContainer.java`
-
-## Auto Routines Study
-Until the SuperStructure gets refactored, the following files are useful when studying autonomous routines
-* `RobotContainer.java`
-* `subsystems/Tracker.java`
-* `subsystems/PathHandler.java`
-* `subsystems/SuperStructure` (only tangentially as the SuperStructure is deprecated for removal in this particular branch)
-
-All other files are largely unused (some are even blank or fully commented out).
+## Unused Files
+The following files were largely unused:
+* `subsystems/VisionManager.java`
+* `LimelightHelpers.java`
