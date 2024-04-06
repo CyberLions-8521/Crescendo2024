@@ -11,6 +11,9 @@ Much of the original code base borrows code from three different sources
 
 For reference for how the 2024 Crescendo game was played, see the associated [Game Manual](https://www.firstinspires.org/resource-library/frc/competition-manual-qa-system).
 
+## Robot Documentation
+Images that provide extra information on the robot, its subsystems, as well as videos that showcase the robot responding to the controllers can be found iln the [documentation-imgs-vids](https://github.com/CyberLions-8521/Crescendo2024/tree/main/documentation-imgs-vids) directory.
+
 ## Robot Subsystems
 The subsystems of the robot include the following
 * Drivebase - located in `Drive.java`
