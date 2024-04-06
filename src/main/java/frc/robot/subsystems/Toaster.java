@@ -103,8 +103,8 @@ public class Toaster extends SubsystemBase {
 
   public Command ToasterSpeakerShootCmd() {
     return this.run(() -> setShooterSpeed(ToasterConstants.SpeakerShooterSpeed))
-      .andThen(new WaitCommand(ToasterConstants.waitTime))
-      .andThen(this.run(() -> m_holder.set(ToasterConstants.SpeakerHolderSpeed)));
+    .withTimeout(ToasterConstants.SpeakerWaitTime)
+    .andThen(this.run(() -> m_holder.set(ToasterConstants.SpeakerHolderSpeed)));
   }
 
   public Command ToasterAmpShootCmd() {
