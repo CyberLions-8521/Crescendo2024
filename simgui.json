@@ -1,0 +1,17 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Chooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Reset Elevator": "Command",
+      "/SmartDashboard/Reset Hood Wrist": "Command",
+      "/SmartDashboard/Reset Joint": "Command",
+      "/SmartDashboard/shoot (Middle)": "Command",
+      "/SmartDashboard/shoot (Side)": "Command"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
