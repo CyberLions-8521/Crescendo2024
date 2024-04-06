@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setWithTuneValue() {
-    set(getPosition() * ElevatorConstants.kZeroSetpointMultiplier);
+    set(getPosition() * ElevatorConstants.kAntiGravityMultiplier);
   }
 
   //SETPOINT METHODS

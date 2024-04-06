@@ -60,7 +60,7 @@ public class Joint extends SubsystemBase {
   }
 
   public void setOff() {
-    set(getPosition() * JointConstants.kOffTuneValue);
+    set(getPosition() * JointConstants.kAntiGravityMultiplier);
   }
 
   //SETPOINT METHODS
@@ -92,7 +92,7 @@ public class Joint extends SubsystemBase {
     if (getPosition() > 0) {
       set(-0.15);
     } else {
-      set(JointConstants.kOffTuneValue * getPosition());
+      set(JointConstants.kAntiGravityMultiplier * getPosition());
     }
   }
 

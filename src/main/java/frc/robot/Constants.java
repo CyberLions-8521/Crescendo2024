@@ -16,10 +16,6 @@ public final class Constants {
     public static final int kPartnerControllerPort = 2;
   }
   public static class MotorConstants {  
-    //INDEXER
-    //public static final int INDEXER_WRIST_MOTOR = 0;
-    //public static final int INDEXER_MOTOR = 0;
-
     //HOOD
     public static final int HOOD_WRIST_MOTOR = 5;
     public static final int HOOD_MOTOR = 13;
@@ -37,13 +33,6 @@ public final class Constants {
     public static final int JOINT_LEFT_MOTOR = 7;
   }
 
-  //WRIST CONSTANTS
-  // public static class WristConstants{
-  //   public static final double WRIST_KP = 0;
-  //   public static final double WRIST_KD = 0;
-  //   public static final double MAX_ACCELERATION = 0;
-  //   public static final double MAX_VELOCITY = 0;
-  // }
   public static class HoodConstants{
     public static final double HOOD_SPEED = 0.7;
     public static final double kIntakeSpeed = -0.8;
@@ -52,74 +41,50 @@ public final class Constants {
   public static class ElevatorConstants{
     public static final double ELEVATOR_KP = 0.65;
     public static final double ELEVATOR_KD = 0.005;
-
     public static final double MAX_ACCELERATION = 0.01;
     public static final double MAX_VELOCITY = 0.1;
-
     public static final double ELEVATOR_HEIGHT_TOLERANCE = 0.025;
     public static final double ZEROING_SPEED = -0.05;
     public static final double GEAR_RATIO = 13;
-
     public static final double MAX_POSITION = 26;
-    // public static final double AMP_POSITION = 0;
-    // public static final double SPEAKER_POSITION = 0;
-    // public static final double SOURCE_POSITION = 0;
-    // public static final double TRAP_POSITION = 0;
-    // public static final double GROUND_INTAKE_POSITION = 0;
-
     public static final int kAmpSetpoint = 23;
     public static final int kSourceSetpoint = 14;
-
-    // TODO: Find out what these numbers are and update names accordingly
-    private static final double kZeroTuneValue = 0.00348837;
-    private static final double kZeroTuneMultiplier = 0.3;
-    public static final double kZeroSetpointMultiplier = kZeroTuneValue * kZeroTuneMultiplier;
+    private static final double kAntiGravity = 0.00348837;
+    private static final double kAntiGravityTuner = 0.3;
+    public static final double kAntiGravityMultiplier = kAntiGravity * kAntiGravityTuner;
     
   }
   public static class ToasterConstants{
     //WAIT TIME
     public static final double waitTime = 0.75; // in seconds
-
     //INTAKE
     public static final double intakeSpeed = -0.25;
-
     //SPEAKER
     public static final double SpeakerShooterSpeed = 1;
     public static final double SpeakerHolderSpeed = 0.9;
     public static final double SpeakerWaitTime = 2;
-
     //AMP
     public static final double AmpShooterSpeed = 0.7;
     public static final double AmpHolderSpeed = 0.5;
-
     public static final int kShootingSpeed = 5000;  // in rpm?
   }
   
   public static class JointConstants{
     public static final double JOINT_KP = 0.12;
     public static final double JOINT_KD = 0.025;
-    // public static final double MAX_ACCELERATION = 0;
-    // public static final double MAX_VELOCITY = 0;
-    // public static final Rotation2d AMP_POSITION = Rotation2d.fromRotations(0);
-    // public static final Rotation2d SPEAKER_POSITION = Rotation2d.fromRotations(0);
-    // public static final Rotation2d SOURCE_POSITION = Rotation2d.fromRotations(0);
-    // public static final Rotation2d TRAP_POSITION = Rotation2d.fromRotations(0);
-    // public static final Rotation2d GROUND_INTAKE_POSITION = Rotation2d.fromRotations(0);
     public static final Rotation2d JOINT_TOLERANCE = Rotation2d.fromRotations(0.5);
     public static final double GEAR_RATIO = 179.5;
 
     public static final int kAmpSetpoint = 22;
     public static final double kSourceSetpoint = 24.5;
 
-    // TODO: Find out what this value is in Joint.java and rename it properly
-    public static final double kOffTuneValue = 0.000806452;
+    public static final double kAntiGravityMultiplier = 0.000806452;
   }
 
   public static class HoodWristConstants{
     public static final double HOOD_WRIST_KP = 0.6;
     public static final double HOOD_WRIST_KD = 0.05;
     public static final double HOOD_WRIST_TOLERANCE = 0.05;
-    
     public static final int kAmpSetpoint = 6;
     public static final int kSourceSetpoint = 10;
   }
@@ -127,16 +92,13 @@ public final class Constants {
   public static class DriveConstants {
     public static final double MAX_ANGULAR_VELOCITY = 2 * Math.PI;
     public static final double MAX_TANGENTIAL_VELOCITY = 6;
-
     public static final double kMagnitudeSlewRate = 1.8;
     public static final double kRotationalSlewRate = 2.0;
     public static final double kDirectionSlewRate = 1.2;
-
     public static final double kDriveDeadband = 0.1;
   }
 
   public static class SwerveModuleConstants{
-
      //DRIVE KRAKENS
     public static final int BOTTOM_RIGHT_DRIVE_PORT = 3;
     public static final int BOTTOM_LEFT_DRIVE_PORT = 1;
@@ -151,31 +113,13 @@ public final class Constants {
 
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double CIRCUMFERENCE = WHEEL_DIAMETER_METERS * Math.PI;
-
-    // In meters - this is 24 inches
-    // private static final double WHEELBASE_WIDTH = 0.6096;//0.7366;//0.6604;
-    // private static final double WHEELBASE_LENGTH = 0.6096;//0.7366;//0.6604;
-
-    // public static final Translation2d BOTTOM_RIGHT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    // public static final Translation2d BOTTOM_LEFT_MODULE_POSITION = new Translation2d(-WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
-    // public static final Translation2d TOP_RIGHT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,-WHEELBASE_LENGTH/2);
-    // public static final Translation2d TOP_LEFT_MODULE_POSITION = new Translation2d(WHEELBASE_WIDTH/2,WHEELBASE_LENGTH/2);
-
-    // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-    //   new Translation2d(WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
-    //   new Translation2d(WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2),
-    //   new Translation2d(-WHEELBASE_WIDTH / 2, WHEELBASE_LENGTH / 2),
-    //   new Translation2d(-WHEELBASE_WIDTH / 2, -WHEELBASE_LENGTH / 2));
     
     // Drivebase measures 29x29 inches, but the swerve modules sit 12 inches in either direction from the center of the robot frame
     private static final double kWheelbaseSizeHalf = Inches.of(12).in(Meters);
-    // private static final double kWheelbaseWidthHalf = WHEELBASE_WIDTH / 2.0;
-    // private static final double kWheelbaseLengthHalf = WHEELBASE_LENGTH / 2.0;
     private static final Translation2d kBotRightModule = new Translation2d(-kWheelbaseSizeHalf,-kWheelbaseSizeHalf);
     private static final Translation2d kBotLeftModule  = new Translation2d(-kWheelbaseSizeHalf, kWheelbaseSizeHalf);
     private static final Translation2d kTopRightModule = new Translation2d(kWheelbaseSizeHalf, -kWheelbaseSizeHalf);
     private static final Translation2d kTopLeftModule  = new Translation2d(kWheelbaseSizeHalf,  kWheelbaseSizeHalf);
-
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       kTopLeftModule,
       kTopRightModule,
@@ -199,9 +143,6 @@ public final class Constants {
     public static final double DRIVE_KFF = 0.0001;
     public static final double DRIVE_KD = 0.001;
     public static final double TURN_KP = 0.5;
-
-    // public static final double LOWER_BOUND = 0.0;
-    // public static final double UPPER_BOUND = 360.0;
   }
 
 }
