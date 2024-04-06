@@ -9,47 +9,21 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-// import frc.robot.subsystems.SuperStructure.SuperStructureState;
 
 public class PathHandler {
-    // private static PathHandler instance = new PathHandler();
-    // private Tracker tracker = Tracker.getInstance();
-    // private Drive drive = Drive.getInstance();
-    // private SuperStructure m_superStructure = SuperStructure.getInstance();
     private final Drive m_drive;
     private final Tracker m_tracker;
-    // private final SuperStructure m_superStructure;
 
-    public PathHandler(Drive drive, Tracker tracker/*, SuperStructure superStructure*/) {
+    public PathHandler(Drive drive, Tracker tracker) {
         m_drive = drive;
         m_tracker = tracker;
-        // m_superStructure = superStructure;
         configEvents();
         configAutoBuilder();
     }
 
-    // private static PathHandler m_instance = new PathHandler();
-
-    // public static PathHandler getInstance(){
-    //     return m_instance;
-    // }
-
-    public Command getAuto(String fileName){
-        return AutoBuilder.buildAuto(fileName);
-    }
-
-    public Command followPath(String pathName){
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        return AutoBuilder.followPath(path);
-    }
-
-
     public void configEvents(){
         NamedCommands.registerCommand("print", new PrintCommand("Hello World!"));
-        // NamedCommands.registerCommand("Shooot", new InstantCommand(() -> m_superStructure.setState(SuperStructureState.SPEAKER_SHOOT), m_superStructure));
     }
 
     public void configAutoBuilder(){
@@ -78,5 +52,14 @@ public class PathHandler {
             },
             m_drive // Reference to this subsystem to set requirements
         );
+    }
+
+    public Command getAuto(String fileName){
+        return AutoBuilder.buildAuto(fileName);
+    }
+
+    public Command followPath(String pathName){
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        return AutoBuilder.followPath(path);
     }
 }

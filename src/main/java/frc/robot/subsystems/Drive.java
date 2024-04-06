@@ -5,29 +5,22 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-// import com.pathplanner.lib.util.PIDConstants;
-// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import edu.wpi.first.networktables.NetworkTableInstance;
-// import edu.wpi.first.networktables.StructArrayPublisher;
+
 import edu.wpi.first.util.WPIUtilJNI;
-// import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.SwerveModuleConstants.*;
-// import com.pathplanner.lib.auto.AutoBuilder;
-// import frc.robot.Util.PPSwerveControllerCommand;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static frc.robot.Constants.SwerveModuleConstants.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Util.SwerveModule;
 import frc.robot.Util.SwerveUtils;
@@ -42,8 +35,6 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
   }
 
-  // private static Drive m_instance = new Drive();
-
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
@@ -51,10 +42,6 @@ public class Drive extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-
-  // public static Drive getInstance(){
-  //   return m_instance;
-  // }
   
   private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
   private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
@@ -209,28 +196,10 @@ public class Drive extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
-
     SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
     SmartDashboard.putNumber("Gyro Degrees", m_gyro.getAngle());
-
-    // SmartDashboard.putNumber("front left abs", m_topLeft.getAbsoluteTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("front right abs", m_topRight.getAbsoluteTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("rear left abs", m_bottomLeft.getAbsoluteTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("rear right abs", m_bottomRight.getAbsoluteTurnAngle().getDegrees());
-
-    // SmartDashboard.putNumber("front left relative", m_topLeft.getTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("front right relative", m_topRight.getTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("rear left relative", m_bottomLeft.getTurnAngle().getDegrees());
-    // SmartDashboard.putNumber("rear right relative", m_bottomRight.getTurnAngle().getDegrees());
-
-    // SmartDashboard.putNumber("Velocity X", getRelativeSpeeds().vxMetersPerSecond);
-    // SmartDashboard.putNumber("Velocity Y", getRelativeSpeeds().vyMetersPerSecond);
-
-    // SmartDashboard.putNumber("front left actual angle", m_topLeft.getTurnAngle().getDegrees());
     SmartDashboard.putNumber("front left actual velocity", Math.abs(m_topLeft.getDriveVelocity()));
-    
     SmartDashboard.putNumber("Heading", getHeading());
-
   }
 
   @Override

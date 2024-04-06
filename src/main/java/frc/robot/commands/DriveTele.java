@@ -6,50 +6,25 @@ package frc.robot.commands;
 
 import static frc.robot.Constants.DriveConstants.MAX_ANGULAR_VELOCITY;
 import static frc.robot.Constants.DriveConstants.MAX_TANGENTIAL_VELOCITY;
-// import static frc.robot.Constants.SwerveModuleConstants.DRIVE_KINEMATICS;
+
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-// import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.Constants;
-// import frc.robot.Util.mathProfiles;
 import frc.robot.subsystems.Drive;
-// import frc.robot.subsystems.Tracker;
 
 /** An example command that uses an example subsystem. */
 public class DriveTele extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
-  //private Drive m_drive = Drive.getInstance();
-  // private Drive m_drive = Drive.getInstance();
-  // private Tracker m_tracker = Tracker.getInstance();
-
   private DoubleSupplier fwd, str, rot;
   private Drive m_drive;
   private final double kDeadZone = 0.15;
 
   private double modifyInputs(double value, boolean isRot){
-    
-    // if(isRot){
-    //   //deadzone
-    //   if(Math.abs(value) < 0.15){
-    //     value = 0;
-      
-    //   }
-    //   return value * MAX_ANGULAR_VELOCITY;
-    // }
-
-    //   else{
-    //     if(Math.abs(value) < 0.15){
-    //       value = 0;
-    //     }
-    //     return value * MAX_TANGENTIAL_VELOCITY;
-    //   }
     if (Math.abs(value) < kDeadZone) {
       return 0;
     }
