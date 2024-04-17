@@ -192,21 +192,23 @@ public class SwerveModule {
           TalonFXConfiguration m_driveControllerConfig = new TalonFXConfiguration();
           
           //CONFIGURE PID VALUES
-          m_driveControllerConfig.Slot0.kP = DRIVE_KP;
-          m_driveControllerConfig.Slot0.kD = DRIVE_KD;
-          m_driveControllerConfig.Slot0.kV = DRIVE_KFF;
+          m_driveControllerConfig.Slot0
+               .WithKP(DRIVE_KP)
+               .WithKD(DRIVE_KD)
+               .WithKV(DRIVE_KFF);
 
           //NEW LINE
-          m_driveControllerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-          m_driveControllerConfig.CurrentLimits.SupplyCurrentLimit = 80;
+          m_driveControllerConfig.CurrentLimits
+               .WithSupplyCurrentLimitEnable (true)
+               .WithSupplyCurrentLimit(80);
 
           //INVERSION
-          m_driveControllerConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+          m_driveControllerConfig.MotorOutput
+               .WithInverted(isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive)
+               .WithNeutralMode(NeutralModeValue.Brake);
 
           m_driveControllerConfig.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO / CIRCUMFERENCE;
 
-          //NEUTRAL MODE
-          m_driveControllerConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
           //APPLY IT
           m_driveMotor.getConfigurator().apply(m_driveControllerConfig);
