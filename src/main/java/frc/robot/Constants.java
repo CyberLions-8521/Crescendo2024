@@ -125,9 +125,16 @@ public final class Constants {
       kTopRightModule,
       kBotLeftModule,
       kBotRightModule);
-
-    public static final double TURN_GEAR_RATIO = 150.0/7;//12.8;
-    public static final double DRIVE_GEAR_RATIO = 5.9028;//8.14;//6.12;//6.75;
+    
+    // Gear ratios found here:
+    // @{link} https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+    // See here for example calculating gear ratios
+    // @{link} https://www.smlease.com/entries/mechanism/gear-train-gear-ratio-torque-and-speed-calculation/
+    // Drive gear ratio is calculated by taking the MK4i L2 gear ratios (the one we used)
+    // and swapping out the 14 teeth drive pinion gear on stage 1 with a 16 teeth
+    // drive pinion gear instead.  The resulting gear ratio is approximately 5.9028.
+    public static final double TURN_GEAR_RATIO = 150.0/7;  //12.8;
+    public static final double DRIVE_GEAR_RATIO = 5.9028;  // (50/16) * (17/27) * (45/15)
 
     public static final int BOTTOM_RIGHT_ENCODER_PORT = 12;
     public static final int BOTTOM_LEFT_ENCODER_PORT = 9;
