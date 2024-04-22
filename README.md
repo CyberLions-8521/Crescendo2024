@@ -1,6 +1,4 @@
 # README
-This is an attempt at a rewrite of [Team 8521 CyberLion's Crescendo 2024 robot code](https://github.com/CyberLions-8521/Crescendo2024/tree/main) into C++.
-
 The main contributors of the original code base included the following senior programmers from the class of 2024
 * [Jackson Nguyen](https://github.com/jackhnguyen)
 * [Rachel Fernandez](https://github.com/PokaDoka1)
