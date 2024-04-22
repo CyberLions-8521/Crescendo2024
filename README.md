@@ -28,6 +28,8 @@ The drivebase used a swerve drive with four [MK4i Swerve modules](https://swerve
 
 The built-in Kraken encoder was used as the driving encoder, and a combination of [CTRE's Cancoder (absolute)](https://store.ctr-electronics.com/cancoder/) as well as the built-in NEO (relative) encoder was used for the turning encoder.  The Cancoder was used in order to keep track of absolute azimuthal positioning (as well as to make it so that the wheels would not have to be manually reset to the "zero" position between robot power cycles), and the Cancoder positional data was fed to the NEO relative encoder to run PID and calculate setpoints.
 
+The MK4i swerve modules were built using the L2 gear ratio option, but with a [16 teeth drive pinion gear](https://www.swervedrivespecialties.com/collections/mk4i-parts/products/kit-adapter-16t-drive-pinion-gear-mk4i?variant=47576386470189) (instead of the provided, default 14 teeth drive pinion gear).  The gear ratio is thus approximately 5.9028.
+
 The [IMU (Inertial Measurement Unit)](https://docs.wpilib.org/en/stable/docs/hardware/sensors/accelerometers-hardware.html) used was a [navX2-MXP from Kauai Labs](https://pdocs.kauailabs.com/navx-mxp/).
 
 ## Controls
