@@ -58,18 +58,17 @@ public class SwerveModule {
           m_driveMotor.getConfigurator().apply(krakenCfg);
           m_driveMotor.setPosition(0);
           m_canCoder.getConfigurator().apply(canCoderCfg);
-          m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO);
-          m_turnEncoder.setVelocityConversionFactor(1/TURN_GEAR_RATIO);
-          m_turnController.setP(TURN_KP);
           configTurnMotor(true);
           rezeroTurnMotors();
      }
 
      private void configTurnMotor(final boolean isInverted) {
           m_turnMotor.restoreFactoryDefaults();
+          m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO);
+          m_turnController.setP(TURN_KP);
           m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(isInverted);
-          m_turnMotor.setSmartCurrentLimit(40,40);
+          m_turnMotor.setSmartCurrentLimit(20,20);
           m_turnMotor.burnFlash();
      }
 
@@ -92,7 +91,7 @@ public class SwerveModule {
      
      public void setState(SwerveModuleState state) {
           SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());
-          optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
+          // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond / CIRCUMFERENCE));
           m_turnController.setReference(optimizedState.angle.getRotations(), ControlType.kPosition);
      }

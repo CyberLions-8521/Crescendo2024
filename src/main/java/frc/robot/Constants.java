@@ -146,10 +146,10 @@ public final class Constants {
     public static final double TOP_RIGHT_ENCODER_OFFSET = -0.155518;//-0.148926;vwww//0.361084;
     public static final double TOP_LEFT_ENCODER_OFFSET = 0.019287;//0.025146;//-0.475342
 
-    public static final double DRIVE_KP = 0.5;
+    public static final double DRIVE_KP = 0.5 * CIRCUMFERENCE;
     public static final double DRIVE_KFF = 0.0001;
     public static final double DRIVE_KD = 0.001;
-    public static final double TURN_KP = 0.5;
+    public static final double TURN_KP = 0.5 * TURN_GEAR_RATIO;
   }
 
 }
