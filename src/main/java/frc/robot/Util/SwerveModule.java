@@ -64,7 +64,7 @@ public class SwerveModule {
 
      private void configTurnMotor(final boolean isInverted) {
           m_turnMotor.restoreFactoryDefaults();
-          m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO);
+          // m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO);
           m_turnController.setP(TURN_KP);
           m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(isInverted);
@@ -75,7 +75,7 @@ public class SwerveModule {
      public void rezeroTurnMotors() {
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations());
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations() * TURN_GEAR_RATIO);
      }
 
      public Rotation2d getAbsoluteTurnAngle() {
@@ -86,18 +86,18 @@ public class SwerveModule {
      }
 
      public SwerveModuleState getState(){
-          return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble() * CIRCUMFERENCE, getTurnAngle());
+          return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble(), getTurnAngle());
      }
      
      public void setState(SwerveModuleState state) {
           SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());
           // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
-          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond / CIRCUMFERENCE));
-          m_turnController.setReference(optimizedState.angle.getRotations(), ControlType.kPosition);
+          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
+          m_turnController.setReference(optimizedState.angle.getRotations() * TURN_GEAR_RATIO, ControlType.kPosition);
      }
 
      public Rotation2d getTurnAngle(){
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition());
+          return Rotation2d.fromRotations(m_turnEncoder.getPosition() / TURN_GEAR_RATIO);
      }
      public double getDrivePosition(){
          //return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;

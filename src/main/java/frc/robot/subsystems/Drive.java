@@ -61,7 +61,7 @@ public class Drive extends SubsystemBase {
     krakenCfg.CurrentLimits
       .withSupplyCurrentLimitEnable(true)
       .withSupplyCurrentLimit(80);
-    krakenCfg.Feedback.withSensorToMechanismRatio(DRIVE_GEAR_RATIO);
+    krakenCfg.Feedback.withSensorToMechanismRatio(DRIVE_GEAR_RATIO / CIRCUMFERENCE);
     krakenCfg.MotorOutput
       .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Brake);
