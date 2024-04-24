@@ -149,7 +149,7 @@ public final class Constants {
     public static final double DRIVE_KP = 0.5;
     public static final double DRIVE_KFF = 0.0001;
     public static final double DRIVE_KD = 0.001;
-    public static final double TURN_KP = 0.5 * TURN_GEAR_RATIO;
+    public static final double TURN_KP = 0.5;
   }
 
 }
