@@ -181,7 +181,8 @@ public class RobotContainer {
         -m_driverController.getLeftX(),
         -m_driverController.getRightX(),
         true,
-        0.020));
+        0.020),
+      m_drive);
     m_driveCommand.setName("DriveCommand");
 
     m_drive.setDefaultCommand(
