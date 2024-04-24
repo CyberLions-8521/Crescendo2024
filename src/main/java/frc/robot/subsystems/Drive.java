@@ -5,10 +5,17 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -26,31 +33,52 @@ import frc.robot.Util.SwerveModule;
 import frc.robot.Util.SwerveUtils;
 
 public class Drive extends SubsystemBase {
+  private double m_currentRotation = 0.0;
+  private double m_currentTranslationDir = 0.0;
+  private double m_currentTranslationMag = 0.0;
+
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+  private SlewRateLimiter m_XSpeedLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+  private SlewRateLimiter m_YSpeedLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+  private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+  
+  private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT);
+  private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT);
+  private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT);
+  private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT);
+
+  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  
   public Drive() {
     m_gyro.reset();
 
+    TalonFXConfiguration krakenCfg = new TalonFXConfiguration();
+    krakenCfg.Slot0
+      .withKP(DRIVE_KP)
+      .withKD(DRIVE_KD)
+      .withKV(DRIVE_KFF);
+    krakenCfg.CurrentLimits
+      .withSupplyCurrentLimitEnable(true)
+      .withSupplyCurrentLimit(80);
+    krakenCfg.Feedback.withSensorToMechanismRatio(DRIVE_GEAR_RATIO);
+    krakenCfg.MotorOutput
+      .withInverted(InvertedValue.Clockwise_Positive)
+      .withNeutralMode(NeutralModeValue.Brake);
+    
+    MagnetSensorConfigs canCoderCfg = new MagnetSensorConfigs();
+    canCoderCfg.withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
+      .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+    
+    ApplyConfigs(krakenCfg, canCoderCfg);
+    
     SmartDashboard.putNumber("Turn P", TURN_KP);
     SmartDashboard.putNumber("Drive P", DRIVE_KP);
     SmartDashboard.putNumber("Drive D", DRIVE_KD);
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
   }
 
-  private double m_currentRotation = 0.0;
-  private double m_currentTranslationDir = 0.0;
-  private double m_currentTranslationMag = 0.0;
-
-  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
-  private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-  
-  private SwerveModule m_bottomRight = new SwerveModule(BOTTOM_RIGHT_DRIVE_PORT, BOTTOM_RIGHT_TURN_PORT, BOTTOM_RIGHT_ENCODER_PORT, BOTTOM_RIGHT_ENCODER_OFFSET, true);
-  private SwerveModule m_bottomLeft = new SwerveModule(BOTTOM_LEFT_DRIVE_PORT, BOTTOM_LEFT_TURN_PORT, BOTTOM_LEFT_ENCODER_PORT, BOTTOM_LEFT_ENCODER_OFFSET, true);
-  private SwerveModule m_topRight = new SwerveModule(TOP_RIGHT_DRIVE_PORT, TOP_RIGHT_TURN_PORT, TOP_RIGHT_ENCODER_PORT, TOP_RIGHT_ENCODER_OFFSET, true);
-  private SwerveModule m_topLeft = new SwerveModule(TOP_LEFT_DRIVE_PORT, TOP_LEFT_TURN_PORT, TOP_LEFT_ENCODER_PORT, TOP_LEFT_ENCODER_OFFSET, true);
-
-  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-
-  public void setModuleStates(SwerveModuleState[] states){
+  public void setModuleStates(SwerveModuleState[] states) {
     SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
     SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
 
@@ -59,7 +87,35 @@ public class Drive extends SubsystemBase {
     m_bottomLeft.setState(states[2]);
     m_bottomRight.setState(states[3]);
 
-    playMusic("mario.chrp");
+    // playMusic("mario.chrp");
+  }
+
+  private void ApplyConfigs(final TalonFXConfiguration krakenCfg, MagnetSensorConfigs canCoderCfg) {
+    m_bottomRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_RIGHT_ENCODER_OFFSET));
+    m_bottomLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_LEFT_ENCODER_OFFSET));
+    m_topRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_RIGHT_ENCODER_OFFSET));
+    m_topLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_LEFT_ENCODER_OFFSET));
+  }
+
+  public void wpilibDrive(final double xSpeed, final double ySpeed, final double rot, final boolean isFieldRelative, final double period) {
+    double xSpeedLimited = m_XSpeedLimiter.calculate(MathUtil.applyDeadband(xSpeed, DriveConstants.kDriveDeadband)) * DriveConstants.MAX_TANGENTIAL_VELOCITY;
+    double ySpeedLimited = m_YSpeedLimiter.calculate(MathUtil.applyDeadband(ySpeed, DriveConstants.kDriveDeadband)) * DriveConstants.MAX_TANGENTIAL_VELOCITY;
+    double rotLimited = m_rotLimiter.calculate(MathUtil.applyDeadband(rot, DriveConstants.kDriveDeadband)) * DriveConstants.MAX_ANGULAR_VELOCITY;
+
+    var swerveModuleStates =
+    kDriveKinematics.toSwerveModuleStates(
+      isFieldRelative
+          ? ChassisSpeeds.discretize(ChassisSpeeds.fromFieldRelativeSpeeds(
+              xSpeedLimited, ySpeedLimited, rotLimited, Rotation2d.fromDegrees(-m_gyro.getYaw())),
+              period)
+          : ChassisSpeeds.discretize(new ChassisSpeeds(xSpeedLimited, ySpeedLimited, rotLimited), period));
+    
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_TANGENTIAL_VELOCITY);
+
+    m_topLeft.setState(swerveModuleStates[0]);
+    m_topRight.setState(swerveModuleStates[1]);
+    m_bottomLeft.setState(swerveModuleStates[2]);
+    m_bottomRight.setState(swerveModuleStates[3]);
   }
 
   // Taken from https://github.com/REVrobotics/MAXSwerve-Java-Template
@@ -74,7 +130,7 @@ public class Drive extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void revDrive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
@@ -163,12 +219,12 @@ public class Drive extends SubsystemBase {
     return kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
 
-  public void readConfigGains(){
-    m_topLeft.configGains();
-    m_topRight.configGains();
-    m_bottomLeft.configGains();
-    m_bottomRight.configGains();
-  }
+  // public void readConfigGains(){
+  //   m_topLeft.configGains();
+  //   m_topRight.configGains();
+  //   m_bottomLeft.configGains();
+  //   m_bottomRight.configGains();
+  // }
   
   public void rezeroTurnMotors(){
     m_topLeft.rezeroTurnMotors();
@@ -183,12 +239,12 @@ public class Drive extends SubsystemBase {
     setModuleStates(states);
   }
 
-  public void playMusic(String song){
-    m_bottomLeft.playMusic(song);
-    m_bottomRight.playMusic(song);
-    m_topLeft.playMusic(song);
-    m_topRight.playMusic(song);
-  }
+  // public void playMusic(String song){
+  //   m_bottomLeft.playMusic(song);
+  //   m_bottomRight.playMusic(song);
+  //   m_topLeft.playMusic(song);
+  //   m_topRight.playMusic(song);
+  // }
 
   public void resetHeading(){
     m_gyro.zeroYaw();

@@ -143,14 +143,14 @@ public class RobotContainer {
 
     SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
     SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
-    SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
-    SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
-    SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
-    SmartDashboard.putData("Play Nomad be like", new InstantCommand(() -> m_drive.playMusic("gangsta.chrp") ));
-    SmartDashboard.putData("Play not being in a playoff match for years", new InstantCommand(() -> m_drive.playMusic("seniors.chrp") ));
-    SmartDashboard.putData("Winning in practice matches", new InstantCommand(() -> m_drive.playMusic("prac.chrp") ));
-    SmartDashboard.putData("Play build season", new InstantCommand(() -> m_drive.playMusic("build.chrp") ));
-    SmartDashboard.putData("Play killer queen", new InstantCommand(() -> m_drive.playMusic("queen.chrp") ));
+    // SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
+    // SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
+    // SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
+    // SmartDashboard.putData("Play Nomad be like", new InstantCommand(() -> m_drive.playMusic("gangsta.chrp") ));
+    // SmartDashboard.putData("Play not being in a playoff match for years", new InstantCommand(() -> m_drive.playMusic("seniors.chrp") ));
+    // SmartDashboard.putData("Winning in practice matches", new InstantCommand(() -> m_drive.playMusic("prac.chrp") ));
+    // SmartDashboard.putData("Play build season", new InstantCommand(() -> m_drive.playMusic("build.chrp") ));
+    // SmartDashboard.putData("Play killer queen", new InstantCommand(() -> m_drive.playMusic("queen.chrp") ));
 
 
 
@@ -166,15 +166,22 @@ public class RobotContainer {
     // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
     // Similarly, the +y direction relative to the field is the -x direction relative to the driver
     // Hence, we pass leftY, leftX in that order to drive, when drive asks for xSpeed, ySpeed (in that order)
-    var m_driveCommand = new RunCommand(
-          () -> 
-          m_drive.drive(
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
-            -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
-            true,
-            false),
-          m_drive);
+    // var m_driveCommand = new RunCommand(
+    //       () -> 
+    //       m_drive.revDrive(
+    //         -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
+    //         -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
+    //         -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+    //         true,
+    //         false),
+    //       m_drive);
+    Command m_driveCommand = new RunCommand(
+      () -> m_drive.wpilibDrive(
+        -m_driverController.getLeftY(),
+        -m_driverController.getLeftX(),
+        -m_driverController.getRightX(),
+        true,
+        0.020));
     m_driveCommand.setName("DriveCommand");
 
     m_drive.setDefaultCommand(
