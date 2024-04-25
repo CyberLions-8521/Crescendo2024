@@ -31,11 +31,10 @@ public class mathProfiles {
             throw new IllegalArgumentException("Input x is outside the valid range [-1, 1]");
         }
 
-        double output = Math.pow(a, x);
         if (x >= 0) {
-            return output - 1.0;
+            return Math.pow(a, x) - 1.0;
         }
-        return -output + 1.0;
+        return -Math.pow(a, -x) + 1.0;
     }
 
     /** Testing other mathematical functions that provide equivalent functionality 
