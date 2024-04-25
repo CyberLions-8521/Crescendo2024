@@ -146,10 +146,23 @@ public final class Constants {
     public static final double TOP_RIGHT_ENCODER_OFFSET = -0.155518;//-0.148926;vwww//0.361084;
     public static final double TOP_LEFT_ENCODER_OFFSET = 0.019287;//0.025146;//-0.475342
 
-    public static final double DRIVE_KP = 0.5;
+    /**
+     * Note: drive kP has been multiplied by circumference because sensor to mechanism ratio
+     * has been altered from DRIVE_GEAR_RATIO/CIRCUMFERENCE to just DRIVE_GEAR_RATIO.  The
+     * extra division by circumference is to scale the kP value properly to the new sensor to
+     * mechanism ratio.
+     */
+    public static final double DRIVE_KP = 0.5 * CIRCUMFERENCE;
     public static final double DRIVE_KFF = 0.0001;
     public static final double DRIVE_KD = 0.001;
-    public static final double TURN_KP = 0.5;
+
+    /** Note:
+     * Turn kP has been multiplied by the turn gear ratio because code has been added to set the
+     * position conversion ratio to 1/turn_gear_ratio.  The multiplication is to properly rescale
+     * the turn kP value to work.  The value of 0.5 was based off of the original code in the 
+     * main (and post_vcr) branches.
+     */
+    public static final double TURN_KP = 0.5 * TURN_GEAR_RATIO;
   }
 
 }
