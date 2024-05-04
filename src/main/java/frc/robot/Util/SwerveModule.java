@@ -91,7 +91,7 @@ public class SwerveModule {
      }
      
      public void setState(SwerveModuleState state) {
-          SwerveModuleState optimizedState = MathUtil.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
           // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
           m_turnController.setReference(optimizedState.angle.getRotations(), ControlType.kPosition);
