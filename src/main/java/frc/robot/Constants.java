@@ -152,7 +152,7 @@ public final class Constants {
      * extra division by circumference is to scale the kP value properly to the new sensor to
      * mechanism ratio.
      */
-    public static final double DRIVE_KP = 0.5 * CIRCUMFERENCE;
+    public static final double DRIVE_KP = 0.5;
     public static final double DRIVE_KFF = 0.0001;
     public static final double DRIVE_KD = 0.001;
 
