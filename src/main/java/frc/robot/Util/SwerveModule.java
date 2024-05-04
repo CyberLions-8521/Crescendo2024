@@ -65,8 +65,12 @@ public class SwerveModule {
 
      private void configTurnMotor(final boolean isInverted) {
           m_turnMotor.restoreFactoryDefaults();
-          m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO);
+          m_turnEncoder.setPositionConversionFactor(1/TURN_GEAR_RATIO * 2 * Math.PI);
+          m_turnEncoder.setVelocityConversionFactor(1/TURN_GEAR_RATIO * 2 * Math.PI / 60);
           m_turnController.setP(TURN_KP);
+          m_turnController.setPositionPIDWrappingEnabled(true);
+          m_turnController.setPositionPIDWrappingMinInput(0);
+          m_turnController.setPositionPIDWrappingMaxInput(2 * Math.PI);
           m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(isInverted);
           m_turnMotor.setSmartCurrentLimit(20,20);
@@ -76,7 +80,7 @@ public class SwerveModule {
      public void rezeroTurnMotors() {
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations());
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRadians());
      }
 
      public Rotation2d getAbsoluteTurnAngle() {
@@ -94,11 +98,11 @@ public class SwerveModule {
           SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
           // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
           m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
-          m_turnController.setReference(optimizedState.angle.getRotations(), ControlType.kPosition);
+          m_turnController.setReference(optimizedState.angle.getRadians(), ControlType.kPosition);
      }
 
      public Rotation2d getTurnAngle() {
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition());
+          return new Rotation2d(m_turnEncoder.getPosition());
      }
      public double getDrivePosition() {
          //return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;

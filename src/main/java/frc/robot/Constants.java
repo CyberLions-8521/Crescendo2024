@@ -162,7 +162,7 @@ public final class Constants {
      * the turn kP value to work.  The value of 0.5 was based off of the original code in the 
      * main (and post_vcr) branches.
      */
-    public static final double TURN_KP = 0.5 * TURN_GEAR_RATIO;
+    public static final double TURN_KP = 0.5 * TURN_GEAR_RATIO / 2 / Math.PI;
   }
 
 }
