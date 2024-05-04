@@ -71,6 +71,7 @@ public class SwerveModule {
           m_turnController.setPositionPIDWrappingEnabled(true);
           m_turnController.setPositionPIDWrappingMinInput(0);
           m_turnController.setPositionPIDWrappingMaxInput(2 * Math.PI);
+          m_turnController.setFeedbackDevice(m_turnEncoder);
           m_turnMotor.setIdleMode(IdleMode.kCoast);
           m_turnMotor.setInverted(isInverted);
           m_turnMotor.setSmartCurrentLimit(20,20);
