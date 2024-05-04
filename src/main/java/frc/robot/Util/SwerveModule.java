@@ -25,6 +25,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -75,7 +76,7 @@ public class SwerveModule {
      public void rezeroTurnMotors() {
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations()/* * TURN_GEAR_RATIO*/);
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRotations());
      }
 
      public Rotation2d getAbsoluteTurnAngle() {
@@ -90,20 +91,20 @@ public class SwerveModule {
      }
      
      public void setState(SwerveModuleState state) {
-          SwerveModuleState optimizedState = CTREUtils.optimize(state, getTurnAngle());
+          SwerveModuleState optimizedState = MathUtil.optimize(state, getTurnAngle());
           // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
-          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond / CIRCUMFERENCE));
-          m_turnController.setReference(optimizedState.angle.getRotations()/* * TURN_GEAR_RATIO*/, ControlType.kPosition);
+          m_driveMotor.setControl(targetSpeed.withVelocity(optimizedState.speedMetersPerSecond));
+          m_turnController.setReference(optimizedState.angle.getRotations(), ControlType.kPosition);
      }
 
-     public Rotation2d getTurnAngle(){
-          return Rotation2d.fromRotations(m_turnEncoder.getPosition()/* / TURN_GEAR_RATIO*/);
+     public Rotation2d getTurnAngle() {
+          return Rotation2d.fromRotations(m_turnEncoder.getPosition());
      }
-     public double getDrivePosition(){
+     public double getDrivePosition() {
          //return (m_driveMotor.getPosition().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
          return m_driveMotor.getPosition().getValueAsDouble();
      }
-     public double getDriveVelocity(){
+     public double getDriveVelocity() {
           //return (m_driveMotor.getVelocity().getValueAsDouble()/Constants.SwerveModuleConstants.DRIVE_GEAR_RATIO) * CIRCUMFERENCE;
           return m_driveMotor.getVelocity().getValueAsDouble();
      }
