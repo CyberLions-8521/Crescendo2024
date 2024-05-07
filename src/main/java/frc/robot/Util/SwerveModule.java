@@ -4,18 +4,18 @@ package frc.robot.Util;
 // import static frc.robot.Constants.SwerveModuleConstants.TURN_KP;
 
 import com.ctre.phoenix6.Orchestra;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+// import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
+// import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 // import com.ctre.phoenix6.controls.VelocityVoltage;
 // import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
+// import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+// import com.ctre.phoenix6.signals.InvertedValue;
+// import com.ctre.phoenix6.signals.NeutralModeValue;
+// import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -25,12 +25,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.SwerveModuleConstants.*;
 
@@ -81,20 +81,16 @@ public class SwerveModule {
      public void rezeroTurnMotors() {
           //REZERO TURN MOTORS
           //absolute rotaion of the cancoder * mt/r
-          m_turnEncoder.setPosition(getAbsoluteTurnAngle().getRadians());
+          m_turnEncoder.setPosition(getAbsoluteTurnAngle());     // converted to radians due to conversion factor
      }
 
-     public Rotation2d getAbsoluteTurnAngle() {
+     public double getAbsoluteTurnAngle() {
           // angleGetter.refresh();
           //getabsposition returns status signal of type double / rotations
           //get value takes the type value and returns it.
-          return Rotation2d.fromRotations(m_canCoder.getAbsolutePosition().getValue());
+          return m_canCoder.getAbsolutePosition().getValue();
      }
 
-     public SwerveModuleState getState(){
-          return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble(), getTurnAngle());
-     }
-     
      public void setState(SwerveModuleState state) {
           SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getTurnAngle());
           // optimizedState.speedMetersPerSecond *= state.angle.minus(getTurnAngle()).getCos();
@@ -105,7 +101,11 @@ public class SwerveModule {
           }
           m_turnController.setReference(optimizedState.angle.getRadians(), ControlType.kPosition);
      }
-
+     
+     public SwerveModuleState getState(){
+          return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble(), getTurnAngle());
+     }
+     
      public Rotation2d getTurnAngle() {
           return new Rotation2d(m_turnEncoder.getPosition());
      }
