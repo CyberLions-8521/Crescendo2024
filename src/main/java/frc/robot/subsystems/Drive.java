@@ -78,6 +78,13 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive FF", DRIVE_KFF);
   }
 
+  private void ApplyConfigs(final TalonFXConfiguration krakenCfg, MagnetSensorConfigs canCoderCfg) {
+    m_bottomRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_RIGHT_ENCODER_OFFSET));
+    m_bottomLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_LEFT_ENCODER_OFFSET));
+    m_topRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_RIGHT_ENCODER_OFFSET));
+    m_topLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_LEFT_ENCODER_OFFSET));
+  }
+  
   public void setModuleStates(SwerveModuleState[] states) {
     SmartDashboard.putNumber("front left desired velocity", states[0].speedMetersPerSecond);
     SmartDashboard.putNumber("front left desired angle", states[0].angle.getDegrees());
@@ -88,13 +95,6 @@ public class Drive extends SubsystemBase {
     m_bottomRight.setState(states[3]);
 
     // playMusic("mario.chrp");
-  }
-
-  private void ApplyConfigs(final TalonFXConfiguration krakenCfg, MagnetSensorConfigs canCoderCfg) {
-    m_bottomRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_RIGHT_ENCODER_OFFSET));
-    m_bottomLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(BOTTOM_LEFT_ENCODER_OFFSET));
-    m_topRight.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_RIGHT_ENCODER_OFFSET));
-    m_topLeft.applyConfigs(krakenCfg, canCoderCfg.withMagnetOffset(TOP_LEFT_ENCODER_OFFSET));
   }
 
   public void wpilibDrive(final double xSpeed, final double ySpeed, final double rot, final boolean isFieldRelative, final double period) {
@@ -261,7 +261,7 @@ public class Drive extends SubsystemBase {
 
   public void logData(){
     SmartDashboard.putNumber("Turn Angle", m_topRight.getTurnAngle().getDegrees());
-    SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle().getDegrees());
+    SmartDashboard.putNumber("Absolute Turn", m_topRight.getAbsoluteTurnAngle());
     SmartDashboard.putNumber("Gyro Degrees", m_gyro.getAngle());
     SmartDashboard.putNumber("front left actual velocity", Math.abs(m_topLeft.getDriveVelocity()));
     SmartDashboard.putNumber("Heading", getHeading());
