@@ -167,14 +167,14 @@ public class RobotContainer {
     // Similarly, the +y direction relative to the field is the -x direction relative to the driver
     // Hence, we pass leftY, leftX in that order to drive, when drive asks for xSpeed, ySpeed (in that order)
     var m_driveCommand = new RunCommand(
-          () -> 
-          m_drive.revDrive(
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
-            -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
-            true,
-            false),
-          m_drive);
+      () -> 
+        m_drive.revDrive(
+          -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
+          -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
+          -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+          true,
+          false),
+      m_drive);
     // Command m_driveCommand = new RunCommand(
     //   () -> m_drive.wpilibDrive(
     //     -m_driverController.getLeftY(),
@@ -185,11 +185,9 @@ public class RobotContainer {
     //   m_drive);
     m_driveCommand.setName("DriveCommand");
 
-    m_drive.setDefaultCommand(
-      // The left stick controls translation of the robot.
-      // Turning is controlled by the X axis of the right stick.
-      m_driveCommand
-    );
+    // The left stick controls translation of the robot.
+    // Turning is controlled by the X axis of the right stick.
+    m_drive.setDefaultCommand(m_driveCommand);
 
     m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
     m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
