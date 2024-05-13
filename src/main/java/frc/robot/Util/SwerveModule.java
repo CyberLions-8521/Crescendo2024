@@ -45,7 +45,7 @@ public class SwerveModule {
   public Orchestra m_Orchestra = new Orchestra();
 
   public SwerveModule(int drivePort, int turnPort, int encoderPort) {
-    Timer.delay(0.1);
+    // Timer.delay(0.1);
 
     m_driveMotor = new TalonFX(drivePort, "Ryan");
     m_turnMotor = new CANSparkMax(turnPort, MotorType.kBrushless);
