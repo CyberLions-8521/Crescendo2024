@@ -3,8 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.auto.NamedCommands;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -129,16 +129,16 @@ public class RobotContainer {
   //////////
   public RobotContainer() {
     configureBindings();
-    NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
-    NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
-    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading, m_drive));
-    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
-    NamedCommands.registerCommand("down", m_zero);
+    // NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
+    // NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
+    // NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading, m_drive));
+    // NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
+    // NamedCommands.registerCommand("down", m_zero);
 
-    m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
-    m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
-    m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
-    m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
+    // m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
+    // m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
+    // m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
+    // m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
     m_chooser.addOption("no auto", Commands.none());
 
     SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
