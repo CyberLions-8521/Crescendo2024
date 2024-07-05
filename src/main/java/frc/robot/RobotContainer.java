@@ -30,6 +30,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
+import frc.robot.subsystems.SmartJoint;
 import frc.robot.subsystems.PathHandler;
 import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Tracker;
@@ -44,7 +45,8 @@ public class RobotContainer {
   private final Elevator m_elevator = new Elevator();
   private final Hood m_hood = new Hood();
   private final HoodWrist m_hoodWrist = new HoodWrist();
-  private final Joint m_joint = new Joint();
+  // private final Joint m_joint = new Joint();
+  private final SmartJoint m_smartJoint = new SmartJoint();
   private final Toaster m_toaster = new Toaster();
 
   // Instantiated because they are configured in their constructor.
@@ -63,66 +65,66 @@ public class RobotContainer {
     m_hood.HoodSetSpeedCmd(0)
   );
 
-  private Command m_goSource = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
-    new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
-    Commands.sequence(
-      Commands.waitSeconds(0.5),
-      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
-      Commands.parallel(
-        m_toaster.ToasterIntakeCmd(),
-        m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
-      )
-    )
-  );
+  // private Command m_goSource = Commands.parallel(
+  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
+  //   new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
+  //   Commands.sequence(
+  //     Commands.waitSeconds(0.5),
+  //     new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
+  //     Commands.parallel(
+  //       m_toaster.ToasterIntakeCmd(),
+  //       m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
+  //     )
+  //   )
+  // );
 
   /**
    * In order to score into the amp, we perform the following commands
    * (1) Lift the arm into position, and extend the elevator to the proper length
    * (2) Wait 0.4 seconds before flipping the rollers into position
    */
-  private Command m_goAmp = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
-    new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
-    Commands.sequence(
-      Commands.waitSeconds(0.4),
-      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
-    )
-  );
+  // private Command m_goAmp = Commands.parallel(
+  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
+  //   new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
+  //   Commands.sequence(
+  //     Commands.waitSeconds(0.4),
+  //     new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
+  //   )
+  // );
 
   //ZERO
-  private Command m_zero = Commands.parallel(
-    new ElevatorGoToSetpoint(m_elevator, 0), 
-    new JointGoToSetpoint(0,0, m_joint), 
-    new HoodWristGoToSetpoint(m_hoodWrist, 0),
-    noIntake
-  );
+  // private Command m_zero = Commands.parallel(
+  //   new ElevatorGoToSetpoint(m_elevator, 0), 
+  //   new JointGoToSetpoint(0,0, m_joint), 
+  //   new HoodWristGoToSetpoint(m_hoodWrist, 0),
+  //   noIntake
+  // );
 
-  private Command m_goSideSpeaker = Commands.parallel(
-    new JointGoToSetpoint(32, 0, m_joint),
-    new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  );
+  // private Command m_goSideSpeaker = Commands.parallel(
+  //   new JointGoToSetpoint(32, 0, m_joint),
+  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  // );
 
-  private Command m_goMiddleSpeaker = Commands.parallel(
-    new JointGoToSetpoint(29, 0, m_joint),
-    new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  );
+  // private Command m_goMiddleSpeaker = Commands.parallel(
+  //   new JointGoToSetpoint(29, 0, m_joint),
+  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  // );
 
   // The command bound to Button Y of partner controller
-  private Command m_goMidSpeakerCommand = Commands.parallel(
-    new JointGoToSetpoint(29, 0, m_joint),
-    new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  );
+  // private Command m_goMidSpeakerCommand = Commands.parallel(
+  //   new JointGoToSetpoint(29, 0, m_joint),
+  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  // );
 
   // Just trying stuff for fun; largely ignore
   // private Command m_goMiddleSpeakerAuto = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
   // private Command m_goMiddleSpeakerTeleop = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
-  private Command autoMiddleSpeakerShootCommand = m_goMiddleSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
-  private Command autoSideSpeakerShootCommand = m_goSideSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
+  // private Command autoMiddleSpeakerShootCommand = m_goMiddleSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
+  // private Command autoSideSpeakerShootCommand = m_goSideSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
 
   public void logData(){
     SmartDashboard.putData("Reset Elevator", new InstantCommand(m_elevator::resetEncoder, m_elevator));
-    SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero, m_joint));
+    // SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero, m_joint));
     SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(m_hoodWrist::reZero, m_hoodWrist));
   }
  
@@ -141,8 +143,8 @@ public class RobotContainer {
     // m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
     m_chooser.addOption("no auto", Commands.none());
 
-    SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
-    SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
+    // SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
+    // SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
     SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
     SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
     SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
@@ -158,9 +160,9 @@ public class RobotContainer {
 
     SmartDashboard.putData("Chooser", m_chooser);
 
-    m_goSource.setName("GoToSource");
-    m_zero.setName("Zero");
-    m_goAmp.setName("GoAmp");
+    // m_goSource.setName("GoToSource");
+    // m_zero.setName("Zero");
+    // m_goAmp.setName("GoAmp");
 
     // Note that MathUtil.applyDeadband() will automatically scale its return value between -1 and 1
     // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
@@ -186,7 +188,7 @@ public class RobotContainer {
     m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
     m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
     m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0), m_hoodWrist));
-    m_joint.setDefaultCommand(m_joint.JointSetOffCmd());
+    // m_joint.setDefaultCommand(m_joint.JointSetOffCmd());
 }
 
   private void configureBindings() {
@@ -196,8 +198,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading, m_drive));
 
     // Master controller
-    m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
-    m_driverController.start().whileTrue(m_joint.JointSetJogCmd(-0.15));
+    // m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
+    // m_driverController.start().whileTrue(m_joint.JointSetJogCmd(-0.15));
     
     // Partner controller
     m_auxController.leftBumper().whileTrue(m_toaster.ToasterAmpShootCmd());
@@ -207,10 +209,12 @@ public class RobotContainer {
       .alongWith(m_hood.HoodSetSpeedCmd(-0.8))
     );
     m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8).repeatedly());
-    m_auxController.a().onTrue(m_goSource);
-    m_auxController.b().onTrue(m_zero);
-    m_auxController.x().onTrue(m_goAmp);
-    m_auxController.y().onTrue(m_goMidSpeakerCommand);
+    // m_auxController.a().onTrue(m_goSource);
+    // m_auxController.b().onTrue(m_zero);
+    // m_auxController.x().onTrue(m_goAmp);
+    // m_auxController.y().onTrue(m_goMidSpeakerCommand);
+    m_auxController.y().onTrue(m_smartJoint.goToGoalCommand(29));
+    m_auxController.b().onTrue(m_smartJoint.goToGoalCommand(0));
   }
   
   public Command getAutonomousCommand() {

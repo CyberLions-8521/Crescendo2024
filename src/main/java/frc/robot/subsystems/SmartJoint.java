@@ -107,13 +107,11 @@ public class SmartJoint extends SubsystemBase {
   }
 
   private void logData(){
-    SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
-    SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
+    SmartDashboard.putNumber("Joint Goal Setpoint", getPosition());
     SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
     SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
     SmartDashboard.putBoolean("At setpoint", atSetpoint());
-    SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
   }
 
 
@@ -164,6 +162,11 @@ public class SmartJoint extends SubsystemBase {
   }
 
   public Command goToGoalCommand(final double goal) {
-    return runOnce(() -> m_jointControllerLeft.setReference(goal, CANSparkMax.ControlType.kSmartMotion));
+    return run(() -> {
+      double out;
+      SmartDashboard.putNumber("Joint Goal Position", goal);
+      m_jointControllerLeft.setReference(goal, CANSparkMax.ControlType.kSmartMotion);
+      out = m_jointEncoderLeft.getPosition();
+      SmartDashboard.putNumber("Joint Position", out); });
   }
 }
