@@ -25,14 +25,6 @@ import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.JointConstants;
 
 public class Joint extends SubsystemBase {
-  //CONSTRUCTOR
-  public Joint() {
-    configMotors();
-    rezero();
-    SmartDashboard.putNumber("Joint kP", m_jointControllerLeft.getP());
-    SmartDashboard.putNumber("Joint kd", m_jointControllerLeft.getD());
-  }
-  
   //MOTOR OBJECTS
   private CANSparkMax m_jointRight = new CANSparkMax(MotorConstants.JOINT_RIGHT_MOTOR, MotorType.kBrushless);
   private CANSparkMax m_jointLeft = new CANSparkMax(MotorConstants.JOINT_LEFT_MOTOR, MotorType.kBrushless);
@@ -45,91 +37,35 @@ public class Joint extends SubsystemBase {
   private SparkPIDController m_jointControllerLeft = m_jointLeft.getPIDController();
 
   //TRAPEZOID PROFILE OBJECT
-  //500,250
-
   private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(550, 150));
-  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
-  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State(getPosition(), 0);
-  
-  //SETPOINT
-  private double m_output = 0;
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
-  //SET MOTOR OUTPUT METHODS
-  private void set(double value) {
-    m_jointLeft.set(value);
+  public Joint() {
+    configMotors();
+    rezero();
+    SmartDashboard.putNumber("Joint kP", m_jointControllerLeft.getP());
+    SmartDashboard.putNumber("Joint kd", m_jointControllerLeft.getD());
   }
 
-  public void setOff() {
-    set(getPosition() * JointConstants.kAntiGravityMultiplier);
-  }
-
-  //SETPOINT METHODS
-  public void setGoal(double desiredPosition, double desiredVelocity){
-    m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
-    // setState(JointState.POSITION);
-    goToSetpoint();
-  }
-
-  private void goToSetpoint() {
-    m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
-    m_output = MathUtil.clamp(m_setpoint.position, 0, 33);
-    m_jointControllerLeft.setReference(m_output, ControlType.kPosition);
-  }
-
-  public boolean atSetpoint(){
-    return MathUtil.isNear(m_goal.position, getPosition(), 0.5);
-  }
-
-  public void refreshSetpoint() {
-    m_setpoint = new TrapezoidProfile.State(getPosition(), m_jointEncoderLeft.getVelocity());
-  }
-
-  private double getPosition() {
-    return m_jointEncoderLeft.getPosition();
-  }
-
-  public void zero() {
-    if (getPosition() > 0) {
-      set(-0.15);
-    } else {
-      set(JointConstants.kAntiGravityMultiplier * getPosition());
-    }
-  }
-
-  public void rezero() {
-    m_jointEncoderRight.setPosition(0);
-    m_jointEncoderLeft.setPosition(0);
-  }
-  
-  @Override
-  public void periodic() {
-    logData();  
-  }
-
-  private void logData(){
-    SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
-    SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
-    SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
-    SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
-    SmartDashboard.putNumber("Joint Right", m_jointRight.get());
-    SmartDashboard.putBoolean("At setpoint", atSetpoint());
-    SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
-  }
-
-
-  private void configMotors(){
+  private void configMotors() {
     //RESTORE FACTORY DEFAULT
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
 
-    REVLibError checkOk = REVLibError.kError;
+    REVLibError checkOk;
 
-    while (true) {
+    do {
       checkOk = m_jointRight.follow(m_jointLeft, true);
+      Timer.delay(0.1);
+    } while (checkOk != REVLibError.kOk);
 
-      if (checkOk == REVLibError.kOk) { break; }
-      else { Timer.delay(0.1); }
-    }
+    // while (true) {
+    //   checkOk = m_jointRight.follow(m_jointLeft, true);
+
+    //   if (checkOk == REVLibError.kOk) { break; }
+    //   else { Timer.delay(0.1); }
+    // }
 
     m_jointControllerLeft.setP(JointConstants.JOINT_KP);
     m_jointControllerLeft.setD(JointConstants.JOINT_KD);
@@ -148,6 +84,81 @@ public class Joint extends SubsystemBase {
     
     m_jointRight.burnFlash();
     m_jointLeft.burnFlash();
+  }
+
+  public void rezero() {
+    m_jointEncoderRight.setPosition(0);
+    m_jointEncoderLeft.setPosition(0);
+  }
+
+  public Command goToSetpointCommand(final double goal) {
+    return new FunctionalCommand(
+      () -> {
+        initializeSetpoint();   // initialize to the current position of joint
+        setGoal(goal, 0);       // position at goal; velocity at 0
+      },
+      () -> goToSetpoint(),
+      interrupted -> setOff(),  // implements anti-gravity
+      () -> isAtSetpoint(),
+      this);
+  }
+
+  public void initializeSetpoint() {
+    // m_setpoint = new TrapezoidProfile.State(getPosition(), m_jointEncoderLeft.getVelocity());
+    m_setpoint.position = getPosition();
+    m_setpoint.velocity = m_jointEncoderLeft.getVelocity();
+  }
+
+  public void setGoal(double desiredPosition, double desiredVelocity) {
+    // m_goal = new TrapezoidProfile.State(desiredPosition, desiredVelocity);
+    m_goal.position = desiredPosition;
+    m_goal.velocity = desiredVelocity;
+  }
+
+  private void goToSetpoint() {
+    m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
+    double output = MathUtil.clamp(m_setpoint.position, 0, 33);
+    m_jointControllerLeft.setReference(output, ControlType.kPosition);
+  }
+
+  public boolean isAtSetpoint() {
+    return MathUtil.isNear(m_goal.position, getPosition(), 0.5);
+  }
+
+  private double getPosition() {
+    return m_jointEncoderLeft.getPosition();
+  }
+
+  //SET MOTOR OUTPUT METHODS
+  private void set(double value) {
+    m_jointLeft.set(value);
+  }
+
+  public void setOff() {
+    set(getPosition() * JointConstants.kAntiGravityMultiplier);
+  }
+
+  public void zero() {
+    if (getPosition() > 0) {
+      set(-0.15);
+    } else {
+      set(JointConstants.kAntiGravityMultiplier * getPosition());
+    }
+  }
+  
+  @Override
+  public void periodic() {
+    logData();  
+  }
+
+  private void logData(){
+    SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
+    SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
+    SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
+    SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
+    SmartDashboard.putNumber("Joint Right", m_jointRight.get());
+    SmartDashboard.putBoolean("At setpoint", atSetpoint());
+    SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
   }
 
   public Command JointSetJogCmd(final double jogValue) {

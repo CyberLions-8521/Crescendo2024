@@ -31,13 +31,14 @@ public class JointGoToSetpoint extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_joint.refreshSetpoint();
+    m_joint.initializeSetpoint();
+    m_joint.setGoal(goalPosition, goalVelocity);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_joint.setGoal(goalPosition, goalVelocity);
+    m_joint.goToSetpoint();
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +50,6 @@ public class JointGoToSetpoint extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_joint.atSetpoint());
+    return m_joint.isAtSetpoint();
   }
 }
