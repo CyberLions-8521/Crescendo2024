@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.MotorConstants;
@@ -115,7 +116,7 @@ public class Joint extends SubsystemBase {
     m_goal.velocity = desiredVelocity;
   }
 
-  private void goToSetpoint() {
+  public void goToSetpoint() {
     m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
     double output = MathUtil.clamp(m_setpoint.position, 0, 33);
     m_jointControllerLeft.setReference(output, ControlType.kPosition);
@@ -157,7 +158,7 @@ public class Joint extends SubsystemBase {
     SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
     SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
-    SmartDashboard.putBoolean("At setpoint", atSetpoint());
+    SmartDashboard.putBoolean("At setpoint", isAtSetpoint());
     SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
   }
 
