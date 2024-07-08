@@ -46,7 +46,7 @@ public class RobotContainer {
   private final Hood m_hood = new Hood();
   private final HoodWrist m_hoodWrist = new HoodWrist();
   private final Joint m_joint = new Joint();
-  private final SmartJoint m_smartJoint = new SmartJoint();
+  // private final SmartJoint m_smartJoint = new SmartJoint();
   private final Toaster m_toaster = new Toaster();
 
   // Instantiated because they are configured in their constructor.
