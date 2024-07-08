@@ -45,7 +45,7 @@ public class RobotContainer {
   private final Elevator m_elevator = new Elevator();
   private final Hood m_hood = new Hood();
   private final HoodWrist m_hoodWrist = new HoodWrist();
-  // private final Joint m_joint = new Joint();
+  private final Joint m_joint = new Joint();
   private final SmartJoint m_smartJoint = new SmartJoint();
   private final Toaster m_toaster = new Toaster();
 
@@ -93,12 +93,12 @@ public class RobotContainer {
   // );
 
   //ZERO
-  // private Command m_zero = Commands.parallel(
-  //   new ElevatorGoToSetpoint(m_elevator, 0), 
-  //   new JointGoToSetpoint(0,0, m_joint), 
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0),
-  //   noIntake
-  // );
+  private Command m_zero = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 0), 
+    new JointGoToSetpoint(0,0, m_joint), 
+    new HoodWristGoToSetpoint(m_hoodWrist, 0),
+    noIntake
+  );
 
   // private Command m_goSideSpeaker = Commands.parallel(
   //   new JointGoToSetpoint(32, 0, m_joint),
@@ -111,10 +111,10 @@ public class RobotContainer {
   // );
 
   // The command bound to Button Y of partner controller
-  // private Command m_goMidSpeakerCommand = Commands.parallel(
-  //   new JointGoToSetpoint(29, 0, m_joint),
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  // );
+  private Command m_goMidSpeakerCommand = Commands.parallel(
+    new JointGoToSetpoint(29, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
 
   // Just trying stuff for fun; largely ignore
   // private Command m_goMiddleSpeakerAuto = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
@@ -210,11 +210,11 @@ public class RobotContainer {
     );
     m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8).repeatedly());
     // m_auxController.a().onTrue(m_goSource);
-    // m_auxController.b().onTrue(m_zero);
+    m_auxController.b().onTrue(m_zero);
     // m_auxController.x().onTrue(m_goAmp);
-    // m_auxController.y().onTrue(m_goMidSpeakerCommand);
-    m_auxController.y().onTrue(m_smartJoint.goToGoalCommand(29));
-    m_auxController.b().onTrue(m_smartJoint.goToGoalCommand(0));
+    m_auxController.y().onTrue(m_goMidSpeakerCommand);
+    // m_auxController.y().onTrue(m_smartJoint.goToGoalCommand(29));
+    // m_auxController.b().onTrue(m_smartJoint.goToGoalCommand(0));
   }
   
   public Command getAutonomousCommand() {
