@@ -21,11 +21,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.JointConstants;
 
+/**
+ * This class functions near equivalently to the Joint subsystem
+ * and its corresponding JointGoToSetpoint command.  This class
+ * is for illustrative purposes and is meant to showcase how to
+ * accomplish trapezoidal motion profiling utilizing WPILib's
+ * built-in TrapezoidProfileSubsystem wrapper class.
+ */
 public class ProfiledJoint extends TrapezoidProfileSubsystem {
   //MOTOR OBJECTS
   private CANSparkMax m_jointRight = new CANSparkMax(MotorConstants.JOINT_RIGHT_MOTOR, MotorType.kBrushless);
@@ -54,12 +60,9 @@ public class ProfiledJoint extends TrapezoidProfileSubsystem {
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
 
-    REVLibError checkOk;
-
-    do {
-      checkOk = m_jointRight.follow(m_jointLeft, true);
+    while (m_jointRight.follow(m_jointLeft, true) != REVLibError.kOk) {
       Timer.delay(0.1);
-    } while (checkOk != REVLibError.kOk);
+    }
 
     m_jointControllerLeft.setP(JointConstants.JOINT_KP);
     m_jointControllerLeft.setD(JointConstants.JOINT_KD);
@@ -90,11 +93,6 @@ public class ProfiledJoint extends TrapezoidProfileSubsystem {
     double output = MathUtil.clamp(state.position, 0, 33);
     m_jointControllerLeft.setReference(output, ControlType.kPosition);
   }
-
-  //TRAPEZOID PROFILE OBJECT
-  // private final TrapezoidProfile m_profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(550, 150));
-  // private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
-  // private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
   
   @Override
   public void periodic() {
@@ -105,12 +103,9 @@ public class ProfiledJoint extends TrapezoidProfileSubsystem {
   private void logData() {
     SmartDashboard.putNumber("Joint kP", m_jointControllerLeft.getP());
     SmartDashboard.putNumber("Joint kd", m_jointControllerLeft.getD());
-    // SmartDashboard.putNumber("Joint Goal Position", m_goal.position);
-    // SmartDashboard.putNumber("Joint Goal Setpoint", m_setpoint.position);
     SmartDashboard.putNumber("joint velocity", m_jointEncoderLeft.getVelocity());
     SmartDashboard.putNumber("Joint Left", m_jointLeft.get());
     SmartDashboard.putNumber("Joint Right", m_jointRight.get());
-    // SmartDashboard.putBoolean("At setpoint", isAtSetpoint());
     SmartDashboard.putNumber("Joint Position", m_jointEncoderLeft.getPosition());
   }
 
