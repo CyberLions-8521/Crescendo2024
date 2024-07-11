@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -46,6 +48,7 @@ public class RobotContainer {
   private final HoodWrist m_hoodWrist = new HoodWrist();
   private final Joint m_joint = new Joint();
   private final Toaster m_toaster = new Toaster();
+  private final CommandJoystick m_joystick = new CommandJoystick(1);
 
   // Instantiated because they are configured in their constructor.
   // Actual implementation given by PathPlanner calls for configuration within Drive subsystem.
@@ -55,8 +58,8 @@ public class RobotContainer {
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>(); 
 
-  private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController m_auxController = new CommandXboxController(OperatorConstants.kPartnerControllerPort);
+  // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // private final CommandXboxController m_auxController = new CommandXboxController(OperatorConstants.kPartnerControllerPort);
   
   private Command noIntake = Commands.parallel(
     m_toaster.ToasterOffCmd(),
@@ -166,12 +169,21 @@ public class RobotContainer {
     // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
     // Similarly, the +y direction relative to the field is the -x direction relative to the driver
     // Hence, we pass leftY, leftX in that order to drive, when drive asks for xSpeed, ySpeed (in that order)
+    // var m_driveCommand = new RunCommand(
+    //       () -> 
+    //       m_drive.drive(
+    //         -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
+    //         -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
+    //         -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+    //         true,
+    //         false),
+    //       m_drive);
     var m_driveCommand = new RunCommand(
           () -> 
           m_drive.drive(
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband), 2),
-            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_driverController.getLeftX(), DriveConstants.kDriveDeadband), 2),
-            -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadband),
+            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_joystick.getY(), DriveConstants.kDriveDeadband), 2),
+            -mathProfiles.exponentialDrive(MathUtil.applyDeadband(m_joystick.getX(), DriveConstants.kDriveDeadband), 2),
+            -MathUtil.applyDeadband(m_joystick.getZ(), DriveConstants.kDriveDeadband),
             true,
             false),
           m_drive);
@@ -191,6 +203,13 @@ public class RobotContainer {
 
   private void configureBindings() {
     logData();
+    m_joystick.button(7).onTrue(m_goSource);
+    m_joystick.button(8).onTrue(m_zero);
+    m_joystick.button(9).onTrue(m_goAmp);
+    m_joystick.top().onTrue(m_goMidSpeakerCommand);
+    m_joystick.trigger().whileTrue(m_toaster.ToasterSpeakerShootCmd());
+
+    /*
     //DRIVEBASE
     m_driverController.a().onTrue(new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
     m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading, m_drive));
@@ -211,6 +230,7 @@ public class RobotContainer {
     m_auxController.b().onTrue(m_zero);
     m_auxController.x().onTrue(m_goAmp);
     m_auxController.y().onTrue(m_goMidSpeakerCommand);
+    */
   }
   
   public Command getAutonomousCommand() {

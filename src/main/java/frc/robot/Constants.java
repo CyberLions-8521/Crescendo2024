@@ -95,7 +95,7 @@ public final class Constants {
     public static final double kMagnitudeSlewRate = 1.8;
     public static final double kRotationalSlewRate = 2.0;
     public static final double kDirectionSlewRate = 1.2;
-    public static final double kDriveDeadband = 0.1;
+    public static final double kDriveDeadband = 0.3; // 0.1 for xbox controller; 0.3 for joystick
   }
 
   public static class SwerveModuleConstants{

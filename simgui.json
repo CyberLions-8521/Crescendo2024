@@ -4,9 +4,17 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Play AP CSP": "Command",
+      "/SmartDashboard/Play Nomad be like": "Command",
+      "/SmartDashboard/Play Taylor Swift": "Command",
+      "/SmartDashboard/Play build season": "Command",
+      "/SmartDashboard/Play killer queen": "Command",
+      "/SmartDashboard/Play me waiting on deck": "Command",
+      "/SmartDashboard/Play not being in a playoff match for years": "Command",
       "/SmartDashboard/Reset Elevator": "Command",
       "/SmartDashboard/Reset Hood Wrist": "Command",
       "/SmartDashboard/Reset Joint": "Command",
+      "/SmartDashboard/Winning in practice matches": "Command",
       "/SmartDashboard/shoot (Middle)": "Command",
       "/SmartDashboard/shoot (Side)": "Command"
     }
