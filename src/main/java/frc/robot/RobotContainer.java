@@ -3,8 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-// import com.pathplanner.lib.auto.NamedCommands;
-// import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,8 +30,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.HoodWrist;
 import frc.robot.subsystems.Joint;
-import frc.robot.subsystems.SmartJoint;
-import frc.robot.subsystems.ProfiledJoint;
+// import frc.robot.subsystems.ProfiledJoint;
 import frc.robot.subsystems.PathHandler;
 import frc.robot.subsystems.Toaster;
 import frc.robot.subsystems.Tracker;
@@ -46,9 +45,8 @@ public class RobotContainer {
   private final Elevator m_elevator = new Elevator();
   private final Hood m_hood = new Hood();
   private final HoodWrist m_hoodWrist = new HoodWrist();
-  // private final Joint m_joint = new Joint();
-  // private final SmartJoint m_smartJoint = new SmartJoint();
-  private final ProfiledJoint m_profiledJoint = new ProfiledJoint();
+  private final Joint m_joint = new Joint();
+  // private final ProfiledJoint m_profiledJoint = new ProfiledJoint();
   private final Toaster m_toaster = new Toaster();
 
   // Instantiated because they are configured in their constructor.
@@ -67,104 +65,99 @@ public class RobotContainer {
     m_hood.HoodSetSpeedCmd(0)
   );
 
-  // private Command m_goSource = Commands.parallel(
-  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
-  //   new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
-  //   Commands.sequence(
-  //     Commands.waitSeconds(0.5),
-  //     new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
-  //     Commands.parallel(
-  //       m_toaster.ToasterIntakeCmd(),
-  //       m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
-  //     )
-  //   )
-  // );
+  private Command m_goSource = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kSourceSetpoint), 
+    new JointGoToSetpoint(JointConstants.kSourceSetpoint,0, m_joint), 
+    Commands.sequence(
+      Commands.waitSeconds(0.5),
+      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kSourceSetpoint),
+      Commands.parallel(
+        m_toaster.ToasterIntakeCmd(),
+        m_hood.HoodSetSpeedCmd(HoodConstants.kIntakeSpeed)
+      )
+    )
+  );
 
   /**
    * In order to score into the amp, we perform the following commands
    * (1) Lift the arm into position, and extend the elevator to the proper length
    * (2) Wait 0.4 seconds before flipping the rollers into position
    */
-  // private Command m_goAmp = Commands.parallel(
-  //   new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
-  //   new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
-  //   Commands.sequence(
-  //     Commands.waitSeconds(0.4),
-  //     new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
-  //   )
-  // );
+  private Command m_goAmp = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, ElevatorConstants.kAmpSetpoint), 
+    new JointGoToSetpoint(JointConstants.kAmpSetpoint,0, m_joint),
+    Commands.sequence(
+      Commands.waitSeconds(0.4),
+      new HoodWristGoToSetpoint(m_hoodWrist, HoodWristConstants.kAmpSetpoint)
+    )
+  );
 
   //ZERO
-  // private Command m_zero = Commands.parallel(
-  //   new ElevatorGoToSetpoint(m_elevator, 0), 
-  //   new JointGoToSetpoint(0,0, m_joint), 
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0),
-  //   noIntake
-  // );
+  private Command m_zero = Commands.parallel(
+    new ElevatorGoToSetpoint(m_elevator, 0), 
+    new JointGoToSetpoint(0,0, m_joint), 
+    new HoodWristGoToSetpoint(m_hoodWrist, 0),
+    noIntake
+  );
 
-  // private Command m_goSideSpeaker = Commands.parallel(
-  //   new JointGoToSetpoint(32, 0, m_joint),
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  // );
+  private Command m_goSideSpeaker = Commands.parallel(
+    new JointGoToSetpoint(32, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
 
-  // private Command m_goMiddleSpeaker = Commands.parallel(
-  //   new JointGoToSetpoint(29, 0, m_joint),
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  // );
+  private Command m_goMiddleSpeaker = Commands.parallel(
+    new JointGoToSetpoint(29, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
 
   // The command bound to Button Y of partner controller
-  // private Command m_goMidSpeakerCommand = Commands.parallel(
-  //   new JointGoToSetpoint(29, 0, m_joint),
-  //   new HoodWristGoToSetpoint(m_hoodWrist, 0)
-  // );
+  private Command m_goMidSpeakerCommand = Commands.parallel(
+    new JointGoToSetpoint(29, 0, m_joint),
+    new HoodWristGoToSetpoint(m_hoodWrist, 0)
+  );
 
   // Just trying stuff for fun; largely ignore
   // private Command m_goMiddleSpeakerAuto = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
   // private Command m_goMiddleSpeakerTeleop = ElevatedHoodedJoint.goMidSpeakerCommand(m_elevator, m_hoodWrist, m_joint);
-  // private Command autoMiddleSpeakerShootCommand = m_goMiddleSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
-  // private Command autoSideSpeakerShootCommand = m_goSideSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
+  private Command autoMiddleSpeakerShootCommand = m_goMiddleSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
+  private Command autoSideSpeakerShootCommand = m_goSideSpeaker.andThen(m_toaster.ToasterSpeakerShootCmd()).withTimeout(3);
 
   public void logData(){
     SmartDashboard.putData("Reset Elevator", new InstantCommand(m_elevator::resetEncoder, m_elevator));
-    // SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero, m_joint));
+    SmartDashboard.putData("Reset Joint", new InstantCommand(m_joint::rezero, m_joint));
     SmartDashboard.putData("Reset Hood Wrist", new InstantCommand(m_hoodWrist::reZero, m_hoodWrist));
   }
  
   //////////
   public RobotContainer() {
     configureBindings();
-    // NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
-    // NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
-    // NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading, m_drive));
-    // NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
-    // NamedCommands.registerCommand("down", m_zero);
+    NamedCommands.registerCommand("shoot (Middle)", autoMiddleSpeakerShootCommand);
+    NamedCommands.registerCommand("shoot (Side)", autoSideSpeakerShootCommand);
+    NamedCommands.registerCommand("Reset Gyro", new InstantCommand(m_drive::resetHeading, m_drive));
+    NamedCommands.registerCommand("Rezero Turn Motor", new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
+    NamedCommands.registerCommand("down", m_zero);
 
-    // m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
-    // m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
-    // m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
-    // m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
+    m_chooser.addOption("Top Taxi", new PathPlannerAuto("Top Taxi"));
+    m_chooser.addOption("Bottom Taxi", new PathPlannerAuto("Bottom Taxi"));
+    m_chooser.addOption("Middle Taxi", new PathPlannerAuto("Middle Taxi"));
+    m_chooser.addOption("Practice", new PathPlannerAuto("HOLA"));
     m_chooser.addOption("no auto", Commands.none());
 
     // SmartDashboard.putData("shoot (Middle)",autoMiddleSpeakerShootCommand);
     // SmartDashboard.putData("shoot (Side)",autoSideSpeakerShootCommand);
-    SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
-    SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
-    SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
-    SmartDashboard.putData("Play Nomad be like", new InstantCommand(() -> m_drive.playMusic("gangsta.chrp") ));
-    SmartDashboard.putData("Play not being in a playoff match for years", new InstantCommand(() -> m_drive.playMusic("seniors.chrp") ));
-    SmartDashboard.putData("Winning in practice matches", new InstantCommand(() -> m_drive.playMusic("prac.chrp") ));
-    SmartDashboard.putData("Play build season", new InstantCommand(() -> m_drive.playMusic("build.chrp") ));
-    SmartDashboard.putData("Play killer queen", new InstantCommand(() -> m_drive.playMusic("queen.chrp") ));
-
-
-
-
-
+    // SmartDashboard.putData("Play Taylor Swift", new InstantCommand(() -> m_drive.playMusic("mario.chrp") ));
+    // SmartDashboard.putData("Play AP CSP", new InstantCommand(() -> m_drive.playMusic("sand.chrp") ));
+    // SmartDashboard.putData("Play me waiting on deck", new InstantCommand(() -> m_drive.playMusic("wii.chrp") ));
+    // SmartDashboard.putData("Play Nomad be like", new InstantCommand(() -> m_drive.playMusic("gangsta.chrp") ));
+    // SmartDashboard.putData("Play not being in a playoff match for years", new InstantCommand(() -> m_drive.playMusic("seniors.chrp") ));
+    // SmartDashboard.putData("Winning in practice matches", new InstantCommand(() -> m_drive.playMusic("prac.chrp") ));
+    // SmartDashboard.putData("Play build season", new InstantCommand(() -> m_drive.playMusic("build.chrp") ));
+    // SmartDashboard.putData("Play killer queen", new InstantCommand(() -> m_drive.playMusic("queen.chrp") ));
     SmartDashboard.putData("Chooser", m_chooser);
 
-    // m_goSource.setName("GoToSource");
-    // m_zero.setName("Zero");
-    // m_goAmp.setName("GoAmp");
+    m_goSource.setName("GoToSource");
+    m_zero.setName("Zero");
+    m_goAmp.setName("GoAmp");
 
     // Note that MathUtil.applyDeadband() will automatically scale its return value between -1 and 1
     // Note also that for field oriented driving, the +x direction relative to the field is +y relative to the driver
@@ -190,7 +183,7 @@ public class RobotContainer {
     m_toaster.setDefaultCommand(m_toaster.ToasterOffCmd());
     m_hood.setDefaultCommand(m_hood.HoodSetSpeedCmd(0));
     m_hoodWrist.setDefaultCommand(new InstantCommand(() -> m_hoodWrist.setSpeed(0), m_hoodWrist));
-    // m_joint.setDefaultCommand(m_joint.JointSetOffCmd());
+    m_joint.setDefaultCommand(m_joint.JointSetOffCmd());
 }
 
   private void configureBindings() {
@@ -200,8 +193,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(new InstantCommand(m_drive::resetHeading, m_drive));
 
     // Master controller
-    // m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
-    // m_driverController.start().whileTrue(m_joint.JointSetJogCmd(-0.15));
+    m_driverController.back().whileTrue(m_joint.JointSetJogCmd(0.15));
+    m_driverController.start().whileTrue(m_joint.JointSetJogCmd(-0.15));
     
     // Partner controller
     m_auxController.leftBumper().whileTrue(m_toaster.ToasterAmpShootCmd());
@@ -211,12 +204,10 @@ public class RobotContainer {
       .alongWith(m_hood.HoodSetSpeedCmd(-0.8))
     );
     m_auxController.start().whileTrue(m_hood.HoodSetSpeedCmd(0.8).repeatedly());
-    // m_auxController.a().onTrue(m_goSource);
-    // m_auxController.b().onTrue(m_zero);
-    // m_auxController.x().onTrue(m_goAmp);
-    // m_auxController.y().onTrue(m_goMidSpeakerCommand);
-    m_auxController.y().onTrue(m_profiledJoint.goToGoalCommand(29));
-    m_auxController.b().onTrue(m_profiledJoint.goToGoalCommand(0));
+    m_auxController.a().onTrue(m_goSource);
+    m_auxController.b().onTrue(m_zero);
+    m_auxController.x().onTrue(m_goAmp);
+    m_auxController.y().onTrue(m_goMidSpeakerCommand);
   }
   
   public Command getAutonomousCommand() {
