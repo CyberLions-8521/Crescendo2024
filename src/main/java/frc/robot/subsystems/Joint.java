@@ -54,19 +54,9 @@ public class Joint extends SubsystemBase {
     m_jointRight.restoreFactoryDefaults();
     m_jointLeft.restoreFactoryDefaults();
 
-    REVLibError checkOk;
-
-    do {
-      checkOk = m_jointRight.follow(m_jointLeft, true);
+    while (m_jointRight.follow(m_jointLeft, true) != REVLibError.kOk) {
       Timer.delay(0.1);
-    } while (checkOk != REVLibError.kOk);
-
-    // while (true) {
-    //   checkOk = m_jointRight.follow(m_jointLeft, true);
-
-    //   if (checkOk == REVLibError.kOk) { break; }
-    //   else { Timer.delay(0.1); }
-    // }
+    }
 
     m_jointControllerLeft.setP(JointConstants.JOINT_KP);
     m_jointControllerLeft.setD(JointConstants.JOINT_KD);
@@ -92,6 +82,13 @@ public class Joint extends SubsystemBase {
     m_jointEncoderLeft.setPosition(0);
   }
 
+  /**
+   * Equivalent to the JointGoToSetpoint command in the commands/ directory
+   * 
+   * @param   goal  The position of the goal; defaulted to rotations mesured by
+   *                the motor encoder.
+   * @return  A FunctionalCommand that tells the joint to go to the setpoint.
+   */
   public Command goToSetpointCommand(final double goal) {
     return new FunctionalCommand(
       () -> {
