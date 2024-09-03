@@ -208,6 +208,8 @@ public class RobotContainer {
     m_joystick.button(9).onTrue(m_goAmp);
     m_joystick.top().onTrue(m_goMidSpeakerCommand);
     m_joystick.trigger().whileTrue(m_toaster.ToasterSpeakerShootCmd());
+    // m_joystick.button(3).onTrue(new InstantCommand(m_drive::rezeroTurnMotors, m_drive));
+    // m_joystick.button(4).onTrue(new InstantCommand(m_drive::resetHeading, m_drive));
 
     /*
     //DRIVEBASE
